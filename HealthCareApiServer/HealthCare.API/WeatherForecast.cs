@@ -1,6 +1,6 @@
 using System;
 
-namespace HealthCareAPI
+namespace HealthCare.API
 {
     public class WeatherForecast
     {

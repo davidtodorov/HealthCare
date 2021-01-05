@@ -5,7 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace HealthCareAPI.Controllers
+namespace HealthCare.API.Controllers
 {
     [ApiController]
     [Route("[controller]")]
