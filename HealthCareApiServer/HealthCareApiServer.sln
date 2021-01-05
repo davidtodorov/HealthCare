@@ -5,6 +5,10 @@ VisualStudioVersion = 16.0.30804.86
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HealthCare.API", "HealthCare.API\HealthCare.API.csproj", "{ABCE9453-D2B4-4BF6-AB70-28F18059320D}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HealthCare.Data", "HealthCare.Data\HealthCare.Data.csproj", "{92C96B03-682E-4657-ACA8-4E705B48374F}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HealthCare.Models", "HealthCare.Models\HealthCare.Models.csproj", "{2873A984-578B-4B18-B311-EDC2B587B021}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,6 +19,14 @@ Global
 		{ABCE9453-D2B4-4BF6-AB70-28F18059320D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{ABCE9453-D2B4-4BF6-AB70-28F18059320D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{ABCE9453-D2B4-4BF6-AB70-28F18059320D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{92C96B03-682E-4657-ACA8-4E705B48374F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{92C96B03-682E-4657-ACA8-4E705B48374F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{92C96B03-682E-4657-ACA8-4E705B48374F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{92C96B03-682E-4657-ACA8-4E705B48374F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2873A984-578B-4B18-B311-EDC2B587B021}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2873A984-578B-4B18-B311-EDC2B587B021}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2873A984-578B-4B18-B311-EDC2B587B021}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2873A984-578B-4B18-B311-EDC2B587B021}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

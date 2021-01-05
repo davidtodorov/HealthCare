@@ -1,7 +1,7 @@
 ﻿using System;
 using Microsoft.EntityFrameworkCore.Migrations;
 
-namespace HealthCare.API.Migrations
+namespace HealthCare.Data.Migrations
 {
     public partial class Initial : Migration
     {

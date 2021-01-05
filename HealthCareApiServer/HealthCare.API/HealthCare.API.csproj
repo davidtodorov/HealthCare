@@ -17,5 +17,9 @@
     </PackageReference>
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\HealthCare.Data\HealthCare.Data.csproj" />
+  </ItemGroup>
+
 
 </Project>
