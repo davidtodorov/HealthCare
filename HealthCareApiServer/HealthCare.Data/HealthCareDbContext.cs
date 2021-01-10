@@ -1,4 +1,5 @@
-﻿using HealthCare.Models;
+﻿using HealthCare.API.Models;
+using HealthCare.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
@@ -9,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace HealthCare.Data
 {
-    public class HealthCareDbContext : IdentityDbContext
+    public class HealthCareDbContext : IdentityDbContext<User>
     {
         public HealthCareDbContext(DbContextOptions options) : base(options)
         {

@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace HealthCare.Data.Migrations
 {
-    public partial class Initial : Migration
+    public partial class initial : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -49,7 +49,7 @@ namespace HealthCare.Data.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Hospoitals",
+                name: "Hospital",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
@@ -58,7 +58,7 @@ namespace HealthCare.Data.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Hospoitals", x => x.Id);
+                    table.PrimaryKey("PK_Hospital", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -225,7 +225,7 @@ namespace HealthCare.Data.Migrations
                 name: "AspNetUserTokens");
 
             migrationBuilder.DropTable(
-                name: "Hospoitals");
+                name: "Hospital");
 
             migrationBuilder.DropTable(
                 name: "AspNetRoles");
