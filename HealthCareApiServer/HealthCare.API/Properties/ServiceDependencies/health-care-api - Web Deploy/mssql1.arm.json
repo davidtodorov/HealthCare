@@ -4,7 +4,7 @@
   "parameters": {
     "resourceGroupName": {
       "type": "string",
-      "defaultValue": "HealthCareApp",
+      "defaultValue": "health-care-api",
       "metadata": {
         "_parameterType": "resourceGroup",
         "description": "Name of the resource group for the resource. It is recommended to put resources under same resource group for better tracking."
@@ -12,7 +12,7 @@
     },
     "resourceGroupLocation": {
       "type": "string",
-      "defaultValue": "westeurope",
+      "defaultValue": "southcentralus",
       "metadata": {
         "_parameterType": "location",
         "description": "Location of the resource group. Resource groups could have different location than resources."
@@ -51,23 +51,23 @@
             {
               "kind": "v12.0",
               "location": "[parameters('resourceLocation')]",
-              "name": "healthcare-apidbserver",
+              "name": "healthcare-database",
               "type": "Microsoft.Sql/servers",
               "apiVersion": "2017-10-01-preview"
             },
             {
               "sku": {
-                "name": "Free",
-                "tier": "Free",
-                "capacity": 5
+                "name": "Standard",
+                "tier": "Standard",
+                "capacity": 10
               },
               "kind": "v12.0,user",
               "location": "[parameters('resourceLocation')]",
-              "name": "healthcare-apidbserver/HealthCare.API_db",
+              "name": "healthcare-database/HealthCare.API_db",
               "type": "Microsoft.Sql/servers/databases",
               "apiVersion": "2017-10-01-preview",
               "dependsOn": [
-                "healthcare-apidbserver"
+                "healthcare-database"
               ]
             }
           ]
