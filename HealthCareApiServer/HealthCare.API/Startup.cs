@@ -1,3 +1,4 @@
+using HealthCare.API.Infrastructure;
 using HealthCare.API.Models;
 using HealthCare.Data;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -37,7 +38,14 @@ namespace HealthCare.API
                 options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
 
             services
-                .AddIdentity<User, IdentityRole>()
+                .AddIdentity<User, IdentityRole>(options =>
+                {
+                    options.Password.RequiredLength = 3;
+                    options.Password.RequireDigit = false;
+                    options.Password.RequireLowercase = false;
+                    options.Password.RequireUppercase = false;
+                    options.Password.RequireNonAlphanumeric = false;
+                })
                 .AddEntityFrameworkStores<HealthCareDbContext>();
 
             var appSettingsConfiguration = Configuration.GetSection("ApplicationSettings");
@@ -92,6 +100,8 @@ namespace HealthCare.API
             {
                 endpoints.MapControllers();
             });
+
+            app.ApplyMigrations();
         }
     }
 }
