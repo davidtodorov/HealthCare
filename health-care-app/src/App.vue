@@ -1,5 +1,5 @@
 <template>
-npm   <v-app>
+  <v-app>
     <v-app-bar
       app
       color="primary"
