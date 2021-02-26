@@ -1,15 +1,18 @@
-import Vue from 'vue'
-import Vuex from 'vuex'
+import Vue from 'vue';
+import Vuex, { createNamespacedHelpers } from 'vuex';
+import userModule from './user';
 
 Vue.use(Vuex)
 
 export default new Vuex.Store({
-  state: {
-  },
-  mutations: {
+  modules: {
+    user: userModule
   },
   actions: {
-  },
-  modules: {
+    clearAll({ commit }) {
+      commit('user/resetState');
+    }
   }
-})
+});
+
+export const userHelpers = createNamespacedHelpers('user');
