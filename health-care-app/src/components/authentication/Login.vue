@@ -2,11 +2,11 @@
 	<AppAuthenticationForm title="LoginTestPWA" :submitHandler="submitLogin" :allFieldsAreValid="true">
 		<v-form>
 			<v-text-field 
-				label="Email" 
-				name="email" 
+				label="Username" 
+				name="username" 
 				type="text" 
 				color="#232323" 
-				v-model="email" 
+				v-model="username" 
 			/>
 
 			<v-text-field
@@ -31,24 +31,24 @@ export default {
 	},
 	data: () => {
 		return {
-			email: "",
+			username: "",
 			password: "",
 			errorMessage: ""
 		};
 	},
 	methods: {
 		submitLogin() {
-			// this.$store
-			// 	.dispatch("user/login", {
-			// 		email: this.email,
-			// 		password: this.password
-			// 	})
-			// 	.then(() => {
-			// 		this.$router.push({ name: "ProductList" });
-			// 	})
-			// 	.catch(err => {
-			// 		this.errorMessage = err.response.data;
-			// 	});
+			this.$store
+				.dispatch("user/login", {
+					username: this.username,
+					password: this.password
+				})
+				// .then(() => {
+				// 	this.$router.push({ name: "ProductList" });
+				// })
+				.catch(err => {
+					this.errorMessage = err.response.data;
+				});
 		}
 	},
 };

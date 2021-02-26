@@ -71,6 +71,16 @@ namespace HealthCare.API
                 };
             });
 
+
+            services.AddCors(options =>
+            {
+                options.AddPolicy("CorsApi", builder => 
+                    builder
+                        .WithOrigins("*")
+                        .AllowAnyHeader()
+                        .AllowAnyMethod());
+            });
+
             services.AddControllers();
         }
 
@@ -85,13 +95,7 @@ namespace HealthCare.API
             app.UseHttpsRedirection();
 
             app.UseRouting();
-            //app.UseCors(options => options
-            //    .AllowAnyOrigin()
-            //    .AllowAnyHeader()
-            //    .AllowAnyMethod()
-            //);
-
-            app.UseCors();
+            app.UseCors("CorsApi");
 
             app.UseAuthentication();
             app.UseAuthorization();
