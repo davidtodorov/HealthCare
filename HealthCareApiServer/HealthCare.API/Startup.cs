@@ -1,23 +1,12 @@
-using HealthCare.API.Infrastructure;
-using HealthCare.API.Models;
-using HealthCare.Data;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.HttpsPolicy;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
-using Microsoft.IdentityModel.Tokens;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+
+using HealthCare.API.Infrastructure.Extensions;
+using HealthCare.Data;
 
 namespace HealthCare.API
 {
@@ -33,55 +22,19 @@ namespace HealthCare.API
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            //services.AddControllers();
-            services.AddDbContext<HealthCareDbContext>(options =>
-                options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
-
             services
-                .AddIdentity<User, IdentityRole>(options =>
+                .AddDbContext<HealthCareDbContext>(options => options.UseSqlServer(this.Configuration.GetDefaultConnectionString()))
+                .AddIdentity()
+                .AddJwtAuthentication(services.GetApplicationSettings(this.Configuration))
+                .AddCors(options =>
                 {
-                    options.Password.RequiredLength = 3;
-                    options.Password.RequireDigit = false;
-                    options.Password.RequireLowercase = false;
-                    options.Password.RequireUppercase = false;
-                    options.Password.RequireNonAlphanumeric = false;
+                    options.AddPolicy("CorsApi", builder =>
+                        builder
+                            .WithOrigins("*")
+                            .AllowAnyHeader()
+                            .AllowAnyMethod());
                 })
-                .AddEntityFrameworkStores<HealthCareDbContext>();
-
-            var appSettingsConfiguration = Configuration.GetSection("ApplicationSettings");
-            services.Configure<ApplicationSettings>(appSettingsConfiguration);
-
-            var appSettings = appSettingsConfiguration.Get<ApplicationSettings>();
-            var key = Encoding.ASCII.GetBytes(appSettings.Secret);
-            services.AddAuthentication(x =>
-            {
-                x.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-                x.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-            })
-            .AddJwtBearer(x =>
-            {
-                x.RequireHttpsMetadata = false;
-                x.SaveToken = true;
-                x.TokenValidationParameters = new TokenValidationParameters
-                {
-                    ValidateIssuerSigningKey = true,
-                    IssuerSigningKey = new SymmetricSecurityKey(key),
-                    ValidateIssuer = false,
-                    ValidateAudience = false
-                };
-            });
-
-
-            services.AddCors(options =>
-            {
-                options.AddPolicy("CorsApi", builder => 
-                    builder
-                        .WithOrigins("*")
-                        .AllowAnyHeader()
-                        .AllowAnyMethod());
-            });
-
-            services.AddControllers();
+                .AddControllers();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -92,20 +45,17 @@ namespace HealthCare.API
                 app.UseDeveloperExceptionPage();
             }
 
-            app.UseHttpsRedirection();
-
-            app.UseRouting();
-            app.UseCors("CorsApi");
-
-            app.UseAuthentication();
-            app.UseAuthorization();
-
-            app.UseEndpoints(endpoints =>
-            {
-                endpoints.MapControllers();
-            });
-
-            app.ApplyMigrations();
+            app
+                .UseHttpsRedirection()
+                .UseRouting()
+                .UseCors("CorsApi")
+                .UseAuthentication()
+                .UseAuthorization()
+                .UseEndpoints(endpoints =>
+                {
+                    endpoints.MapControllers();
+                })
+                .ApplyMigrations();
         }
     }
 }
