@@ -57,7 +57,7 @@ export default {
 			},
 			{
 				icon: "mdi-inbox",
-				text: "Lgoin",
+				text: "Login",
 				to: "/login",
 			},
 			{

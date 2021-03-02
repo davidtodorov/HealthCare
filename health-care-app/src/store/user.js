@@ -1,4 +1,6 @@
-import axios from '../../axios';
+import axios from '@/axios';
+import authService from '@/services/authService';
+
 
 const getDefaultState = () => {
     return {
@@ -25,33 +27,34 @@ const user = {
         },
     },
     actions: {
-        register({ commit }, { email, username, password }) {
+        register({ email, username, password }) {
             return axios.post('/identity/register', {
                 email,
                 username,
                 password
-            }).then((res) => {
-                commit('setCurrentUser', res.data);
+            }).then(() => {
                 return Promise.resolve();
             }).catch(err => {
                 return Promise.reject(err)
             })
         },
-        getUser({ commit }) {
-            return axios.post("https://localhost:44336/identity/login").then((res) => {
-                console.log(res);
-                commit('setCurrentUser', res.data);
-                return Promise.resolve();
-            }).catch(err => {
-                return Promise.reject(err)
-            })
-        },
+        // getUser({ commit }) {
+        //     return axios.post("https://localhost:44336/identity/login").then((res) => {
+        //         console.log(res);
+                
+        //         commit('setCurrentUser', res.data);
+        //         return Promise.resolve();
+        //     }).catch(err => {
+        //         return Promise.reject(err)
+        //     })
+        // },
         login({ commit }, { username, password }) {
             return axios.post("identity/login", {
                 username,
                 password
             }).then((res) => {
                 console.log(res);
+                authService.setToken(res.data.token);
                 commit('setCurrentUser', res.data);
                 return Promise.resolve();
             }).catch(err => {
