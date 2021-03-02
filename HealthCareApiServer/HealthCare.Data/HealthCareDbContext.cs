@@ -10,14 +10,15 @@ using System.Threading.Tasks;
 
 namespace HealthCare.Data
 {
-    public class HealthCareDbContext : IdentityDbContext<User>
+    public class HealthCareDbContext : IdentityDbContext<User, IdentityRole<int>, int>
     {
         public HealthCareDbContext(DbContextOptions options) : base(options)
         {
 
         }
 
-        public DbSet<Hospital> Hospital { get; set; }
+        public DbSet<Hospital> Hospitals { get; set; }
+        public DbSet<Doctor> Doctors { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
