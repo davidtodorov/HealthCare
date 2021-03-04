@@ -6,7 +6,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 
 using HealthCare.API.Infrastructure.Extensions;
-using HealthCare.Data;
+using HealthCare.Infrastructure;
 
 namespace HealthCare.API
 {

@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace HealthCare.Data
+namespace HealthCare.Infrastructure
 {
     public class UnitOfWork : IDisposable
     {

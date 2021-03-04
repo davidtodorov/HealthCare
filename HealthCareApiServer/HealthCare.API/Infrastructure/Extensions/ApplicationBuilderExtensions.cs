@@ -1,4 +1,4 @@
-﻿using HealthCare.Data;
+﻿using HealthCare.Infrastructure;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;

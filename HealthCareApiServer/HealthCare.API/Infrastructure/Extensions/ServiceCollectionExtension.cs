@@ -1,5 +1,5 @@
 ﻿using HealthCare.API.Models;
-using HealthCare.Data;
+using HealthCare.Infrastructure;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.DependencyInjection;

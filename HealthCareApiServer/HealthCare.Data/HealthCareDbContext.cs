@@ -8,7 +8,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace HealthCare.Data
+namespace HealthCare.Infrastructure
 {
     public class HealthCareDbContext : IdentityDbContext<User, IdentityRole<int>, int>
     {
