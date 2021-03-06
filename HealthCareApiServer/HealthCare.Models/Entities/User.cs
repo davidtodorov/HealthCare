@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using System.ComponentModel.DataAnnotations;
 
-namespace HealthCare.API.Models
+namespace HealthCare.Core.Entities
 {
     public class User : IdentityUser<int>
     {

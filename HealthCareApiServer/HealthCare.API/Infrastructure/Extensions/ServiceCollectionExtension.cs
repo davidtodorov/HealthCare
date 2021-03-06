@@ -1,4 +1,4 @@
-﻿using HealthCare.API.Models;
+﻿using HealthCare.Core.Entities;
 using HealthCare.Infrastructure;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;

@@ -1,14 +1,14 @@
-﻿using HealthCare.API.Models;
+﻿using System;
+using System.Text;
+using System.Security.Claims;
+using System.Threading.Tasks;
+using System.IdentityModel.Tokens.Jwt;
 using HealthCare.API.Models.Identity;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
-using System;
-using System.IdentityModel.Tokens.Jwt;
-using System.Security.Claims;
-using System.Text;
-using System.Threading.Tasks;
+using HealthCare.Core.Entities;
 
 namespace HealthCare.API.Controllers
 {

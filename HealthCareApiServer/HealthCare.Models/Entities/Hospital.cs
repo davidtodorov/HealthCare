@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Text;
 
-namespace HealthCare.Models
+namespace HealthCare.Core.Entities
 {
     public class Hospital
     {

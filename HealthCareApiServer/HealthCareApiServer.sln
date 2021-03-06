@@ -7,7 +7,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HealthCare.API", "HealthCar
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HealthCare.Infrastructure", "HealthCare.Data\HealthCare.Infrastructure.csproj", "{92C96B03-682E-4657-ACA8-4E705B48374F}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HealthCare.Models", "HealthCare.Models\HealthCare.Models.csproj", "{2873A984-578B-4B18-B311-EDC2B587B021}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HealthCare.Core", "HealthCare.Models\HealthCare.Core.csproj", "{2873A984-578B-4B18-B311-EDC2B587B021}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

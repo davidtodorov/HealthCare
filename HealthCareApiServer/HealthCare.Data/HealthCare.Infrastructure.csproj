@@ -19,7 +19,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\HealthCare.Models\HealthCare.Models.csproj" />
+    <ProjectReference Include="..\HealthCare.Models\HealthCare.Core.csproj" />
   </ItemGroup>
 
 </Project>
