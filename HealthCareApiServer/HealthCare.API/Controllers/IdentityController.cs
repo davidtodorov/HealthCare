@@ -67,7 +67,9 @@ namespace HealthCare.API.Controllers
             var user = new User
             {
                 Email = model.Email,
-                UserName = model.Username
+                UserName = model.Username,
+                FirstName = model.FirstName,
+                LastName = model.LastsName
             };
             var result = await this.userManager.CreateAsync(user, model.Password);
 

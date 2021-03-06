@@ -20,7 +20,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\HealthCare.Data\HealthCare.Infrastructure.csproj" />
+    <ProjectReference Include="..\HealthCare.Core\HealthCare.Core.csproj" />
+    <ProjectReference Include="..\HealthCare.Infrastructure\HealthCare.Infrastructure.csproj" />
   </ItemGroup>
 
 
