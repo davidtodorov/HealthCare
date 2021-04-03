@@ -49,5 +49,11 @@ namespace HealthCare.API.Infrastructure.Extensions
 
             return services;
         }
+
+        public static IServiceCollection AddApplicationServices(this IServiceCollection services)
+        {
+            return services
+                    .AddScoped<IUnitOfWork, UnitOfWork>();
+        }
     }
 }

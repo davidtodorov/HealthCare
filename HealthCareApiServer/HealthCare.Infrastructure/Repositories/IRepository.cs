@@ -5,7 +5,7 @@ using System.Linq.Expressions;
 
 namespace HealthCare.Infrastructure
 {
-    internal interface IRepository<TEntity>
+    public interface IRepository<TEntity>
         where TEntity : class
     {
         TEntity GetById(object id);

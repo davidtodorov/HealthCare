@@ -12,5 +12,6 @@ namespace HealthCare.API.Controllers
     [ApiController]
     public abstract class ApiController : ControllerBase
     {
+
     }
 }

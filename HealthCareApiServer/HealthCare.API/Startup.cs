@@ -34,6 +34,7 @@ namespace HealthCare.API
                             .AllowAnyHeader()
                             .AllowAnyMethod());
                 })
+                .AddApplicationServices()
                 .AddControllers();
         }
 
