@@ -1,4 +1,5 @@
-﻿using HealthCare.Infrastructure;
+﻿using AutoMapper;
+using HealthCare.Infrastructure;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
@@ -14,31 +15,34 @@ namespace HealthCare.API.Controllers
         where TModel : class
     {
         
-        public RestController(IUnitOfWork unitOfWork)
+        public RestController(IUnitOfWork unitOfWork, IMapper mapper)
         {
             this.unitOfWork = unitOfWork;
             this.repository = GetRepository(typeof(TEntity));
+            this.mapper = mapper;
         }
 
         [HttpGet]
-        public IEnumerable<TEntity> Get()
+        public IEnumerable<TModel> Get()
         {
-            var result = this.repository.GetAll();
-            return result;
+            var entities = this.repository.GetAll();
+            var result = mapper.Map<IEnumerable<TEntity>, IEnumerable<TModel>>(entities);
+            return result.ToList();
         }
 
         [HttpGet("{id}")]
-        public virtual TEntity Get(int id)
+        public virtual TModel Get(int id)
         {
-            var result = this.repository.GetById(id);
+            var entity = this.repository.GetById(id);
+            var result = mapper.Map<TEntity, TModel>(entity);
             return result;
         }
 
         [HttpPost]
         public virtual ActionResult Post(TModel requestModel)
         {
-            var a = (TEntity)Activator.CreateInstance(typeof(TEntity), new object[] { requestModel });
-            this.repository.Insert(a);
+            var entity = (TEntity)Activator.CreateInstance(typeof(TEntity), new object[] { requestModel });
+            this.repository.Insert(entity);
             unitOfWork.SaveChanges();
             return Ok();
         }
@@ -46,7 +50,9 @@ namespace HealthCare.API.Controllers
         [HttpPut("{id}")]
         public virtual void Put(int id, TModel requestModel)
         {
-
+            var entity = this.repository.GetById(id);
+            mapper.Map(requestModel, entity);
+            unitOfWork.SaveChanges();
         }
 
         [HttpDelete("{id}")]
@@ -70,6 +76,7 @@ namespace HealthCare.API.Controllers
         }
 
         private readonly IRepository<TEntity> repository;
+        private readonly IMapper mapper;
         protected readonly IUnitOfWork unitOfWork;
         #endregion
     }

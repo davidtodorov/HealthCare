@@ -1,4 +1,5 @@
-﻿using HealthCare.Application.Models;
+﻿using AutoMapper;
+using HealthCare.Application.Models;
 using HealthCare.Core.Entities;
 using HealthCare.Infrastructure;
 using Microsoft.AspNetCore.Authorization;
@@ -12,22 +13,10 @@ namespace HealthCare.API.Controllers
 {
     public class HospitalController : RestController<Hospital, HospitalModel>
     {
-        public HospitalController(IUnitOfWork unitOfWork)
-            : base(unitOfWork)
+        public HospitalController(IUnitOfWork unitOfWork, IMapper mapper)
+            : base(unitOfWork, mapper)
         {
 
-        }
-
-        [HttpPost]
-        public override ActionResult Post(HospitalModel model)
-        {
-            var hospital = new Hospital()
-            {
-                Name = model.Name
-            };
-            this.unitOfWork.HospitalRepository.Insert(hospital);
-            this.unitOfWork.SaveChanges();
-            return Ok();
         }
     }
 }

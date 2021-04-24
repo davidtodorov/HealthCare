@@ -1,4 +1,6 @@
-﻿using HealthCare.Core.Entities;
+﻿using AutoMapper;
+using HealthCare.Application.AutoMapper;
+using HealthCare.Core.Entities;
 using HealthCare.Infrastructure;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
@@ -54,6 +56,18 @@ namespace HealthCare.API.Infrastructure.Extensions
         {
             return services
                     .AddScoped<IUnitOfWork, UnitOfWork>();
+        }
+
+        public static IServiceCollection AddMapperConfig(this IServiceCollection services)
+        {
+            // Auto Mapper Configurations
+            var mapperConfig = new MapperConfiguration(mc =>
+            {
+                mc.AddProfile(new MappingProfile());
+            });
+
+            IMapper mapper = mapperConfig.CreateMapper();
+            return services.AddSingleton(mapper);
         }
     }
 }
