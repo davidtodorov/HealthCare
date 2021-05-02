@@ -1,8 +1,11 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
-import Home from '../views/Home.vue'
-import Login from '../components/authentication/Login'
-import Register from '@/components/authentication/Register'
+import Home from '@/views/Home.vue'
+import Login from '@/views/authentication/Login'
+import Register from '@/views/authentication/Register'
+
+// import store from '@/store'
+// import authService from '@/services/authService';
 
 Vue.use(VueRouter)
 
@@ -18,7 +21,10 @@ const routes = [
   {
     path: '/home',
     name: 'Home',
-    component: Home
+    component: Home,
+    meta: {
+      requiresAuth: true
+    }
   },
   {
     path: '/login',
@@ -44,6 +50,29 @@ const router = new VueRouter({
   mode: 'history',
   base: process.env.BASE_URL,
   routes
+})
+
+router.beforeEach((to, from, next) => {
+  if (to.meta.requiresAuth) {
+      // if (!store.state.user.currentUser) {
+      //     var authToken = authService.get('auth-token');
+      //     if (authToken) {
+      //         store.dispatch("user/getCurrentUser")
+      //             .then(() => {
+      //                 return next()
+      //             })
+      //             .catch(() => {
+      //                 next('/login')
+      //             });
+      //     } else {
+      //         next("/login")
+      //     }
+      // } else {
+      //     next();
+      // }
+  } else {
+      next();
+  }
 })
 
 export default router

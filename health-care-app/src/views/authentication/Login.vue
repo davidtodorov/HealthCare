@@ -43,12 +43,10 @@ export default {
 					username: this.username,
 					password: this.password
 				})
-				// .then(() => {
-				// 	this.$router.push({ name: "ProductList" });
-				// })
-				.catch(err => {
-					this.errorMessage = err.response.data;
-				});
+				.then(() => {
+					this.$router.push({ name: "Home" });
+				})
+				.catch(() => this.errorMessage = "Wrong username or password!");
 		}
 	},
 };
