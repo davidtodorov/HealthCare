@@ -11,8 +11,8 @@ namespace HealthCare.Application.AutoMapper
     {
         public MappingProfile()
         {
-            CreateMap<Hospital, HospitalModel>();
-            CreateMap<HospitalModel, Hospital>();
+            CreateMap<Hospital, HospitalModel>().ReverseMap();
+            CreateMap<User, UserModel>().ReverseMap();
         }
     }
 }

@@ -56,8 +56,10 @@ namespace HealthCare.API
                 .UseEndpoints(endpoints =>
                 {
                     endpoints.MapControllers();
-                })
-                .ApplyMigrations();
+                });
+
+            app.SeedDatabase();
+            app.ApplyMigrations();
         }
     }
 }
