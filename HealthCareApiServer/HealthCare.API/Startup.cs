@@ -25,7 +25,7 @@ namespace HealthCare.API
             services
                 .AddDbContext<HealthCareDbContext>(options => options.UseSqlServer(this.Configuration.GetDefaultConnectionString()))
                 .AddIdentity()
-                .AddJwtAuthentication(services.GetApplicationSettings(this.Configuration))
+                //.AddJwtAuthentication(services.GetApplicationSettings(this.Configuration))  USE THIS CODE IF YOU WANT TO USE JWT TOKEN
                 .AddCors(options =>
                 {
                     options.AddPolicy("CorsApi", builder =>
