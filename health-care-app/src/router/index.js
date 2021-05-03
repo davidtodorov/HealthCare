@@ -3,8 +3,9 @@ import VueRouter from 'vue-router'
 import Home from '@/views/Home.vue'
 import Login from '@/views/authentication/Login'
 import Register from '@/views/authentication/Register'
+import ErrorPage from '@/views/Error'
 
-// import store from '@/store'
+import store from '@/store'
 // import authService from '@/services/authService';
 
 Vue.use(VueRouter)
@@ -15,7 +16,8 @@ const routes = [
     name: 'Home',
     component: Home,
     meta: {
-      requiresAuth: true
+      requiresAuth: true,
+      roles: ["Admin"]
     }
   },
   {
@@ -23,7 +25,8 @@ const routes = [
     name: 'Home',
     component: Home,
     meta: {
-      requiresAuth: true
+      requiresAuth: true,
+      roles: ["Admin"]
     }
   },
   {
@@ -43,7 +46,12 @@ const routes = [
     // this generates a separate chunk (about.[hash].js) for this route
     // which is lazy-loaded when the route is visited.
     component: () => import(/* webpackChunkName: "about" */ '../views/About.vue')
-  }
+  },
+  {
+    path: '/error',
+    name: 'Error',
+    component: ErrorPage
+  },
 ]
 
 const router = new VueRouter({
@@ -54,25 +62,31 @@ const router = new VueRouter({
 
 router.beforeEach((to, from, next) => {
   if (to.meta.requiresAuth) {
-      // if (!store.state.user.currentUser) {
-      //     var authToken = authService.get('auth-token');
-      //     if (authToken) {
-      //         store.dispatch("user/getCurrentUser")
-      //             .then(() => {
-      //                 return next()
-      //             })
-      //             .catch(() => {
-      //                 next('/login')
-      //             });
-      //     } else {
-      //         next("/login")
-      //     }
-      // } else {
-      //     next();
-      // }
-  } else {
-      next();
-  }
-})
+    var user = store.state.user.currentUser;
+        if (!user) {
+            // var authToken = Cookies.get('x-auth-token');
+            // if (authToken) {
+            //     store.dispatch("user/getCurrentUser")
+            //         .then(() => {
+            //             return next()
+            //         })
+            //         .catch(() => {
+            //             next('/login')
+            //         });
+            // } else {
+            //     next("/login")
+            // }
+        } else {
+            if(to.meta.roles.some(x => user.roles.includes(x))){
+              next();
+            }
+            else {
+              next("/error")
+            }
+        }
+    } else {
+        next();
+    }
+});
 
 export default router

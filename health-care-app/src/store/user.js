@@ -1,5 +1,5 @@
 import axios from '@/axios';
-import authService from '@/services/authService';
+// import authService from '@/services/authService';
 
 
 const getDefaultState = () => {
@@ -54,7 +54,7 @@ const user = {
                 password
             }).then((res) => {
                 console.log(res);
-                authService.setToken(res.data.token);
+                // authService.setToken(res.data.token);
                 commit('setCurrentUser', res.data);
                 return Promise.resolve();
             }).catch(err => {
