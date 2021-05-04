@@ -1,17 +1,23 @@
 ﻿using HealthCare.Core;
+using HealthCare.Core.Base;
 using HealthCare.Core.Entities;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using System;
 using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace HealthCare.Infrastructure
 {
     public class HealthCareDbContext : IdentityDbContext<User, IdentityRole<int>, int>
     {
-        public HealthCareDbContext(DbContextOptions options) : base(options)
-        {
+        private IPrincipalProvider principalProvider;
 
+        public HealthCareDbContext(DbContextOptions options, IPrincipalProvider principalProvider) : base(options)
+        {
+            this.principalProvider = principalProvider;
         }
 
         public DbSet<Hospital> Hospitals { get; set; }
@@ -27,7 +33,7 @@ namespace HealthCare.Infrastructure
                 relationship.DeleteBehavior = DeleteBehavior.Restrict;
             }
 
-            builder.Entity<Department>().HasData(new { Id = 1, Name = "Aesthetic plastic and reconstructive surgery" }, 
+            builder.Entity<Department>().HasData(new { Id = 1, Name = "Aesthetic plastic and reconstructive surgery" },
                                                  new { Id = 2, Name = "Allergology" },
                                                  new { Id = 3, Name = "Cardiology" },
                                                  new { Id = 4, Name = "Cardiovascular surgery" },
@@ -51,6 +57,44 @@ namespace HealthCare.Infrastructure
                                                  new { Id = 22, Name = "Psychiatry" },
                                                  new { Id = 23, Name = "Radiotherapy" },
                                                  new { Id = 24, Name = "Rheumatology" });
+
+        }
+
+        //public override int SaveChanges(bool acceptAllChangesOnSuccess)
+        //{
+        //    this.ApplyAuditInformation();
+        //    return base.SaveChanges(acceptAllChangesOnSuccess);
+        //}
+        //public override Task<int> SaveChangesAsync(bool acceptAllChangesOnSuccess, CancellationToken cancellationToken = default)
+        //{
+        //    this.ApplyAuditInformation();
+        //    return base.SaveChangesAsync(acceptAllChangesOnSuccess, cancellationToken);
+        //}
+
+        private void ApplyAuditInformation()
+        {
+            this.ChangeTracker
+                .Entries()
+                .ToList()
+                .ForEach(entry =>
+                {
+                    var userName = this.principalProvider.GetCurrentUserName();
+
+                    if (entry.Entity is IEntity entity)
+                    {
+                        if (entry.State == EntityState.Added)
+                        {
+                            entity.CreatedOn = DateTime.UtcNow;
+                            entity.CreatedBy = userName;
+
+                        }
+                        else if (entry.State == EntityState.Modified)
+                        {
+                            entity.ModifiedOn = DateTime.UtcNow;
+                            entity.ModifiedBy = userName;
+                        }
+                    }
+                });
         }
     }
 }
