@@ -26,6 +26,26 @@
 			/>
 
 			<v-text-field
+				label="First Name"
+				name="firstName"
+				type="text"
+				color="#232323"
+				v-model="firstName"
+				@blur="$v.firstName.$touch"
+				:error-messages="firstNameErrors"
+			/>
+
+			<v-text-field
+				label="Last Name"
+				name="lastName"
+				type="text"
+				color="#232323"
+				v-model="lastName"
+				@blur="$v.lastName.$touch"
+				:error-messages="lastNameErrors"
+			/>
+
+			<v-text-field
 				id="password"
 				label="Password"
 				name="password"
@@ -66,6 +86,8 @@ export default {
 		return {
 			email: "",
 			username: "",
+			firstName: "",
+			lastName: "",
 			password: "",
 			confirmPassword: "",
 			errorMessage: ""
@@ -76,6 +98,8 @@ export default {
 			required,
 			email
 		},
+		firstName: { required },
+		lastName: { required },
 		username: {
 			required,
 			minLength: minLength(4)
@@ -93,6 +117,8 @@ export default {
 			return (
 				!this.$v.$anyError &&
 				!!this.email &&
+				!!this.firstName &&
+				!!this.lastName &&
 				!!this.username &&
 				!!this.password &&
 				!!this.confirmPassword
@@ -111,6 +137,18 @@ export default {
 			!this.$v.username.required && errors.push("Username is required");
 			!this.$v.username.minLength &&
 				errors.push("The minimal length must be 4 symbols");
+			return errors;
+		},
+		firstNameErrors() {
+			const errors = [];
+			if (!this.$v.firstName.$dirty) return errors;
+			!this.$v.firstName.required && errors.push("First Name is required");
+			return errors;
+		},
+		lastNameErrors() {
+			const errors = [];
+			if (!this.$v.lastName.$dirty) return errors;
+			!this.$v.lastName.required && errors.push("Last Name is required");
 			return errors;
 		},
 		passwordErrors() {
@@ -135,11 +173,13 @@ export default {
 				.dispatch("user/register", {
 					email: this.email,
 					username: this.username,
+					firstName: this.firstName,
+					lastName: this.lastName,
 					password: this.password
 				})
 				.then(res => {
 					console.log(res);
-					this.$router.push({ name: "ProductList" });
+					this.$router.push({ name: "Home" });
 				})
 				.catch(err => {
 					this.errorMessage = err.response.data;

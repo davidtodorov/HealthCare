@@ -8,8 +8,10 @@ namespace HealthCare.API.Models.Identity
 {
     public class RegisterUserRequestModel
     {
+        [Required]
         public string FirstName { get; set; }
-        public string LastsName { get; set; }
+        [Required]
+        public string LastName { get; set; }
         [Required]
         public string Username { get; set; }
         [Required]

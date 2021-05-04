@@ -12,6 +12,7 @@ using HealthCare.Core.Entities;
 using System.Collections.Generic;
 using System.Linq;
 using Microsoft.AspNetCore.Authorization;
+using HealthCare.Core;
 
 namespace HealthCare.API.Controllers
 {
@@ -99,9 +100,10 @@ namespace HealthCare.API.Controllers
                 Email = model.Email,
                 UserName = model.Username,
                 FirstName = model.FirstName,
-                LastName = model.LastsName
+                LastName = model.LastName
             };
             var result = await this.userManager.CreateAsync(user, model.Password);
+            await userManager.AddToRoleAsync(user, RoleConstants.PATIENT_ROLE);
 
             if (result.Succeeded)
             {

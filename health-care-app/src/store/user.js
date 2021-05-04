@@ -27,12 +27,15 @@ const user = {
         },
     },
     actions: {
-        register({ email, username, password }) {
+        register({ commit }, { email, username, firstName, lastName, password }) {
             return axios.post('/identity/register', {
                 email,
                 username,
+                firstName,
+                lastName,
                 password
             }).then(() => {
+                commit();
                 return Promise.resolve();
             }).catch(err => {
                 return Promise.reject(err)
@@ -41,7 +44,7 @@ const user = {
         // getUser({ commit }) {
         //     return axios.post("https://localhost:44336/identity/login").then((res) => {
         //         console.log(res);
-                
+
         //         commit('setCurrentUser', res.data);
         //         return Promise.resolve();
         //     }).catch(err => {
