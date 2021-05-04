@@ -11,5 +11,8 @@ namespace HealthCare.Core.Entities
         [Required]
         public int HospitalId { get; set; }
         public Hospital Hospital { get; set; }
+        [Required]
+        public int DepartmentId { get; set; }
+        public Department Department { get; set; }
     }
 }

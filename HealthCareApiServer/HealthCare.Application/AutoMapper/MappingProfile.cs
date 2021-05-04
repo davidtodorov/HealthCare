@@ -13,6 +13,8 @@ namespace HealthCare.Application.AutoMapper
         {
             CreateMap<Hospital, HospitalModel>().ReverseMap();
             CreateMap<User, UserModel>().ReverseMap();
+            CreateMap<Doctor, DoctorModel>().ReverseMap();
+            CreateMap<Department, DepartmentModel>().ReverseMap();
         }
     }
 }

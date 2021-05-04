@@ -4,14 +4,16 @@ using HealthCare.Infrastructure;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace HealthCare.Infrastructure.Migrations
 {
     [DbContext(typeof(HealthCareDbContext))]
-    partial class HealthCareDbContextModelSnapshot : ModelSnapshot
+    [Migration("20210504133019_AddMoreDepartments")]
+    partial class AddMoreDepartments
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -163,9 +165,6 @@ namespace HealthCare.Infrastructure.Migrations
                         .HasColumnType("int")
                         .UseIdentityColumn();
 
-                    b.Property<int>("DepartmentId")
-                        .HasColumnType("int");
-
                     b.Property<int>("HospitalId")
                         .HasColumnType("int");
 
@@ -173,8 +172,6 @@ namespace HealthCare.Infrastructure.Migrations
                         .HasColumnType("int");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("DepartmentId");
 
                     b.HasIndex("HospitalId");
 
@@ -406,12 +403,6 @@ namespace HealthCare.Infrastructure.Migrations
 
             modelBuilder.Entity("HealthCare.Core.Entities.Doctor", b =>
                 {
-                    b.HasOne("HealthCare.Core.Entities.Department", "Department")
-                        .WithMany()
-                        .HasForeignKey("DepartmentId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
                     b.HasOne("HealthCare.Core.Entities.Hospital", "Hospital")
                         .WithMany()
                         .HasForeignKey("HospitalId")
@@ -423,8 +414,6 @@ namespace HealthCare.Infrastructure.Migrations
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
-
-                    b.Navigation("Department");
 
                     b.Navigation("Hospital");
 

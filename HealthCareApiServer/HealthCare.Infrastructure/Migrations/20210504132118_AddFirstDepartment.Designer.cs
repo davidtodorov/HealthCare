@@ -4,14 +4,16 @@ using HealthCare.Infrastructure;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace HealthCare.Infrastructure.Migrations
 {
     [DbContext(typeof(HealthCareDbContext))]
-    partial class HealthCareDbContextModelSnapshot : ModelSnapshot
+    [Migration("20210504132118_AddFirstDepartment")]
+    partial class AddFirstDepartment
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -38,121 +40,6 @@ namespace HealthCare.Infrastructure.Migrations
                         {
                             Id = 1,
                             Name = "Aesthetic plastic and reconstructive surgery"
-                        },
-                        new
-                        {
-                            Id = 2,
-                            Name = "Allergology"
-                        },
-                        new
-                        {
-                            Id = 3,
-                            Name = "Cardiology"
-                        },
-                        new
-                        {
-                            Id = 4,
-                            Name = "Cardiovascular surgery"
-                        },
-                        new
-                        {
-                            Id = 5,
-                            Name = "Chest surgery"
-                        },
-                        new
-                        {
-                            Id = 6,
-                            Name = "Dermatology"
-                        },
-                        new
-                        {
-                            Id = 7,
-                            Name = "Ear nose and throat"
-                        },
-                        new
-                        {
-                            Id = 8,
-                            Name = "Endocrinology diabetes and metabolic diseases"
-                        },
-                        new
-                        {
-                            Id = 9,
-                            Name = "Gastroenterology"
-                        },
-                        new
-                        {
-                            Id = 10,
-                            Name = "General surgery"
-                        },
-                        new
-                        {
-                            Id = 11,
-                            Name = "Hematology"
-                        },
-                        new
-                        {
-                            Id = 12,
-                            Name = "Infections diseases"
-                        },
-                        new
-                        {
-                            Id = 13,
-                            Name = "Internal medicine"
-                        },
-                        new
-                        {
-                            Id = 14,
-                            Name = "Nephrology"
-                        },
-                        new
-                        {
-                            Id = 15,
-                            Name = "Neurology"
-                        },
-                        new
-                        {
-                            Id = 16,
-                            Name = "Nutrition and dietetics"
-                        },
-                        new
-                        {
-                            Id = 17,
-                            Name = "Obstetrics and genecology"
-                        },
-                        new
-                        {
-                            Id = 18,
-                            Name = "Oncology"
-                        },
-                        new
-                        {
-                            Id = 19,
-                            Name = "Ophthalmology"
-                        },
-                        new
-                        {
-                            Id = 20,
-                            Name = "Orthopedics"
-                        },
-                        new
-                        {
-                            Id = 21,
-                            Name = "Physiotherapy"
-                        },
-                        new
-                        {
-                            Id = 22,
-                            Name = "Psychiatry"
-                        },
-                        new
-                        {
-                            Id = 23,
-                            Name = "Radiotherapy"
-                        },
-                        new
-                        {
-                            Id = 24,
-                            Name = "Rheumatology"
                         });
                 });
 
@@ -163,9 +50,6 @@ namespace HealthCare.Infrastructure.Migrations
                         .HasColumnType("int")
                         .UseIdentityColumn();
 
-                    b.Property<int>("DepartmentId")
-                        .HasColumnType("int");
-
                     b.Property<int>("HospitalId")
                         .HasColumnType("int");
 
@@ -173,8 +57,6 @@ namespace HealthCare.Infrastructure.Migrations
                         .HasColumnType("int");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("DepartmentId");
 
                     b.HasIndex("HospitalId");
 
@@ -406,12 +288,6 @@ namespace HealthCare.Infrastructure.Migrations
 
             modelBuilder.Entity("HealthCare.Core.Entities.Doctor", b =>
                 {
-                    b.HasOne("HealthCare.Core.Entities.Department", "Department")
-                        .WithMany()
-                        .HasForeignKey("DepartmentId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
                     b.HasOne("HealthCare.Core.Entities.Hospital", "Hospital")
                         .WithMany()
                         .HasForeignKey("HospitalId")
@@ -423,8 +299,6 @@ namespace HealthCare.Infrastructure.Migrations
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
-
-                    b.Navigation("Department");
 
                     b.Navigation("Hospital");
 

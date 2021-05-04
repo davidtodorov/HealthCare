@@ -56,6 +56,11 @@ export default {
 				to: "/home",
 			},
 			{
+				icon: "mdi-star",
+				text: "Hospitals",
+				to: "/hospitals",
+			},
+			{
 				icon: "mdi-inbox",
 				text: "Login",
 				to: "/login",

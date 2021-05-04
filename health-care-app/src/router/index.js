@@ -4,6 +4,7 @@ import Home from '@/views/Home.vue'
 import Login from '@/views/authentication/Login'
 import Register from '@/views/authentication/Register'
 import ErrorPage from '@/views/Error'
+import Hospitals from '@/views/Hospitals'
 
 import store from '@/store'
 // import authService from '@/services/authService';
@@ -17,7 +18,6 @@ const routes = [
     component: Home,
     meta: {
       requiresAuth: true,
-      roles: ["Admin"]
     }
   },
   {
@@ -26,7 +26,6 @@ const routes = [
     component: Home,
     meta: {
       requiresAuth: true,
-      roles: ["Admin"]
     }
   },
   {
@@ -51,6 +50,11 @@ const routes = [
     path: '/error',
     name: 'Error',
     component: ErrorPage
+  },
+  {
+    path: '/hospitals',
+    name: 'Hospitals',
+    component: Hospitals
   },
 ]
 
