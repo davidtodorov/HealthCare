@@ -54,9 +54,7 @@ namespace HealthCare.API.Infrastructure.Extensions
 
         public static IServiceCollection AddApplicationServices(this IServiceCollection services)
         {
-            return services
-                    .AddScoped<IUnitOfWork, UnitOfWork>()
-                    .AddScoped<IPrincipalProvider, PrincipalProvider>();
+            return services.AddScoped<IUnitOfWork, UnitOfWork>();
         }
 
         public static IServiceCollection AddMapperConfig(this IServiceCollection services)

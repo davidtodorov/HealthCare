@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using HealthCare.Core.Base;
 using HealthCare.Infrastructure;
 using Microsoft.AspNetCore.Mvc;
 using System;
@@ -11,7 +12,7 @@ using System.Threading.Tasks;
 namespace HealthCare.API.Controllers
 {
     public abstract class RestController<TEntity, TModel> : ApiController
-        where TEntity : class
+        where TEntity : IEntity
         where TModel : class
     {
         
@@ -41,7 +42,8 @@ namespace HealthCare.API.Controllers
         [HttpPost]
         public virtual ActionResult Post(TModel requestModel)
         {
-            var entity = (TEntity)Activator.CreateInstance(typeof(TEntity), new object[] { requestModel });
+            //var entity = (TEntity)Activator.CreateInstance(typeof(TEntity), new object[] { requestModel });
+            var entity = mapper.Map<TModel, TEntity>(requestModel);
             this.repository.Insert(entity);
             unitOfWork.SaveChanges();
             return Ok();

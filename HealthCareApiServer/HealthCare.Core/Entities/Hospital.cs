@@ -1,17 +1,17 @@
-﻿using System;
+﻿using HealthCare.Core.Base;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Text;
 
 namespace HealthCare.Core.Entities
 {
-    public class Hospital
+    public class Hospital : Entity
     {
-        public Hospital(string name)
+        public Hospital(string Name)
         {
-            this.Name = name;
+            this.Name = Name;
         }
-        public int Id { get; set; }
         [Required]
         public string Name { get; set; }
     }

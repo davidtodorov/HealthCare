@@ -1,10 +1,10 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using HealthCare.Core.Base;
+using System.ComponentModel.DataAnnotations;
 
 namespace HealthCare.Core.Entities
 {
-    public class Doctor
+    public class Doctor : Entity
     {
-        public int Id { get; set; }
         [Required] 
         public int UserId { get; set; }
         public User User { get; set; }

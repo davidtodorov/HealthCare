@@ -7,12 +7,14 @@ namespace HealthCare.Infrastructure
     {
         public IRepository<Hospital> HospitalRepository { get; set; }
         public IRepository<Doctor> DoctorRepository { get; set; }
+        public IRepository<User> UserRepository { get; set; }
 
         public UnitOfWork(HealthCareDbContext context)
         {
             this.context = context;
             this.HospitalRepository = new Repository<Hospital>(context);
             this.DoctorRepository = new Repository<Doctor>(context);
+            this.UserRepository = new Repository<User>(context);
         }
 
         public void SaveChanges()
