@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using HealthCare.Core.Base;
 using HealthCare.Infrastructure;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
@@ -11,6 +12,7 @@ using System.Threading.Tasks;
 
 namespace HealthCare.API.Controllers
 {
+    [Authorize]
     public abstract class RestController<TEntity, TModel> : ApiController
         where TEntity : IEntity
         where TModel : class

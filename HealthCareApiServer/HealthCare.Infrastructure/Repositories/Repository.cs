@@ -65,6 +65,10 @@ namespace HealthCare.Infrastructure
         public virtual void Remove(object id)
         {
             TEntity entityToDelete = dbSet.Find(id);
+            if (entityToDelete == null)
+            {
+                throw new NullReferenceException("Entity with the given id does not exists!");
+            }
             Remove(entityToDelete);
         }
 
