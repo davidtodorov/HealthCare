@@ -12,6 +12,7 @@ instance.interceptors.request.use((config) => {
 
 const baseUrl = process.env.NODE_ENV == 'development' ? 'https://localhost:44336' : 'https://health-care-api.azurewebsites.net/'
 instance.defaults.baseURL = baseUrl;
+// instance.defaults.withCredentials = true;
 
 instance.interceptors.request.use(function (config) {
     const token = authService.getToken();

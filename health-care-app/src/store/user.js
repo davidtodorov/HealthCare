@@ -27,6 +27,15 @@ const user = {
         },
     },
     actions: {
+        verifyUser({ commit }) {
+            return axios.post("https://localhost:44336/identity/verify").then((res) => {
+                console.log(res);
+                commit('setCurrentUser', res.data);
+                return Promise.resolve();
+            }).catch(err => {
+                return Promise.reject(err)
+            })
+        },
         register({ email, username, password }) {
             return axios.post('/identity/register', {
                 email,
@@ -38,16 +47,6 @@ const user = {
                 return Promise.reject(err)
             })
         },
-        // getUser({ commit }) {
-        //     return axios.post("https://localhost:44336/identity/login").then((res) => {
-        //         console.log(res);
-                
-        //         commit('setCurrentUser', res.data);
-        //         return Promise.resolve();
-        //     }).catch(err => {
-        //         return Promise.reject(err)
-        //     })
-        // },
         login({ commit }, { username, password }) {
             return axios.post("identity/login", {
                 username,

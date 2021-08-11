@@ -4,8 +4,8 @@ import Home from '@/views/Home.vue'
 import Login from '@/views/authentication/Login'
 import Register from '@/views/authentication/Register'
 
-// import store from '@/store'
-// import authService from '@/services/authService';
+import store from '@/store'
+import authService from '@/services/authService';
 
 Vue.use(VueRouter)
 
@@ -54,22 +54,22 @@ const router = new VueRouter({
 
 router.beforeEach((to, from, next) => {
   if (to.meta.requiresAuth) {
-      // if (!store.state.user.currentUser) {
-      //     var authToken = authService.get('auth-token');
-      //     if (authToken) {
-      //         store.dispatch("user/getCurrentUser")
-      //             .then(() => {
-      //                 return next()
-      //             })
-      //             .catch(() => {
-      //                 next('/login')
-      //             });
-      //     } else {
-      //         next("/login")
-      //     }
-      // } else {
-      //     next();
-      // }
+      if (!store.state.user.currentUser) {
+          let authToken = authService.getToken('auth-token');
+          if (authToken) {
+              const user = store.getters.currentUser;
+              if (!user) {
+                  store.dispatch("user/verifyUser").then(() => {
+
+                  })
+              }
+              user ? next() : next('/login');
+          } else {
+              next("/login")
+          }
+      } else {
+          next();
+      }
   } else {
       next();
   }

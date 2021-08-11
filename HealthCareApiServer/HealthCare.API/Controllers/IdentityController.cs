@@ -68,6 +68,8 @@ namespace HealthCare.API.Controllers
             //var token = tokenHandler.CreateToken(tokenDescriptor);
             var encryptedToken = tokenHandler.WriteToken(token);
 
+            Response.Cookies.Append("token", encryptedToken);
+
             return new { 
                 Token = encryptedToken
             };
@@ -96,6 +98,14 @@ namespace HealthCare.API.Controllers
             }
 
             return this.BadRequest(result.Errors);
+        }
+
+        [HttpPost]
+        [Route(nameof(Verify))]
+        public async Task<ActionResult> Verify()
+        {
+            var token = Request.Cookies.Keys;
+            return null;
         }
     }
 }

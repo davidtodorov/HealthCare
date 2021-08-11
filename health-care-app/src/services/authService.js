@@ -1,9 +1,13 @@
+import Cookie from 'js-cookie'
+
 const getToken = () => {
-    return localStorage.getItem("auth-token")
+    return Cookie.get("auth-token");
+    // return localStorage.getItem("auth-token")
 }
 
 const setToken = (value) => {
-    return localStorage.setItem("auth-token", value)
+    return Cookie.set("auth-token", value);
+    // return localStorage.setItem("auth-token", value)
 }
 
 export default {
