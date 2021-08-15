@@ -1,0 +1,83 @@
+﻿using AutoMapper;
+using HealthCare.Infrastructure;
+using Microsoft.AspNetCore.Mvc;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+
+// For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+
+namespace WebApp.Controllers
+{
+    public abstract class RestController<TEntity, TModel> : ApiController
+        where TEntity : class
+        where TModel : class
+    {
+
+        public RestController(IUnitOfWork unitOfWork, IMapper mapper)
+        {
+            this.unitOfWork = unitOfWork;
+            repository = GetRepository(typeof(TEntity));
+            this.mapper = mapper;
+        }
+
+        [HttpGet]
+        public IEnumerable<TModel> Get()
+        {
+            var entities = repository.GetAll();
+            var result = mapper.Map<IEnumerable<TEntity>, IEnumerable<TModel>>(entities);
+            return result.ToList();
+        }
+
+        [HttpGet("{id}")]
+        public virtual TModel Get(int id)
+        {
+            var entity = repository.GetById(id);
+            var result = mapper.Map<TEntity, TModel>(entity);
+            return result;
+        }
+
+        [HttpPost]
+        public virtual ActionResult Post(TModel requestModel)
+        {
+            var entity = (TEntity)Activator.CreateInstance(typeof(TEntity), new object[] { requestModel });
+            repository.Insert(entity);
+            unitOfWork.SaveChanges();
+            return Ok();
+        }
+
+        [HttpPut("{id}")]
+        public virtual void Put(int id, TModel requestModel)
+        {
+            var entity = repository.GetById(id);
+            mapper.Map(requestModel, entity);
+            unitOfWork.SaveChanges();
+        }
+
+        [HttpDelete("{id}")]
+        public virtual void Delete(int id)
+        {
+            repository.Remove(id);
+            unitOfWork.SaveChanges();
+        }
+
+        #region private members
+        private IRepository<TEntity> GetRepository(Type entityType)
+        {
+            foreach (var property in unitOfWork.GetType().GetProperties())
+            {
+                if (property.PropertyType.GenericTypeArguments.FirstOrDefault().Name == entityType.Name)
+                {
+                    return (IRepository<TEntity>)property.GetValue(unitOfWork);
+                }
+            }
+            return null;
+        }
+
+        private readonly IRepository<TEntity> repository;
+        private readonly IMapper mapper;
+        protected readonly IUnitOfWork unitOfWork;
+        #endregion
+    }
+}
