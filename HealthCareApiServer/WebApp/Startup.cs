@@ -1,10 +1,11 @@
+using HealthCare.Infrastructure;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.HttpsPolicy;
-using Microsoft.AspNetCore.SpaServices.ReactDevelopmentServer;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using WebApp.Extensions;
 
 namespace WebApp
 {
@@ -21,7 +22,21 @@ namespace WebApp
         public void ConfigureServices(IServiceCollection services)
         {
 
-            services.AddControllersWithViews();
+            services
+                .AddDbContext<HealthCareDbContext>(options => options.UseSqlServer(this.Configuration.GetDefaultConnectionString()))
+                .AddIdentity()
+                .AddJwtAuthentication(services.GetApplicationSettings(this.Configuration))
+                .AddCors(options =>
+                {
+                    options.AddPolicy("CorsApi", builder =>
+                        builder
+                            .WithOrigins("*")
+                            .AllowAnyHeader()
+                            .AllowAnyMethod());
+                })
+                .AddMapperConfig()
+                .AddApplicationServices()
+                .AddControllers();
 
             // In production, the React files will be served from this directory
             services.AddSpaStaticFiles(configuration =>
@@ -49,11 +64,13 @@ namespace WebApp
             app.UseSpaStaticFiles();
 
             app.UseRouting();
-
+            app.UseCors("CorsApi");
+            app.UseAuthentication();
+            app.UseAuthorization();
             app.UseEndpoints(endpoints =>
-             {
-                 endpoints.MapControllers();
-             });
+            {
+                endpoints.MapControllers();
+            });
 
             app.UseSpa(spa =>
             {
@@ -61,7 +78,7 @@ namespace WebApp
 
                 if (env.IsDevelopment())
                 {
-                    spa.UseProxyToSpaDevelopmentServer("http://localhost:8080");
+                    //spa.UseProxyToSpaDevelopmentServer("http://localhost:8080");
                 }
             });
         }

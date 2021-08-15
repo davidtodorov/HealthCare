@@ -1,7 +1,7 @@
 module.exports = {
-    //devServer: {
-    //    proxy: 'http://localhost:48459/'
-    //},
+    devServer: {
+       proxy: 'https://localhost:44351/'
+    },
     pwa: {
         workboxOptions: {
             skipWaiting: true
