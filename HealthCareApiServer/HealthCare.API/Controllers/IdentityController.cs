@@ -82,9 +82,19 @@ namespace HealthCare.API.Controllers
 
             //Response.Cookies.Append("auth-token", encryptedToken);
 
-            //return new { 
-            //    Token = encryptedToken
+            //await signInManager.SignInAsync(user, false);
+            //var userRoles = await userManager.GetRolesAsync(user);
+            //return new
+            //{
+            //    UserId = user.Id,
+            //    FirstName = user.FirstName,
+            //    LastName = user.LastName,
+            //    Roles = userRoles
             //};
+
+            return new { 
+                Token = encryptedToken
+            };
         }
 
         [HttpPost]

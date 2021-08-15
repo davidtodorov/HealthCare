@@ -1,5 +1,5 @@
 import axios from '@/axios';
-// import authService from '@/services/authService';
+import authService from '@/services/authService';
 
 
 const getDefaultState = () => {
@@ -36,15 +36,12 @@ const user = {
                 return Promise.reject(err)
             })
         },
-        register({ commit }, { email, username, firstName, lastName, password }) {
+        register({ email, username, password }) {
             return axios.post('/identity/register', {
                 email,
                 username,
-                firstName,
-                lastName,
                 password
             }).then(() => {
-                commit();
                 return Promise.resolve();
             }).catch(err => {
                 return Promise.reject(err)
@@ -56,7 +53,7 @@ const user = {
                 password
             }).then((res) => {
                 console.log(res);
-                // authService.setToken(res.data.token);
+                authService.setToken(res.data.token);
                 commit('setCurrentUser', res.data);
                 return Promise.resolve();
             }).catch(err => {
