@@ -38,10 +38,10 @@ namespace WebApp
                 .AddApplicationServices()
                 .AddControllers();
 
-            // In production, the React files will be served from this directory
+            // In production, the Vue files will be served from this directory
             services.AddSpaStaticFiles(configuration =>
             {
-                configuration.RootPath = "health-care-app/dist";
+                configuration.RootPath = "client-app/dist";
             });
         }
 
@@ -64,7 +64,11 @@ namespace WebApp
             app.UseSpaStaticFiles();
 
             app.UseRouting();
-            app.UseCors("CorsApi");
+
+            if (env.IsDevelopment())
+            {
+                app.UseCors("CorsApi");
+            }
             app.UseAuthentication();
             app.UseAuthorization();
             app.UseEndpoints(endpoints =>
@@ -74,7 +78,7 @@ namespace WebApp
 
             app.UseSpa(spa =>
             {
-                spa.Options.SourcePath = "health-care-app";
+                spa.Options.SourcePath = "client-app";
 
                 if (env.IsDevelopment())
                 {
