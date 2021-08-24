@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using HealthCare.Core.Base;
 using HealthCare.Infrastructure;
 using Microsoft.AspNetCore.Mvc;
 using System;
@@ -11,7 +12,7 @@ using System.Threading.Tasks;
 namespace WebApp.Controllers
 {
     public abstract class RestController<TEntity, TModel> : ApiController
-        where TEntity : class
+        where TEntity : IEntity
         where TModel : class
     {
 
