@@ -92,9 +92,9 @@ namespace HealthCare.API.Controllers
             //    Roles = userRoles
             //};
 
-            return new { 
-                Token = encryptedToken
-            };
+            //return new { 
+            //    Token = encryptedToken
+            //};
         }
 
         [HttpPost]
