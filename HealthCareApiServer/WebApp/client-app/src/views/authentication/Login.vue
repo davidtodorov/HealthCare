@@ -1,5 +1,5 @@
 <template>
-	<AppAuthenticationForm title="Pesho" :submitHandler="submitLogin" :allFieldsAreValid="true">
+	<AppAuthenticationForm title="Login" :submitHandler="submitLogin" :allFieldsAreValid="true">
 		<v-form>
 			<v-text-field 
 				label="Username" 

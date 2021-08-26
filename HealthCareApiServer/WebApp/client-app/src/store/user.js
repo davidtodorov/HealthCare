@@ -1,6 +1,4 @@
 import axios from '@/axios';
-import authService from '@/services/authService';
-
 
 const getDefaultState = () => {
     return {
@@ -28,20 +26,22 @@ const user = {
     },
     actions: {
         verifyUser({ commit }) {
-            return axios.post("https://localhost:44336/identity/verify").then((res) => {
-                console.log(res);
+            return axios.post("identity/verify").then((res) => {
                 commit('setCurrentUser', res.data);
                 return Promise.resolve();
             }).catch(err => {
                 return Promise.reject(err)
             })
         },
-        register({ email, username, password }) {
-            return axios.post('/identity/register', {
+        register({commit},{ email, username, password, firstName, lastName }) {
+            return axios.post('identity/register', {
                 email,
                 username,
-                password
-            }).then(() => {
+                password,
+                firstName,
+                lastName
+            }).then((res) => {
+                commit('setCurrentUser', res.data);
                 return Promise.resolve();
             }).catch(err => {
                 return Promise.reject(err)
@@ -52,8 +52,6 @@ const user = {
                 username,
                 password
             }).then((res) => {
-                console.log(res);
-                authService.setToken(res.data.token);
                 commit('setCurrentUser', res.data);
                 return Promise.resolve();
             }).catch(err => {

@@ -85,7 +85,7 @@ namespace HealthCare.Infrastructure
                 .ForEach(entry =>
                 {
                     
-                    var userName = this.httpContextAccessor.HttpContext.User.Identity.Name;
+                    var userName = this.httpContextAccessor.HttpContext.User.Identity.Name ?? "Anonymous";
                     var entity = (IEntity)entry.Entity;
 
                     entity.ModifiedOn = DateTime.UtcNow;

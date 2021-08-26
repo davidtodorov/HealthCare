@@ -11,9 +11,9 @@ instance.interceptors.request.use((config) => {
 });
 
 //change with the port of backend server
-const baseUrl = process.env.NODE_ENV == 'development' ? 'https://localhost:44351' : 'https://health-care-api.azurewebsites.net/'
+const baseUrl = '/'; // process.env.NODE_ENV == 'development' ? '/' : 'https://health-care-api.azurewebsites.net/'
 instance.defaults.baseURL = baseUrl;
-// instance.defaults.withCredentials = true;
+instance.defaults.withCredentials = true;
 
 instance.interceptors.request.use(function (config) {
     const token = authService.getToken();

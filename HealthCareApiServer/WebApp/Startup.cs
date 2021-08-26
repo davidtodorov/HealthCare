@@ -6,6 +6,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using WebApp.Extensions;
+using WebApp.Infrastructure.Extensions;
 
 namespace WebApp
 {
@@ -25,12 +26,12 @@ namespace WebApp
             services
                 .AddDbContext<HealthCareDbContext>(options => options.UseSqlServer(this.Configuration.GetDefaultConnectionString()))
                 .AddIdentity()
-                .AddJwtAuthentication(services.GetApplicationSettings(this.Configuration))
+                //.AddJwtAuthentication(services.GetApplicationSettings(this.Configuration))  //USE FOR JWT AUTHENTICATION
                 .AddCors(options =>
                 {
                     options.AddPolicy("CorsApi", builder =>
                         builder
-                            .WithOrigins("*")
+                            .WithOrigins("http://localhost:8080")
                             .AllowAnyHeader()
                             .AllowAnyMethod());
                 })
@@ -85,6 +86,9 @@ namespace WebApp
                     //spa.UseProxyToSpaDevelopmentServer("http://localhost:8080");
                 }
             });
+
+            app.SeedDatabase();
+            app.ApplyMigrations();
         }
     }
 }

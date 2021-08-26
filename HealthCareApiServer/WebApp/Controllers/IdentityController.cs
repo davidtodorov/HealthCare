@@ -10,17 +10,21 @@ using Microsoft.IdentityModel.Tokens;
 using HealthCare.Core.Entities;
 using System.Collections.Generic;
 using WebApp.Models.Identity;
+using HealthCare.Core;
+using Microsoft.AspNetCore.Authentication.Cookies;
 
 namespace WebApp.Controllers
 {
     public class IdentityController : ApiController
     {
         private readonly UserManager<User> userManager;
+        private readonly SignInManager<User> signInManager;
         private readonly ApplicationSettings appSettings;
 
-        public IdentityController(UserManager<User> userManager, IOptions<ApplicationSettings> appSettings)
+        public IdentityController(UserManager<User> userManager, SignInManager<User> signInManager, IOptions<ApplicationSettings> appSettings)
         {
             this.userManager = userManager;
+            this.signInManager = signInManager;
             this.appSettings = appSettings.Value;
         }
 
@@ -39,41 +43,43 @@ namespace WebApp.Controllers
                 return Unauthorized();
             }
 
-            var claims = new List<Claim>
-            {
-                new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
-                new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString())
-            };
 
-            var roles = await userManager.GetRolesAsync(user);
-            foreach (var role in roles)
-            {
-                claims.Add(new Claim(ClaimTypes.Role, role));
-            }
+            await signInManager.SignInAsync(user, false, CookieAuthenticationDefaults.AuthenticationScheme);
 
-            // generate token that is valid for 7 days
-            var tokenHandler = new JwtSecurityTokenHandler();
-            var key = Encoding.ASCII.GetBytes(appSettings.Secret);
-            var token = new JwtSecurityToken(
-                claims: claims,
-                expires: DateTime.UtcNow.AddDays(7),
-                signingCredentials: new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
-            );
+            return Ok(new { Username = user.UserName, FirstName = user.FirstName, LastName = user.LastName });
+
+
+            //USE FOR JWT AUTHENTICATION
+
+            //var claims = new List<Claim>
             //{
-            //    //Subject = new ClaimsIdentity(new[] { new Claim(ClaimTypes.Name, user.Id.ToString()) }),
-            //    //Expires = DateTime.UtcNow.AddDays(7),
-            //    //SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature),
-            //    //Claims
+            //    new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
+            //    new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString())
             //};
-            //var token = tokenHandler.CreateToken(tokenDescriptor);
-            var encryptedToken = tokenHandler.WriteToken(token);
 
-            Response.Cookies.Append("token", encryptedToken);
+            //var roles = await userManager.GetRolesAsync(user);
+            //foreach (var role in roles)
+            //{
+            //    claims.Add(new Claim(ClaimTypes.Role, role));
+            //}
 
-            return new
-            {
-                Token = encryptedToken
-            };
+            //// generate token that is valid for 7 days
+            //var tokenHandler = new JwtSecurityTokenHandler();
+            //var key = Encoding.ASCII.GetBytes(appSettings.Secret);
+            //var token = new JwtSecurityToken(
+            //    claims: claims,
+            //    expires: DateTime.UtcNow.AddDays(7),
+            //    signingCredentials: new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
+            //);
+            
+            //var encryptedToken = tokenHandler.WriteToken(token);
+
+            //Response.Cookies.Append("token", encryptedToken);
+
+            //return new
+            //{
+            //    Token = encryptedToken
+            //};
         }
 
         [HttpPost]
@@ -89,13 +95,14 @@ namespace WebApp.Controllers
                 Email = model.Email,
                 UserName = model.Username,
                 FirstName = model.FirstName,
-                LastName = model.LastsName
+                LastName = model.LastName
             };
             var result = await userManager.CreateAsync(user, model.Password);
+            await userManager.AddToRoleAsync(user, RoleConstants.PATIENT_ROLE);
 
             if (result.Succeeded)
             {
-                return Ok();
+                return Ok(new { Username = user.UserName, FirstName = user.FirstName, LastName = user.LastName });
             }
 
             return this.BadRequest(result.Errors);
@@ -103,10 +110,11 @@ namespace WebApp.Controllers
 
         [HttpPost]
         [Route(nameof(Verify))]
-        public async Task<ActionResult> Verify()
+        public ActionResult Verify()
         {
             var token = Request.Cookies.Keys;
-            return null;
+            bool isVerified = (HttpContext.User != null) && HttpContext.User.Identity.IsAuthenticated;
+            return isVerified ? Ok() : Unauthorized();
         }
     }
 }

@@ -10,7 +10,7 @@ instance.interceptors.request.use((config) => {
     return config;
 });
 
-const baseUrl = process.env.NODE_ENV == 'development' ? 'https://localhost:44336' : 'https://health-care-api.azurewebsites.net/'
+const baseUrl = process.env.NODE_ENV == 'development' ? 'https://localhost:44351' : 'https://health-care-api.azurewebsites.net/'
 instance.defaults.baseURL = baseUrl;
 // instance.defaults.withCredentials = true;
 
