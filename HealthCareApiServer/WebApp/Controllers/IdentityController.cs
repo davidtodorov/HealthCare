@@ -12,6 +12,7 @@ using System.Collections.Generic;
 using WebApp.Models.Identity;
 using HealthCare.Core;
 using Microsoft.AspNetCore.Authentication.Cookies;
+using System.Linq;
 
 namespace WebApp.Controllers
 {
@@ -110,11 +111,10 @@ namespace WebApp.Controllers
 
         [HttpPost]
         [Route(nameof(Verify))]
-        public ActionResult Verify()
+        public async Task<ActionResult> Verify()
         {
-            var token = Request.Cookies.Keys;
-            bool isVerified = (HttpContext.User != null) && HttpContext.User.Identity.IsAuthenticated;
-            return isVerified ? Ok() : Unauthorized();
+            var user = await userManager.GetUserAsync(User);
+            return user != null ? Ok(new { Username = user.UserName, FirstName = user.FirstName, LastName = user.LastName }) : Unauthorized();
         }
     }
 }

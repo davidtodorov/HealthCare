@@ -3,6 +3,7 @@ import axios from '@/axios';
 const getDefaultState = () => {
     return {
         currentUser: null,
+        isLoggedIn: false,
     }
 }
 
@@ -13,6 +14,9 @@ const user = {
         currentUser(state) {
             return state.currentUser;
         },
+        isLoggedIn(state) {
+            return !!state.currentUser;
+        }
 
     },
     mutations: {
