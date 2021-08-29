@@ -65,7 +65,7 @@ namespace WebApp
             app.UseSpaStaticFiles();
 
             app.UseRouting();
-
+            app.UseCors();
             if (env.IsDevelopment())
             {
                 app.UseCors("CorsApi");
@@ -83,7 +83,7 @@ namespace WebApp
 
                 if (env.IsDevelopment())
                 {
-                    //spa.UseProxyToSpaDevelopmentServer("http://localhost:8080");
+                    spa.UseProxyToSpaDevelopmentServer("http://localhost:8080");
                 }
             });
 
