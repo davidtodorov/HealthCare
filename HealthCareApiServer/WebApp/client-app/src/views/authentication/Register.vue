@@ -176,7 +176,7 @@ export default {
         })
         .then((res) => {
           console.log(res);
-          this.$router.push({ name: "ProductList" });
+          this.$router.push({ name: "Home" });
         })
         .catch((err) => {
           this.errorMessage = err.response.data;

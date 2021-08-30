@@ -72,7 +72,7 @@ namespace WebApp.Controllers
             //    expires: DateTime.UtcNow.AddDays(7),
             //    signingCredentials: new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
             //);
-            
+
             //var encryptedToken = tokenHandler.WriteToken(token);
 
             //Response.Cookies.Append("token", encryptedToken);
@@ -99,10 +99,11 @@ namespace WebApp.Controllers
                 LastName = model.LastName
             };
             var result = await userManager.CreateAsync(user, model.Password);
-            await userManager.AddToRoleAsync(user, RoleConstants.PATIENT_ROLE);
 
             if (result.Succeeded)
             {
+                await userManager.AddToRoleAsync(user, RoleConstants.PATIENT_ROLE);
+                await signInManager.SignInAsync(user, false, CookieAuthenticationDefaults.AuthenticationScheme);
                 return Ok(new { Username = user.UserName, FirstName = user.FirstName, LastName = user.LastName });
             }
 
