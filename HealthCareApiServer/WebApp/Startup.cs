@@ -87,8 +87,8 @@ namespace WebApp
                 }
             });
 
-            app.SeedDatabase();
             app.ApplyMigrations();
+            app.SeedDatabase();
         }
     }
 }

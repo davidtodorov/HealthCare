@@ -111,6 +111,14 @@ namespace WebApp.Controllers
         }
 
         [HttpPost]
+        [Route(nameof(Logout))]
+        public async Task<ActionResult> Logout()
+        {
+            await this.signInManager.SignOutAsync();
+            return Ok();
+        }
+
+        [HttpPost]
         [Route(nameof(Verify))]
         public async Task<ActionResult> Verify()
         {

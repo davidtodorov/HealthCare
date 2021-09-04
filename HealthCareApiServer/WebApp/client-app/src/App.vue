@@ -1,12 +1,14 @@
 <template>
   <v-app id="inspire">
     <v-navigation-drawer v-model="drawer" app>
-      <v-card class="mx-auto" max-width="500">
-        <v-list>
-            <MenuItems :isVisible=!isLoggedIn :items=noUserMenuItems></MenuItems>
-            <MenuItems :isVisible=isLoggedIn :items=adminMenuItems></MenuItems>
-        </v-list>
-      </v-card>
+      <MenuItems :isVisible="!isLoggedIn" :items="noUserMenuItems"></MenuItems>
+      <MenuItems :isVisible="isLoggedIn" :items="adminMenuItems"></MenuItems>
+
+      <template v-if="isLoggedIn" v-slot:append>
+        <div class="pa-2">
+          <v-btn @click="onLogout" block> Logout </v-btn>
+        </div>
+      </template>
     </v-navigation-drawer>
 
     <v-app-bar app>
@@ -26,7 +28,7 @@
 </template>
 
 <script>
-import MenuItems from './components/MenuItems';
+import MenuItems from "./components/MenuItems";
 
 export default {
   name: "App",
@@ -55,6 +57,10 @@ export default {
         text: "Home",
         to: "/home",
       },
+      // {
+      //   icon: "mdi-inbox",
+      //   text: "Log Out",
+      // },
     ],
   }),
   computed: {
@@ -66,6 +72,18 @@ export default {
         this.isLoggedIn &&
         `${this.$store.getters["user/currentUser"].firstName} ${this.$store.getters["user/currentUser"].lastName}`
       );
+    },
+  },
+  methods: {
+    onLogout() {
+      this.$store
+        .dispatch("user/logout")
+        .then(() => {
+          this.$router.push({ name: "Login" });
+        })
+        .catch((err) => {
+          console.log(err);
+        });
     },
   },
 };
