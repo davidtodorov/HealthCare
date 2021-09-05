@@ -1,5 +1,5 @@
 <template>
-  <v-app id="inspire">
+  <div>
     <v-navigation-drawer v-model="drawer" app>
       <MenuItems :isVisible="!isLoggedIn" :items="noUserMenuItems"></MenuItems>
       <MenuItems :isVisible="isLoggedIn" :items="adminMenuItems"></MenuItems>
@@ -20,19 +20,11 @@
         </v-toolbar-title>
       </template>
     </v-app-bar>
-
-    <v-main>
-      <router-view />
-    </v-main>
-  </v-app>
+  </div>
 </template>
 
 <script>
-import MenuItems from "./components/MenuItems";
-
 export default {
-  name: "App",
-
   components: {
     MenuItems,
   },
@@ -57,10 +49,6 @@ export default {
         text: "Home",
         to: "/",
       },
-      // {
-      //   icon: "mdi-inbox",
-      //   text: "Log Out",
-      // },
     ],
   }),
   computed: {
@@ -88,3 +76,6 @@ export default {
   },
 };
 </script>
+
+<style>
+</style>
