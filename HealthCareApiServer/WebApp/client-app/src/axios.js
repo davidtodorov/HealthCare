@@ -11,7 +11,7 @@ instance.interceptors.request.use((config) => {
 });
 
 //change with the port of backend server
-const baseUrl = '/'; // process.env.NODE_ENV == 'development' ? '/' : 'https://health-care-api.azurewebsites.net/'
+const baseUrl = '/api/'; // process.env.NODE_ENV == 'development' ? '/' : 'https://health-care-api.azurewebsites.net/'
 instance.defaults.baseURL = baseUrl;
 instance.defaults.withCredentials = true;
 

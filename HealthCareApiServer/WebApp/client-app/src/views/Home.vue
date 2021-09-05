@@ -1,6 +1,7 @@
 <template>
-  <div class="home">
-    <img alt="Vue logo" src="../assets/logo.png">
+  <div>
+    <v-btn color="primary" elevation="2" to="/hospital/create">Create Hospital</v-btn>
+    <v-btn color="primary" elevation="2">Create Doctor</v-btn>
   </div>
 </template>
 
@@ -8,8 +9,7 @@
 // @ is an alias to /src
 
 export default {
-  name: 'Home',
-  components: {
-  }
-}
+  name: "Home",
+  components: {},
+};
 </script>

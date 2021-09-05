@@ -53,11 +53,11 @@ const router = new VueRouter({
 
 router.beforeEach((to, from, next) => {
   if (to.meta.requiresAuth) {
-    const user = store.getters.currentUser;
+    const user = store.getters['user/currentUser']
     if (user) {
       next()
     } else {
-      store.dispatch("user/verifyUser").then(() => {
+      store.dispatch('user/verifyUser').then(() => {
         next()
       }).catch(() => {
         next('/login')

@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 namespace WebApp.Controllers
 {
     [EnableCors("CorsApi")]
-    [Route("[controller]")]
+    [Route("api/[controller]")]
     [ApiController]
     public abstract class ApiController : ControllerBase
     {
