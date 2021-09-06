@@ -51,6 +51,11 @@ export default {
         text: "Home",
         to: "/",
       },
+      {
+        icon: "mdi-inbox",
+        text: "Hospitals",
+        to: "/hospitals",
+      },
     ],
   }),
   computed: {

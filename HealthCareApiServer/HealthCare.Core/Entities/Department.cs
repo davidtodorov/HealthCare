@@ -9,6 +9,6 @@ namespace HealthCare.Core.Entities
 {
     public class Department : Entity
     {
-        public string Name { get; set; }
+        public virtual string Name { get; set; }
     }
 }

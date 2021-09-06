@@ -10,6 +10,7 @@ namespace HealthCare.Infrastructure
     public interface IUnitOfWork : IDisposable
     {
         IRepository<Hospital> HospitalRepository { get; set; }
+        IRepository<Doctor> DoctorRepository { get; set; }
         void SaveChanges();
     }
 }

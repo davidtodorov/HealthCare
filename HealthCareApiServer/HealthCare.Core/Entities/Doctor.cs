@@ -6,13 +6,13 @@ namespace HealthCare.Core.Entities
     public class Doctor : Entity
     {
         [Required] 
-        public int UserId { get; set; }
-        public User User { get; set; }
+        public virtual int UserId { get; set; }
+        public virtual User User { get; set; }
         [Required]
-        public int HospitalId { get; set; }
-        public Hospital Hospital { get; set; }
+        public virtual int HospitalId { get; set; }
+        public virtual Hospital Hospital { get; set; }
         [Required]
-        public int DepartmentId { get; set; }
-        public Department Department { get; set; }
+        public virtual int DepartmentId { get; set; }
+        public virtual Department Department { get; set; }
     }
 }

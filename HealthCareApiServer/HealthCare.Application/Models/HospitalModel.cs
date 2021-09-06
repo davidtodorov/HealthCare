@@ -6,7 +6,11 @@ namespace HealthCare.Application.Models
 {
     public class HospitalModel
     {
-        public int? Id { get; set; }
+        public HospitalModel()
+        {
+            DoctorModels = new List<DoctorModel>();
+        }
         public string Name { get; set; }
+        public List<DoctorModel> DoctorModels{ get; set; }
     }
 }
