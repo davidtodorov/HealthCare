@@ -1,5 +1,9 @@
 ﻿using AutoMapper;
 using HealthCare.Application.AutoMapper;
+using HealthCare.Application.Interfaces.Doctor;
+using HealthCare.Application.Interfaces.User;
+using HealthCare.Application.Services.Doctors;
+using HealthCare.Application.Services.User;
 using HealthCare.Core.Entities;
 using HealthCare.Infrastructure;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -67,7 +71,10 @@ namespace WebApp.Extensions
             });
 
             IMapper mapper = mapperConfig.CreateMapper();
-            return services.AddSingleton(mapper);
+            return services
+                    .AddSingleton(mapper)
+                    .AddTransient<IUserCreator, UserCreator>()
+                    .AddTransient<IDoctorCreator, DoctorCreator>();
         }
     }
 }

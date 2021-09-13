@@ -9,10 +9,10 @@ using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using HealthCare.Core.Entities;
 using System.Collections.Generic;
-using WebApp.Models.Identity;
 using HealthCare.Core;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using System.Linq;
+using HealthCare.Application.Models.User;
 
 namespace WebApp.Controllers
 {

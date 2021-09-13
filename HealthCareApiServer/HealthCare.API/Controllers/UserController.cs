@@ -1,7 +1,7 @@
 ﻿using HealthCare.Core.Entities;
-using HealthCare.Application.Models;
 using HealthCare.Infrastructure;
 using AutoMapper;
+using HealthCare.Application.Models.Hospital;
 
 namespace HealthCare.API.Controllers
 {

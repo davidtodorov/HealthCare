@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
-using HealthCare.Application.Models;
+using HealthCare.Application.Interfaces.Doctor;
+using HealthCare.Application.Models.Doctor;
 using HealthCare.Core;
 using HealthCare.Core.Entities;
 using HealthCare.Infrastructure;
@@ -14,9 +15,23 @@ namespace WebApp.Controllers
 {
     public class DoctorController : RestController<Doctor, DoctorModel>
     {
-        public DoctorController(IUnitOfWork unitOfWork, IMapper mapper) : base(unitOfWork, mapper)
-        {
+        private IDoctorCreator doctorCreator;
 
+        public DoctorController(IUnitOfWork unitOfWork, IMapper mapper, IDoctorCreator doctorCreator) : base(unitOfWork, mapper)
+        {
+            this.doctorCreator = doctorCreator;
+        }
+
+        [HttpPost]
+        [Route("/api/CreateDoctor")]
+        public async Task<ActionResult> CreateDoctor(CreateDoctorModel requestModel)
+        {
+            var result = await this.doctorCreator.CreateDoctor(requestModel);
+            if (result.Failure)
+            {
+                return BadRequest(result.Error);
+            }
+            return Ok();
         }
     }
 }

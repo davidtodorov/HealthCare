@@ -1,8 +1,9 @@
-﻿using System;
+﻿using HealthCare.Application.Models.Doctor;
+using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace HealthCare.Application.Models
+namespace HealthCare.Application.Models.Hospital
 {
     public class HospitalModel
     {
@@ -11,6 +12,6 @@ namespace HealthCare.Application.Models
             DoctorModels = new List<DoctorModel>();
         }
         public string Name { get; set; }
-        public List<DoctorModel> DoctorModels{ get; set; }
+        public List<DoctorModel> DoctorModels { get; set; }
     }
 }

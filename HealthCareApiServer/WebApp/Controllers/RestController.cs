@@ -15,7 +15,6 @@ namespace WebApp.Controllers
         where TEntity : IEntity
         where TModel : class
     {
-
         public RestController(IUnitOfWork unitOfWork, IMapper mapper)
         {
             this.unitOfWork = unitOfWork;
