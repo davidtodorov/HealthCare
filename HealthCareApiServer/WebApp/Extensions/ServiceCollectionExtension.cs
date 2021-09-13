@@ -59,7 +59,9 @@ namespace WebApp.Extensions
         public static IServiceCollection AddApplicationServices(this IServiceCollection services)
         {
             return services
-                    .AddScoped<IUnitOfWork, UnitOfWork>();
+                    .AddScoped<IUnitOfWork, UnitOfWork>()
+                    .AddTransient<IUserCreator, UserCreator>()
+                    .AddTransient<IDoctorCreator, DoctorCreator>(); ;
         }
 
         public static IServiceCollection AddMapperConfig(this IServiceCollection services)
@@ -71,10 +73,8 @@ namespace WebApp.Extensions
             });
 
             IMapper mapper = mapperConfig.CreateMapper();
-            return services
-                    .AddSingleton(mapper)
-                    .AddTransient<IUserCreator, UserCreator>()
-                    .AddTransient<IDoctorCreator, DoctorCreator>();
+            return services.AddSingleton(mapper);
+                    
         }
     }
 }

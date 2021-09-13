@@ -22,9 +22,8 @@ namespace WebApp.Controllers
             this.doctorCreator = doctorCreator;
         }
 
-        [HttpPost]
-        [Route("/api/CreateDoctor")]
-        public async Task<ActionResult> CreateDoctor(CreateDoctorModel requestModel)
+        [HttpPost(nameof(Create))]
+        public async Task<ActionResult> Create(CreateDoctorModel requestModel)
         {
             var result = await this.doctorCreator.CreateDoctor(requestModel);
             if (result.Failure)
