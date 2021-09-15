@@ -42,7 +42,6 @@ namespace WebApp.Controllers
         public virtual ActionResult Post(TModel requestModel)
         {
             var result = mapper.Map<TModel, TEntity>(requestModel);
-            //var entity = (TEntity)Activator.CreateInstance(typeof(TEntity), new object[] { requestModel });
             repository.Insert(result);
             unitOfWork.SaveChanges();
             return Ok();

@@ -8,8 +8,9 @@ using System.Threading.Tasks;
 
 namespace HealthCare.Application.Models.Doctor
 {
-    public class CreateDoctorModel : RegisterUserRequestModel
+    public class CreateDoctorModel /*: RegisterUserRequestModel*/
     {
+        public int UserId { get; set; }
         [Required]
         public int HospitalId { get; set; }
         [Required]
