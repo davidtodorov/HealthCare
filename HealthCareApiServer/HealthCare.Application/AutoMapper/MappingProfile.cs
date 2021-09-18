@@ -13,7 +13,7 @@ namespace HealthCare.Application.AutoMapper
     {
         public MappingProfile()
         {
-            CreateMap<Hospital, HospitalModel>().ForMember(hm => hm.DoctorModels, opts => opts.MapFrom(h => h.Doctors)).ReverseMap();
+            CreateMap<Hospital, HospitalModel>().ReverseMap(); //.ForMember(hm => hm.DoctorModels, opts => opts.MapFrom(h => h.Doctors)).ReverseMap();
             CreateMap<User, UserModel>().ReverseMap();
 
             CreateMap<DoctorModel, Doctor>();

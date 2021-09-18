@@ -18,6 +18,7 @@ namespace HealthCare.Core.Entities
         }
         [Required]
         public virtual string Name { get; set; }
+        //public virtual string PhoneNumber { get; set; }
         public virtual List<Doctor> Doctors { get; set; }
     }
 }

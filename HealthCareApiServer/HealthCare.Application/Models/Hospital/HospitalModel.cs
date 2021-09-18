@@ -9,9 +9,9 @@ namespace HealthCare.Application.Models.Hospital
     {
         public HospitalModel()
         {
-            DoctorModels = new List<DoctorModel>();
+            //DoctorModels = new List<DoctorModel>();
         }
         public string Name { get; set; }
-        public List<DoctorModel> DoctorModels { get; set; }
+        //public List<DoctorModel> DoctorModels { get; set; }
     }
 }
