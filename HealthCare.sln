@@ -3,8 +3,6 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.30804.86
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HealthCare.API", "HealthCareApiServer\HealthCare.API\HealthCare.API.csproj", "{ABCE9453-D2B4-4BF6-AB70-28F18059320D}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HealthCare.Core", "HealthCareApiServer\HealthCare.Core\HealthCare.Core.csproj", "{DDD4A520-C6E3-44BF-9178-DC19FCDE91B5}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HealthCare.Infrastructure", "HealthCareApiServer\HealthCare.Infrastructure\HealthCare.Infrastructure.csproj", "{6AF676B8-8605-47AC-BD9D-03B7EB7EDCB1}"
@@ -19,10 +17,6 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{ABCE9453-D2B4-4BF6-AB70-28F18059320D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{ABCE9453-D2B4-4BF6-AB70-28F18059320D}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{ABCE9453-D2B4-4BF6-AB70-28F18059320D}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{ABCE9453-D2B4-4BF6-AB70-28F18059320D}.Release|Any CPU.Build.0 = Release|Any CPU
 		{DDD4A520-C6E3-44BF-9178-DC19FCDE91B5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{DDD4A520-C6E3-44BF-9178-DC19FCDE91B5}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{DDD4A520-C6E3-44BF-9178-DC19FCDE91B5}.Release|Any CPU.ActiveCfg = Release|Any CPU

@@ -8,11 +8,17 @@ namespace HealthCare.Core.Entities
 {
     public class Hospital : Entity
     {
-        public Hospital(string Name)
+        public Hospital()
+        {
+            this.Doctors = new List<Doctor>();
+        }
+        public Hospital(string Name) : this()
         {
             this.Name = Name;
         }
         [Required]
-        public string Name { get; set; }
+        public virtual string Name { get; set; }
+        //public virtual string PhoneNumber { get; set; }
+        public virtual List<Doctor> Doctors { get; set; }
     }
 }

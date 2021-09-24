@@ -15,16 +15,16 @@ namespace HealthCare.Infrastructure.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .UseIdentityColumns()
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
-                .HasAnnotation("ProductVersion", "5.0.1");
+                .HasAnnotation("ProductVersion", "5.0.9")
+                .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
             modelBuilder.Entity("HealthCare.Core.Entities.Department", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int")
-                        .UseIdentityColumn();
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<string>("CreatedBy")
                         .HasColumnType("nvarchar(max)");
@@ -50,216 +50,216 @@ namespace HealthCare.Infrastructure.Migrations
                         {
                             Id = 1,
                             CreatedBy = "script",
-                            CreatedOn = new DateTime(2021, 5, 6, 20, 16, 58, 77, DateTimeKind.Utc).AddTicks(4667),
+                            CreatedOn = new DateTime(2021, 9, 16, 14, 2, 49, 937, DateTimeKind.Utc).AddTicks(899),
                             ModifiedBy = "script",
-                            ModifiedOn = new DateTime(2021, 5, 6, 20, 16, 58, 77, DateTimeKind.Utc).AddTicks(4675),
+                            ModifiedOn = new DateTime(2021, 9, 16, 14, 2, 49, 937, DateTimeKind.Utc).AddTicks(910),
                             Name = "Aesthetic plastic and reconstructive surgery"
                         },
                         new
                         {
                             Id = 2,
                             CreatedBy = "script",
-                            CreatedOn = new DateTime(2021, 5, 6, 20, 16, 58, 77, DateTimeKind.Utc).AddTicks(5592),
+                            CreatedOn = new DateTime(2021, 9, 16, 14, 2, 49, 937, DateTimeKind.Utc).AddTicks(1572),
                             ModifiedBy = "script",
-                            ModifiedOn = new DateTime(2021, 5, 6, 20, 16, 58, 77, DateTimeKind.Utc).AddTicks(5593),
+                            ModifiedOn = new DateTime(2021, 9, 16, 14, 2, 49, 937, DateTimeKind.Utc).AddTicks(1574),
                             Name = "Allergology"
                         },
                         new
                         {
                             Id = 3,
                             CreatedBy = "script",
-                            CreatedOn = new DateTime(2021, 5, 6, 20, 16, 58, 77, DateTimeKind.Utc).AddTicks(5595),
+                            CreatedOn = new DateTime(2021, 9, 16, 14, 2, 49, 937, DateTimeKind.Utc).AddTicks(1575),
                             ModifiedBy = "script",
-                            ModifiedOn = new DateTime(2021, 5, 6, 20, 16, 58, 77, DateTimeKind.Utc).AddTicks(5596),
+                            ModifiedOn = new DateTime(2021, 9, 16, 14, 2, 49, 937, DateTimeKind.Utc).AddTicks(1576),
                             Name = "Cardiology"
                         },
                         new
                         {
                             Id = 4,
                             CreatedBy = "script",
-                            CreatedOn = new DateTime(2021, 5, 6, 20, 16, 58, 77, DateTimeKind.Utc).AddTicks(5596),
+                            CreatedOn = new DateTime(2021, 9, 16, 14, 2, 49, 937, DateTimeKind.Utc).AddTicks(1577),
                             ModifiedBy = "script",
-                            ModifiedOn = new DateTime(2021, 5, 6, 20, 16, 58, 77, DateTimeKind.Utc).AddTicks(5597),
+                            ModifiedOn = new DateTime(2021, 9, 16, 14, 2, 49, 937, DateTimeKind.Utc).AddTicks(1577),
                             Name = "Cardiovascular surgery"
                         },
                         new
                         {
                             Id = 5,
                             CreatedBy = "script",
-                            CreatedOn = new DateTime(2021, 5, 6, 20, 16, 58, 77, DateTimeKind.Utc).AddTicks(5598),
+                            CreatedOn = new DateTime(2021, 9, 16, 14, 2, 49, 937, DateTimeKind.Utc).AddTicks(1578),
                             ModifiedBy = "script",
-                            ModifiedOn = new DateTime(2021, 5, 6, 20, 16, 58, 77, DateTimeKind.Utc).AddTicks(5599),
+                            ModifiedOn = new DateTime(2021, 9, 16, 14, 2, 49, 937, DateTimeKind.Utc).AddTicks(1579),
                             Name = "Chest surgery"
                         },
                         new
                         {
                             Id = 6,
                             CreatedBy = "script",
-                            CreatedOn = new DateTime(2021, 5, 6, 20, 16, 58, 77, DateTimeKind.Utc).AddTicks(5599),
+                            CreatedOn = new DateTime(2021, 9, 16, 14, 2, 49, 937, DateTimeKind.Utc).AddTicks(1580),
                             ModifiedBy = "script",
-                            ModifiedOn = new DateTime(2021, 5, 6, 20, 16, 58, 77, DateTimeKind.Utc).AddTicks(5600),
+                            ModifiedOn = new DateTime(2021, 9, 16, 14, 2, 49, 937, DateTimeKind.Utc).AddTicks(1580),
                             Name = "Dermatology"
                         },
                         new
                         {
                             Id = 7,
                             CreatedBy = "script",
-                            CreatedOn = new DateTime(2021, 5, 6, 20, 16, 58, 77, DateTimeKind.Utc).AddTicks(5602),
+                            CreatedOn = new DateTime(2021, 9, 16, 14, 2, 49, 937, DateTimeKind.Utc).AddTicks(1581),
                             ModifiedBy = "script",
-                            ModifiedOn = new DateTime(2021, 5, 6, 20, 16, 58, 77, DateTimeKind.Utc).AddTicks(5602),
+                            ModifiedOn = new DateTime(2021, 9, 16, 14, 2, 49, 937, DateTimeKind.Utc).AddTicks(1582),
                             Name = "Ear nose and throat"
                         },
                         new
                         {
                             Id = 8,
                             CreatedBy = "script",
-                            CreatedOn = new DateTime(2021, 5, 6, 20, 16, 58, 77, DateTimeKind.Utc).AddTicks(5603),
+                            CreatedOn = new DateTime(2021, 9, 16, 14, 2, 49, 937, DateTimeKind.Utc).AddTicks(1583),
                             ModifiedBy = "script",
-                            ModifiedOn = new DateTime(2021, 5, 6, 20, 16, 58, 77, DateTimeKind.Utc).AddTicks(5604),
+                            ModifiedOn = new DateTime(2021, 9, 16, 14, 2, 49, 937, DateTimeKind.Utc).AddTicks(1583),
                             Name = "Endocrinology diabetes and metabolic diseases"
                         },
                         new
                         {
                             Id = 9,
                             CreatedBy = "script",
-                            CreatedOn = new DateTime(2021, 5, 6, 20, 16, 58, 77, DateTimeKind.Utc).AddTicks(5605),
+                            CreatedOn = new DateTime(2021, 9, 16, 14, 2, 49, 937, DateTimeKind.Utc).AddTicks(1584),
                             ModifiedBy = "script",
-                            ModifiedOn = new DateTime(2021, 5, 6, 20, 16, 58, 77, DateTimeKind.Utc).AddTicks(5605),
+                            ModifiedOn = new DateTime(2021, 9, 16, 14, 2, 49, 937, DateTimeKind.Utc).AddTicks(1585),
                             Name = "Gastroenterology"
                         },
                         new
                         {
                             Id = 10,
                             CreatedBy = "script",
-                            CreatedOn = new DateTime(2021, 5, 6, 20, 16, 58, 77, DateTimeKind.Utc).AddTicks(5606),
+                            CreatedOn = new DateTime(2021, 9, 16, 14, 2, 49, 937, DateTimeKind.Utc).AddTicks(1585),
                             ModifiedBy = "script",
-                            ModifiedOn = new DateTime(2021, 5, 6, 20, 16, 58, 77, DateTimeKind.Utc).AddTicks(5607),
+                            ModifiedOn = new DateTime(2021, 9, 16, 14, 2, 49, 937, DateTimeKind.Utc).AddTicks(1586),
                             Name = "General surgery"
                         },
                         new
                         {
                             Id = 11,
                             CreatedBy = "script",
-                            CreatedOn = new DateTime(2021, 5, 6, 20, 16, 58, 77, DateTimeKind.Utc).AddTicks(5607),
+                            CreatedOn = new DateTime(2021, 9, 16, 14, 2, 49, 937, DateTimeKind.Utc).AddTicks(1587),
                             ModifiedBy = "script",
-                            ModifiedOn = new DateTime(2021, 5, 6, 20, 16, 58, 77, DateTimeKind.Utc).AddTicks(5608),
+                            ModifiedOn = new DateTime(2021, 9, 16, 14, 2, 49, 937, DateTimeKind.Utc).AddTicks(1587),
                             Name = "Hematology"
                         },
                         new
                         {
                             Id = 12,
                             CreatedBy = "script",
-                            CreatedOn = new DateTime(2021, 5, 6, 20, 16, 58, 77, DateTimeKind.Utc).AddTicks(5609),
+                            CreatedOn = new DateTime(2021, 9, 16, 14, 2, 49, 937, DateTimeKind.Utc).AddTicks(1588),
                             ModifiedBy = "script",
-                            ModifiedOn = new DateTime(2021, 5, 6, 20, 16, 58, 77, DateTimeKind.Utc).AddTicks(5610),
+                            ModifiedOn = new DateTime(2021, 9, 16, 14, 2, 49, 937, DateTimeKind.Utc).AddTicks(1589),
                             Name = "Infections diseases"
                         },
                         new
                         {
                             Id = 13,
                             CreatedBy = "script",
-                            CreatedOn = new DateTime(2021, 5, 6, 20, 16, 58, 77, DateTimeKind.Utc).AddTicks(5611),
+                            CreatedOn = new DateTime(2021, 9, 16, 14, 2, 49, 937, DateTimeKind.Utc).AddTicks(1590),
                             ModifiedBy = "script",
-                            ModifiedOn = new DateTime(2021, 5, 6, 20, 16, 58, 77, DateTimeKind.Utc).AddTicks(5612),
+                            ModifiedOn = new DateTime(2021, 9, 16, 14, 2, 49, 937, DateTimeKind.Utc).AddTicks(1590),
                             Name = "Internal medicine"
                         },
                         new
                         {
                             Id = 14,
                             CreatedBy = "script",
-                            CreatedOn = new DateTime(2021, 5, 6, 20, 16, 58, 77, DateTimeKind.Utc).AddTicks(5613),
+                            CreatedOn = new DateTime(2021, 9, 16, 14, 2, 49, 937, DateTimeKind.Utc).AddTicks(1591),
                             ModifiedBy = "script",
-                            ModifiedOn = new DateTime(2021, 5, 6, 20, 16, 58, 77, DateTimeKind.Utc).AddTicks(5614),
+                            ModifiedOn = new DateTime(2021, 9, 16, 14, 2, 49, 937, DateTimeKind.Utc).AddTicks(1592),
                             Name = "Nephrology"
                         },
                         new
                         {
                             Id = 15,
                             CreatedBy = "script",
-                            CreatedOn = new DateTime(2021, 5, 6, 20, 16, 58, 77, DateTimeKind.Utc).AddTicks(5615),
+                            CreatedOn = new DateTime(2021, 9, 16, 14, 2, 49, 937, DateTimeKind.Utc).AddTicks(1592),
                             ModifiedBy = "script",
-                            ModifiedOn = new DateTime(2021, 5, 6, 20, 16, 58, 77, DateTimeKind.Utc).AddTicks(5616),
+                            ModifiedOn = new DateTime(2021, 9, 16, 14, 2, 49, 937, DateTimeKind.Utc).AddTicks(1593),
                             Name = "Neurology"
                         },
                         new
                         {
                             Id = 16,
                             CreatedBy = "script",
-                            CreatedOn = new DateTime(2021, 5, 6, 20, 16, 58, 77, DateTimeKind.Utc).AddTicks(5616),
+                            CreatedOn = new DateTime(2021, 9, 16, 14, 2, 49, 937, DateTimeKind.Utc).AddTicks(1594),
                             ModifiedBy = "script",
-                            ModifiedOn = new DateTime(2021, 5, 6, 20, 16, 58, 77, DateTimeKind.Utc).AddTicks(5617),
+                            ModifiedOn = new DateTime(2021, 9, 16, 14, 2, 49, 937, DateTimeKind.Utc).AddTicks(1594),
                             Name = "Nutrition and dietetics"
                         },
                         new
                         {
                             Id = 17,
                             CreatedBy = "script",
-                            CreatedOn = new DateTime(2021, 5, 6, 20, 16, 58, 77, DateTimeKind.Utc).AddTicks(5618),
+                            CreatedOn = new DateTime(2021, 9, 16, 14, 2, 49, 937, DateTimeKind.Utc).AddTicks(1595),
                             ModifiedBy = "script",
-                            ModifiedOn = new DateTime(2021, 5, 6, 20, 16, 58, 77, DateTimeKind.Utc).AddTicks(5619),
+                            ModifiedOn = new DateTime(2021, 9, 16, 14, 2, 49, 937, DateTimeKind.Utc).AddTicks(1596),
                             Name = "Obstetrics and genecology"
                         },
                         new
                         {
                             Id = 18,
                             CreatedBy = "script",
-                            CreatedOn = new DateTime(2021, 5, 6, 20, 16, 58, 77, DateTimeKind.Utc).AddTicks(5620),
+                            CreatedOn = new DateTime(2021, 9, 16, 14, 2, 49, 937, DateTimeKind.Utc).AddTicks(1596),
                             ModifiedBy = "script",
-                            ModifiedOn = new DateTime(2021, 5, 6, 20, 16, 58, 77, DateTimeKind.Utc).AddTicks(5620),
+                            ModifiedOn = new DateTime(2021, 9, 16, 14, 2, 49, 937, DateTimeKind.Utc).AddTicks(1597),
                             Name = "Oncology"
                         },
                         new
                         {
                             Id = 19,
                             CreatedBy = "script",
-                            CreatedOn = new DateTime(2021, 5, 6, 20, 16, 58, 77, DateTimeKind.Utc).AddTicks(5621),
+                            CreatedOn = new DateTime(2021, 9, 16, 14, 2, 49, 937, DateTimeKind.Utc).AddTicks(1598),
                             ModifiedBy = "script",
-                            ModifiedOn = new DateTime(2021, 5, 6, 20, 16, 58, 77, DateTimeKind.Utc).AddTicks(5622),
+                            ModifiedOn = new DateTime(2021, 9, 16, 14, 2, 49, 937, DateTimeKind.Utc).AddTicks(1598),
                             Name = "Ophthalmology"
                         },
                         new
                         {
                             Id = 20,
                             CreatedBy = "script",
-                            CreatedOn = new DateTime(2021, 5, 6, 20, 16, 58, 77, DateTimeKind.Utc).AddTicks(5623),
+                            CreatedOn = new DateTime(2021, 9, 16, 14, 2, 49, 937, DateTimeKind.Utc).AddTicks(1599),
                             ModifiedBy = "script",
-                            ModifiedOn = new DateTime(2021, 5, 6, 20, 16, 58, 77, DateTimeKind.Utc).AddTicks(5624),
+                            ModifiedOn = new DateTime(2021, 9, 16, 14, 2, 49, 937, DateTimeKind.Utc).AddTicks(1600),
                             Name = "Orthopedics"
                         },
                         new
                         {
                             Id = 21,
                             CreatedBy = "script",
-                            CreatedOn = new DateTime(2021, 5, 6, 20, 16, 58, 77, DateTimeKind.Utc).AddTicks(5624),
+                            CreatedOn = new DateTime(2021, 9, 16, 14, 2, 49, 937, DateTimeKind.Utc).AddTicks(1601),
                             ModifiedBy = "script",
-                            ModifiedOn = new DateTime(2021, 5, 6, 20, 16, 58, 77, DateTimeKind.Utc).AddTicks(5625),
+                            ModifiedOn = new DateTime(2021, 9, 16, 14, 2, 49, 937, DateTimeKind.Utc).AddTicks(1601),
                             Name = "Physiotherapy"
                         },
                         new
                         {
                             Id = 22,
                             CreatedBy = "script",
-                            CreatedOn = new DateTime(2021, 5, 6, 20, 16, 58, 77, DateTimeKind.Utc).AddTicks(5626),
+                            CreatedOn = new DateTime(2021, 9, 16, 14, 2, 49, 937, DateTimeKind.Utc).AddTicks(1602),
                             ModifiedBy = "script",
-                            ModifiedOn = new DateTime(2021, 5, 6, 20, 16, 58, 77, DateTimeKind.Utc).AddTicks(5626),
+                            ModifiedOn = new DateTime(2021, 9, 16, 14, 2, 49, 937, DateTimeKind.Utc).AddTicks(1603),
                             Name = "Psychiatry"
                         },
                         new
                         {
                             Id = 23,
                             CreatedBy = "script",
-                            CreatedOn = new DateTime(2021, 5, 6, 20, 16, 58, 77, DateTimeKind.Utc).AddTicks(5671),
+                            CreatedOn = new DateTime(2021, 9, 16, 14, 2, 49, 937, DateTimeKind.Utc).AddTicks(1604),
                             ModifiedBy = "script",
-                            ModifiedOn = new DateTime(2021, 5, 6, 20, 16, 58, 77, DateTimeKind.Utc).AddTicks(5671),
+                            ModifiedOn = new DateTime(2021, 9, 16, 14, 2, 49, 937, DateTimeKind.Utc).AddTicks(1604),
                             Name = "Radiotherapy"
                         },
                         new
                         {
                             Id = 24,
                             CreatedBy = "script",
-                            CreatedOn = new DateTime(2021, 5, 6, 20, 16, 58, 77, DateTimeKind.Utc).AddTicks(5672),
+                            CreatedOn = new DateTime(2021, 9, 16, 14, 2, 49, 937, DateTimeKind.Utc).AddTicks(1605),
                             ModifiedBy = "script",
-                            ModifiedOn = new DateTime(2021, 5, 6, 20, 16, 58, 77, DateTimeKind.Utc).AddTicks(5673),
+                            ModifiedOn = new DateTime(2021, 9, 16, 14, 2, 49, 937, DateTimeKind.Utc).AddTicks(1606),
                             Name = "Rheumatology"
                         });
                 });
@@ -269,7 +269,7 @@ namespace HealthCare.Infrastructure.Migrations
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int")
-                        .UseIdentityColumn();
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<string>("CreatedBy")
                         .HasColumnType("nvarchar(max)");
@@ -308,7 +308,7 @@ namespace HealthCare.Infrastructure.Migrations
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int")
-                        .UseIdentityColumn();
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<string>("CreatedBy")
                         .HasColumnType("nvarchar(max)");
@@ -336,7 +336,7 @@ namespace HealthCare.Infrastructure.Migrations
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int")
-                        .UseIdentityColumn();
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<int>("AccessFailedCount")
                         .HasColumnType("int");
@@ -425,7 +425,7 @@ namespace HealthCare.Infrastructure.Migrations
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int")
-                        .UseIdentityColumn();
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<string>("ConcurrencyStamp")
                         .IsConcurrencyToken()
@@ -454,7 +454,7 @@ namespace HealthCare.Infrastructure.Migrations
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int")
-                        .UseIdentityColumn();
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<string>("ClaimType")
                         .HasColumnType("nvarchar(max)");
@@ -477,7 +477,7 @@ namespace HealthCare.Infrastructure.Migrations
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int")
-                        .UseIdentityColumn();
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<string>("ClaimType")
                         .HasColumnType("nvarchar(max)");
@@ -559,7 +559,7 @@ namespace HealthCare.Infrastructure.Migrations
                         .IsRequired();
 
                     b.HasOne("HealthCare.Core.Entities.Hospital", "Hospital")
-                        .WithMany()
+                        .WithMany("Doctors")
                         .HasForeignKey("HospitalId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
@@ -626,6 +626,11 @@ namespace HealthCare.Infrastructure.Migrations
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
+                });
+
+            modelBuilder.Entity("HealthCare.Core.Entities.Hospital", b =>
+                {
+                    b.Navigation("Doctors");
                 });
 #pragma warning restore 612, 618
         }

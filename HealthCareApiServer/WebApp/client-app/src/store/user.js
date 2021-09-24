@@ -15,6 +15,8 @@ const user = {
             return state.currentUser;
         },
         isLoggedIn(state) {
+            console.log(state.currentUser);
+            console.log(!!state.currentUser);
             return !!state.currentUser;
         }
     },

@@ -15,7 +15,6 @@ namespace WebApp.Controllers
         where TEntity : IEntity
         where TModel : class
     {
-
         public RestController(IUnitOfWork unitOfWork, IMapper mapper)
         {
             this.unitOfWork = unitOfWork;
@@ -42,25 +41,27 @@ namespace WebApp.Controllers
         [HttpPost]
         public virtual ActionResult Post(TModel requestModel)
         {
-            var entity = (TEntity)Activator.CreateInstance(typeof(TEntity), new object[] { requestModel });
-            repository.Insert(entity);
+            var result = mapper.Map<TModel, TEntity>(requestModel);
+            repository.Insert(result);
             unitOfWork.SaveChanges();
-            return Ok();
+            return Ok(result);
         }
 
         [HttpPut("{id}")]
-        public virtual void Put(int id, TModel requestModel)
+        public virtual ActionResult Put(int id, TModel requestModel)
         {
             var entity = repository.GetById(id);
             mapper.Map(requestModel, entity);
             unitOfWork.SaveChanges();
+            return Ok(entity);
         }
 
         [HttpDelete("{id}")]
-        public virtual void Delete(int id)
+        public virtual ActionResult Delete(int id)
         {
             repository.Remove(id);
             unitOfWork.SaveChanges();
+            return Ok();
         }
 
         #region private members

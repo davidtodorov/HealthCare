@@ -26,6 +26,11 @@ namespace HealthCare.Infrastructure
             context.Dispose();
         }
 
+        public async void SaveChangesAsync()
+        {
+            await context.SaveChangesAsync();
+        }
+
         private readonly HealthCareDbContext context;
     }
 }

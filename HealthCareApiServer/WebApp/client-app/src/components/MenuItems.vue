@@ -1,7 +1,7 @@
 <template>
 <div v-if="isVisible">
   <v-list>
-    <v-list-item v-for="(item, i) in items" :key="i" :to="item.to">
+    <v-list-item link v-for="(item, i) in items" :key="i" :to="item.to">
       <v-list-item-icon>
         <v-icon v-text="item.icon"></v-icon>
       </v-list-item-icon>

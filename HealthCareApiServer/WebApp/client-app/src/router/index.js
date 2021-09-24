@@ -3,7 +3,7 @@ import VueRouter from 'vue-router'
 import Home from '@/views/Home.vue'
 import Login from '@/views/authentication/Login'
 import Register from '@/views/authentication/Register'
-
+import Dashboard from '@/views/dashboard/Index'
 import store from '@/store'
 
 Vue.use(VueRouter)
@@ -11,14 +11,6 @@ Vue.use(VueRouter)
 const routes = [
   {
     path: '/',
-    name: 'Home',
-    component: Home,
-    meta: {
-      requiresAuth: true
-    }
-  },
-  {
-    path: '/home',
     name: 'Home',
     component: Home,
     meta: {
@@ -42,6 +34,27 @@ const routes = [
     // this generates a separate chunk (about.[hash].js) for this route
     // which is lazy-loaded when the route is visited.
     component: () => import(/* webpackChunkName: "about" */ '../views/About.vue')
+  },
+  {
+    path: '/hospitals/create',
+    name: 'CreateHospital',
+    meta: {
+      requiresAuth: true
+    },
+    component: () => import('@/views/hospital/CreateHospital')
+  },
+  {
+    path: '/hospitals',
+    name: 'Hospitals',
+    meta: {
+      requiresAuth: true
+    },
+    component: () => import('@/views/hospital/Index')
+  },
+  {
+    path: '/dashboard',
+    name: 'Dashboard',
+    component: Dashboard
   }
 ]
 
