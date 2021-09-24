@@ -28,7 +28,7 @@ const hospital = {
         addHospital(state, hospital) {
             state.hospitals.push(hospital);
         },
-        updateHospital(state, hospital){
+        updateHospital(state, hospital) {
             state.currentHospital = hospital;
         },
         removeHospital(state, id) {
@@ -41,7 +41,6 @@ const hospital = {
     },
     actions: {
         getHospitals({ commit }) {
-            debugger
             return axios.get('hospital')
                 .then((res) => {
                     commit('setHospitals', res.data);
@@ -50,18 +49,27 @@ const hospital = {
                     return Promise.reject(err)
                 })
         },
-        getProduct({ commit }, { id }) {
-            return axios.get("/products/", {
+        getHospital({ commit }, { id }) {
+            return axios.get("/hospital/", {
                 params: {
                     id
                 }
             }).then(res => {
-                commit('setCurrentProduct', res.data);
+                commit('setCurrentHospital', res.data);
                 return Promise.resolve();
             }).catch(err => {
                 return Promise.reject(err)
             });
         },
+        editHospital({ commit }, payload) {
+            debugger;
+            return axios.put("hospital/:id", payload).then((res) => {
+                commit('setCurrentUser', res.data);
+                return Promise.resolve();
+            }).catch(err => {
+                return Promise.reject(err)
+            })
+        }
     }
 };
 

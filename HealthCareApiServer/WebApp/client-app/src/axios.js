@@ -1,11 +1,13 @@
 /* eslint-disable no-debugger */
 import axios from 'axios';
-import authService from '@/services/authService';
+// import authService from '@/services/auth Service';
 
 const instance = axios.create();
 
 instance.interceptors.request.use((config) => {
-    config.url = `${config.url}`
+    if (config.url?.indexOf(":id") !== -1) {
+        config.url = config.url.replace(":id", config.data.id)
+    }
 
     return config;
 });
@@ -15,13 +17,14 @@ const baseUrl = '/api/'; // process.env.NODE_ENV == 'development' ? '/' : 'https
 instance.defaults.baseURL = baseUrl;
 instance.defaults.withCredentials = true;
 
-instance.interceptors.request.use(function (config) {
-    const token = authService.getToken();
-    if (token) {
-        config.headers.Authorization = `Bearer ${token}`;
-    }
+//USE IF YOU USE JWT
+// instance.interceptors.request.use(function (config) {
+//     const token = authService.getToken();
+//     if (token) {
+//         config.headers.Authorization = `Bearer ${token}`;
+//     }
 
-    return config;
-});
+//     return config;
+// });
 
 export default instance;

@@ -11,6 +11,7 @@ namespace HealthCare.Application.Models.Hospital
         {
             //DoctorModels = new List<DoctorModel>();
         }
+        public int Id { get; set; }
         public string Name { get; set; }
         //public List<DoctorModel> DoctorModels { get; set; }
     }
