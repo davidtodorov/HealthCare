@@ -20,24 +20,25 @@ namespace WebApp.Controllers
 
         }
 
-        [Authorize(Roles = RoleConstants.ADMIN_ROLE)]
         [HttpPost]
+        [Authorize(Roles = RoleConstants.ADMIN_ROLE)]
         public override ActionResult Post(HospitalModel requestModel)
         {
             return base.Post(requestModel);
         }
 
+        [HttpPut("{id}")]
         [Authorize(Roles = RoleConstants.ADMIN_ROLE)]
-        [HttpPut]
-        public override void Put(int id, HospitalModel requestModel)
+        public override ActionResult Put(int id, HospitalModel requestModel)
         {
-            base.Put(id, requestModel);
+            return base.Put(id, requestModel);
         }
 
+        [HttpDelete("{id}")]
         [Authorize(Roles = RoleConstants.ADMIN_ROLE)]
-        public override void Delete(int id)
+        public override ActionResult Delete(int id)
         {
-            base.Delete(id);
+            return base.Delete(id);
         }
     }
 }

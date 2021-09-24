@@ -138,8 +138,9 @@ export default {
       this.dialogDelete = true;
     },
 
-    deleteItemConfirm() {
+    async deleteItemConfirm() {
       this.hospitals.splice(this.editedIndex, 1);
+      await this.$store.dispatch("hospital/deleteHospital", this.editedItem.id);
       this.closeDelete();
     },
 
@@ -159,12 +160,12 @@ export default {
       });
     },
 
-    save() {
+    async save() {
       if (this.editedIndex > -1) {
         Object.assign(this.hospitals[this.editedIndex], this.editedItem);
-        this.$store.dispatch("hospital/editHospital", this.editedItem);
+        await this.$store.dispatch("hospital/editHospital", this.editedItem);
       } else {
-        this.hospitals.push(this.editedItem);
+        await this.$store.dispatch("hospital/createHospital", this.editedItem);
       }
       this.close();
     },

@@ -6,7 +6,7 @@ const instance = axios.create();
 
 instance.interceptors.request.use((config) => {
     if (config.url?.indexOf(":id") !== -1) {
-        config.url = config.url.replace(":id", config.data.id)
+        config.url = config.url.replace(":id", config.data?.id ?? config.id)
     }
 
     return config;

@@ -61,10 +61,28 @@ const hospital = {
                 return Promise.reject(err)
             });
         },
+        createHospital({ commit }, payload) {
+            return axios.post("hospital", payload)
+                .then(res => {
+                    commit('addHospital', res.data);
+                    return Promise.resolve();
+                })
+                .catch(err => {
+                    return Promise.reject(err)
+                })
+        },
         editHospital({ commit }, payload) {
             debugger;
             return axios.put("hospital/:id", payload).then((res) => {
                 commit('setCurrentUser', res.data);
+                return Promise.resolve();
+            }).catch(err => {
+                return Promise.reject(err)
+            })
+        },
+        deleteHospital({ commit }, id) {
+            return axios.delete("hospital/:id", { id }).then(() => {
+                commit('removeHospital');
                 return Promise.resolve();
             }).catch(err => {
                 return Promise.reject(err)
