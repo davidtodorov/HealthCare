@@ -24,7 +24,7 @@
 </template>
 
 <script>
-import MenuItems from "@/components/MenuItems";
+import MenuItems from "@/components/base/MenuItems";
 
 export default {
   components: {

@@ -30,6 +30,8 @@ const hospital = {
         },
         updateHospital(state, hospital) {
             state.currentHospital = hospital;
+            // const index = state.hospitals.map(x => x.id).indexOf(hospital.id);
+            // state.hospitals[index] = hospital;
         },
         removeHospital(state, id) {
             state.hospitals = state.hospitals.filter(p => p.id != id);
@@ -72,9 +74,8 @@ const hospital = {
                 })
         },
         editHospital({ commit }, payload) {
-            debugger;
             return axios.put("hospital/:id", payload).then((res) => {
-                commit('setCurrentUser', res.data);
+                commit('updateHospital', res.data);
                 return Promise.resolve();
             }).catch(err => {
                 return Promise.reject(err)

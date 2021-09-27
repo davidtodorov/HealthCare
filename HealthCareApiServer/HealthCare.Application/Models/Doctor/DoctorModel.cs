@@ -7,9 +7,8 @@ using System.Threading.Tasks;
 
 namespace HealthCare.Application.Models.Doctor
 {
-    public class DoctorModel
+    public class DoctorModel : EntityModel
     {
-        public int Id { get; set; }
         [Required]
         public int UserId { get; set; }
         public string FirstName { get; set; }

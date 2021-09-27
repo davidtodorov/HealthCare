@@ -2,7 +2,7 @@
 using HealthCare.Infrastructure;
 using AutoMapper;
 using HealthCare.Application.Models.Hospital;
-using HealthCare.Application.Models;
+using HealthCare.Application.Models.User;
 
 namespace WebApp.Controllers
 {

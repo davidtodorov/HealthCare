@@ -2,6 +2,7 @@
 using HealthCare.Application.Models;
 using HealthCare.Application.Models.Doctor;
 using HealthCare.Application.Models.Hospital;
+using HealthCare.Application.Models.User;
 using HealthCare.Core.Entities;
 using System;
 using System.Collections.Generic;
