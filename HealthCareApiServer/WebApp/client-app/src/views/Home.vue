@@ -1,25 +1,17 @@
 <template>
   <v-container>
     <v-row>
-      <v-card class="mx-auto" max-width="400">
-        <v-img
-          class="white--text align-end"
-          height="200px"
-          src="/Hospitals.jpg"
-        >
-        </v-img>
-        <v-card-title>Hospitals</v-card-title>
-        <v-card-actions>
-          <v-btn color="primary" elevation="1" to="/hospitals"
-            >View All</v-btn
-          >
+      <AdminDashboardCard
+        imageUrl="/img/Hospitals.jpg"
+        title="Hospitals"
+        entityUrl="/hospitals"
+      ></AdminDashboardCard>
 
-          <v-spacer></v-spacer>
-          <v-btn color="primary" elevation="2" to="/hospitals/create"
-            >Create New</v-btn
-          >
-        </v-card-actions>
-      </v-card>
+      <AdminDashboardCard
+        imageUrl="/img/doctor.jpg"
+        title="Doctors"
+        entityUrl="/doctors"
+      ></AdminDashboardCard>
     </v-row>
   </v-container>
 </template>
@@ -27,8 +19,12 @@
 <script>
 // @ is an alias to /src
 
+import AdminDashboardCard from '@/components/base/AdminDashboardCard'
+
 export default {
   name: "Home",
-  components: {},
+  components: {
+    AdminDashboardCard
+  },
 };
 </script>
