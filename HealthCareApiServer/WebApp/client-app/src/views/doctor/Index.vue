@@ -2,7 +2,7 @@
   <div>
     <v-data-table
       :headers="headers"
-      :items="hospitals"
+      :items="doctors"
       item-key="name"
       sort-by="name"
       class="elevation-1"
@@ -68,7 +68,7 @@
 </template>
 
 <script>
-import { hospitalHelpers } from "@/store";
+import { doctorHelpers } from "@/store";
 import DeleteDialog from "@/components/base/DeleteDialog"
 
 export default {
@@ -84,10 +84,28 @@ export default {
     dialogDelete: false,
     headers: [
       {
-        text: "Name",
+        text: "First Name",
         align: "start",
         sortable: true,
-        value: "name",
+        value: "firstName",
+      },
+      {
+        text: "Last Name",
+        align: "start",
+        sortable: true,
+        value: "lastName",
+      },
+      {
+        text: "Hospital",
+        align: "start",
+        sortable: true,
+        value: "hospitalName",
+      },
+      {
+        text: "Department",
+        align: "start",
+        sortable: true,
+        value: "departmentName",
       },
       { text: "Actions", value: "actions", sortable: false, width: 135 },
     ],
@@ -101,7 +119,7 @@ export default {
   }),
 
   computed: {
-    ...hospitalHelpers.mapGetters(["hospitals"]),
+    ...doctorHelpers.mapGetters(["doctors"]),
     formTitle() {
       return this.editedIndex === -1 ? "New Hospital" : "Edit Hospital";
     },
@@ -118,23 +136,23 @@ export default {
 
   methods: {
     initialize() {
-      this.$store.dispatch("hospital/getHospitals");
+      this.$store.dispatch("doctor/getDoctors");
     },
 
     editItem(item) {
-      this.editedIndex = this.hospitals.map(x => x.id).indexOf(item.id);
+      this.editedIndex = this.doctors.map(x => x.id).indexOf(item.id);
       this.editedItem = Object.assign({}, item);
       this.dialog = true;
     },
 
     deleteItem(item) {
-      this.editedIndex = this.hospitals.indexOf(item);
+      this.editedIndex = this.doctors.indexOf(item);
       this.editedItem = Object.assign({}, item);
       this.dialogDelete = true;
     },
 
     async deleteItemConfirm() {
-      this.hospitals.splice(this.editedIndex, 1);
+      this.doctors.splice(this.editedIndex, 1);
       await this.$store.dispatch("hospital/deleteHospital", this.editedItem.id);
       this.closeDelete();
     },
@@ -157,7 +175,7 @@ export default {
 
     async save() {
       if (this.editedIndex > -1) {
-        Object.assign(this.hospitals[this.editedIndex], this.editedItem);
+        Object.assign(this.doctors[this.editedIndex], this.editedItem);
         await this.$store.dispatch("hospital/editHospital", this.editedItem);
       } else {
         await this.$store.dispatch("hospital/createHospital", this.editedItem);

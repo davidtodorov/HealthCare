@@ -7,6 +7,30 @@ const getDefaultState = () => {
     }
 }
 
+let mutations = {
+    setHospitals(state, hospitals) {
+        state.hospitals = hospitals;
+    },
+    setCurrentHospital(state, hospital) {
+        state.currentHospital = hospital;
+    },
+    addHospital(state, hospital) {
+        state.hospitals.push(hospital);
+    },
+    updateHospital(state, hospital) {
+        state.currentHospital = hospital;
+        // const index = state.hospitals.map(x => x.id).indexOf(hospital.id);
+        // state.hospitals[index] = hospital;
+    },
+    removeHospital(state, id) {
+        state.hospitals = state.hospitals.filter(p => p.id != id);
+    },
+    resetState(state) {
+        const initial = getDefaultState();
+        Object.keys(initial).forEach(key => { state[key] = initial[key] })
+    }
+} 
+
 const hospital = {
     namespaced: true,
     state: getDefaultState(),
@@ -18,29 +42,7 @@ const hospital = {
             return state.currentHospital;
         },
     },
-    mutations: {
-        setHospitals(state, hospitals) {
-            state.hospitals = hospitals;
-        },
-        setCurrentHospital(state, hospital) {
-            state.currentHospital = hospital;
-        },
-        addHospital(state, hospital) {
-            state.hospitals.push(hospital);
-        },
-        updateHospital(state, hospital) {
-            state.currentHospital = hospital;
-            // const index = state.hospitals.map(x => x.id).indexOf(hospital.id);
-            // state.hospitals[index] = hospital;
-        },
-        removeHospital(state, id) {
-            state.hospitals = state.hospitals.filter(p => p.id != id);
-        },
-        resetState(state) {
-            const initial = getDefaultState();
-            Object.keys(initial).forEach(key => { state[key] = initial[key] })
-        }
-    },
+    mutations: mutations,
     actions: {
         getHospitals({ commit }) {
             return axios.get('hospital')

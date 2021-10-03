@@ -52,6 +52,14 @@ const routes = [
     component: () => import('@/views/hospital/Index')
   },
   {
+    path: '/doctors',
+    name: 'Doctors',
+    meta: {
+      requiresAuth: true
+    },
+    component: () => import('@/views/doctor/Index')
+  },
+  {
     path: '/dashboard',
     name: 'Dashboard',
     component: Dashboard
