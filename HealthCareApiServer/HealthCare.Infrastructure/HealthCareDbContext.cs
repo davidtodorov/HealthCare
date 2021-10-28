@@ -45,21 +45,21 @@ namespace HealthCare.Infrastructure
                                                  new { Id = 7, CreatedBy ="script", CreatedOn = DateTime.UtcNow, ModifiedBy = "script", ModifiedOn = DateTime.UtcNow, Name = "Ear nose and throat" },
                                                  new { Id = 8, CreatedBy ="script", CreatedOn = DateTime.UtcNow, ModifiedBy = "script", ModifiedOn = DateTime.UtcNow, Name = "Endocrinology diabetes and metabolic diseases" },
                                                  new { Id = 9, CreatedBy ="script", CreatedOn = DateTime.UtcNow, ModifiedBy = "script", ModifiedOn = DateTime.UtcNow, Name = "Gastroenterology" },
-                                                 new { Id = 10,CreatedBy ="script", CreatedOn = DateTime.UtcNow, ModifiedBy = "script", ModifiedOn = DateTime.UtcNow,  Name = "General surgery" },
-                                                 new { Id = 11,CreatedBy ="script", CreatedOn = DateTime.UtcNow, ModifiedBy = "script", ModifiedOn = DateTime.UtcNow,  Name = "Hematology" },
-                                                 new { Id = 12,CreatedBy ="script", CreatedOn = DateTime.UtcNow, ModifiedBy = "script", ModifiedOn = DateTime.UtcNow,  Name = "Infections diseases" },
-                                                 new { Id = 13,CreatedBy ="script", CreatedOn = DateTime.UtcNow, ModifiedBy = "script", ModifiedOn = DateTime.UtcNow,  Name = "Internal medicine" },
-                                                 new { Id = 14,CreatedBy ="script", CreatedOn = DateTime.UtcNow, ModifiedBy = "script", ModifiedOn = DateTime.UtcNow,  Name = "Nephrology" },
-                                                 new { Id = 15,CreatedBy ="script", CreatedOn = DateTime.UtcNow, ModifiedBy = "script", ModifiedOn = DateTime.UtcNow,  Name = "Neurology" },
-                                                 new { Id = 16,CreatedBy ="script", CreatedOn = DateTime.UtcNow, ModifiedBy = "script", ModifiedOn = DateTime.UtcNow,  Name = "Nutrition and dietetics" },
-                                                 new { Id = 17,CreatedBy ="script", CreatedOn = DateTime.UtcNow, ModifiedBy = "script", ModifiedOn = DateTime.UtcNow,  Name = "Obstetrics and genecology" },
-                                                 new { Id = 18,CreatedBy ="script", CreatedOn = DateTime.UtcNow, ModifiedBy = "script", ModifiedOn = DateTime.UtcNow,  Name = "Oncology" },
-                                                 new { Id = 19,CreatedBy ="script", CreatedOn = DateTime.UtcNow, ModifiedBy = "script", ModifiedOn = DateTime.UtcNow,  Name = "Ophthalmology" },
-                                                 new { Id = 20,CreatedBy ="script", CreatedOn = DateTime.UtcNow, ModifiedBy = "script", ModifiedOn = DateTime.UtcNow,  Name = "Orthopedics" },
-                                                 new { Id = 21,CreatedBy ="script", CreatedOn = DateTime.UtcNow, ModifiedBy = "script", ModifiedOn = DateTime.UtcNow,  Name = "Physiotherapy" },
-                                                 new { Id = 22,CreatedBy ="script", CreatedOn = DateTime.UtcNow, ModifiedBy = "script", ModifiedOn = DateTime.UtcNow,  Name = "Psychiatry" },
-                                                 new { Id = 23,CreatedBy ="script", CreatedOn = DateTime.UtcNow, ModifiedBy = "script", ModifiedOn = DateTime.UtcNow,  Name = "Radiotherapy" },
-                                                 new { Id = 24,CreatedBy ="script", CreatedOn = DateTime.UtcNow, ModifiedBy = "script", ModifiedOn = DateTime.UtcNow,  Name = "Rheumatology" });
+                                                 new { Id = 10,CreatedBy ="script", CreatedOn = DateTime.UtcNow, ModifiedBy = "script", ModifiedOn = DateTime.UtcNow, Name = "General surgery" },
+                                                 new { Id = 11,CreatedBy ="script", CreatedOn = DateTime.UtcNow, ModifiedBy = "script", ModifiedOn = DateTime.UtcNow, Name = "Hematology" },
+                                                 new { Id = 12,CreatedBy ="script", CreatedOn = DateTime.UtcNow, ModifiedBy = "script", ModifiedOn = DateTime.UtcNow, Name = "Infections diseases" },
+                                                 new { Id = 13,CreatedBy ="script", CreatedOn = DateTime.UtcNow, ModifiedBy = "script", ModifiedOn = DateTime.UtcNow, Name = "Internal medicine" },
+                                                 new { Id = 14,CreatedBy ="script", CreatedOn = DateTime.UtcNow, ModifiedBy = "script", ModifiedOn = DateTime.UtcNow, Name = "Nephrology" },
+                                                 new { Id = 15,CreatedBy ="script", CreatedOn = DateTime.UtcNow, ModifiedBy = "script", ModifiedOn = DateTime.UtcNow, Name = "Neurology" },
+                                                 new { Id = 16,CreatedBy ="script", CreatedOn = DateTime.UtcNow, ModifiedBy = "script", ModifiedOn = DateTime.UtcNow, Name = "Nutrition and dietetics" },
+                                                 new { Id = 17,CreatedBy ="script", CreatedOn = DateTime.UtcNow, ModifiedBy = "script", ModifiedOn = DateTime.UtcNow, Name = "Obstetrics and genecology" },
+                                                 new { Id = 18,CreatedBy ="script", CreatedOn = DateTime.UtcNow, ModifiedBy = "script", ModifiedOn = DateTime.UtcNow, Name = "Oncology" },
+                                                 new { Id = 19,CreatedBy ="script", CreatedOn = DateTime.UtcNow, ModifiedBy = "script", ModifiedOn = DateTime.UtcNow, Name = "Ophthalmology" },
+                                                 new { Id = 20,CreatedBy ="script", CreatedOn = DateTime.UtcNow, ModifiedBy = "script", ModifiedOn = DateTime.UtcNow, Name = "Orthopedics" },
+                                                 new { Id = 21,CreatedBy ="script", CreatedOn = DateTime.UtcNow, ModifiedBy = "script", ModifiedOn = DateTime.UtcNow, Name = "Physiotherapy" },
+                                                 new { Id = 22,CreatedBy ="script", CreatedOn = DateTime.UtcNow, ModifiedBy = "script", ModifiedOn = DateTime.UtcNow, Name = "Psychiatry" },
+                                                 new { Id = 23,CreatedBy ="script", CreatedOn = DateTime.UtcNow, ModifiedBy = "script", ModifiedOn = DateTime.UtcNow, Name = "Radiotherapy" },
+                                                 new { Id = 24,CreatedBy ="script", CreatedOn = DateTime.UtcNow, ModifiedBy = "script", ModifiedOn = DateTime.UtcNow, Name = "Rheumatology" });
 
         }
 
@@ -90,8 +90,15 @@ namespace HealthCare.Infrastructure
                 .ToList()
                 .ForEach(entry =>
                 {
-                    
-                    var userName = this.httpContextAccessor.HttpContext.User.Identity.Name ?? "Anonymous";
+                    string userName;
+                    if (this.httpContextAccessor.HttpContext == null)
+                    {
+                        userName = "System";
+                    }
+                    else
+                    {
+                        userName = this.httpContextAccessor.HttpContext.User.Identity.Name ?? "Anonymous";
+                    }
                     var entity = (IEntity)entry.Entity;
 
                     entity.ModifiedOn = DateTime.UtcNow;

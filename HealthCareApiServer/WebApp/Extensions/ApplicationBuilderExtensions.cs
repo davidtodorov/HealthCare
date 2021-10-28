@@ -10,6 +10,8 @@ namespace WebApp.Infrastructure.Extensions
 {
     public static class ApplicationBuilderExtensions
     {
+        private const string DefaultAdminPassword = "admin";
+
         private static readonly IdentityRole<int>[] roles =
         {
             new IdentityRole<int>(RoleConstants.ADMIN_ROLE),
@@ -29,6 +31,21 @@ namespace WebApp.Infrastructure.Extensions
                     await roleManager.CreateAsync(role);
                 }
             }
+
+            var admin = await userManager.FindByEmailAsync("admin@abv.bg");
+            if (admin == null)
+            {
+                var createdAdmin = new User
+                {
+                    Email = "admin@abv.bg",
+                    UserName = "admin",
+                    FirstName = "Admin",
+                    LastName = "Admin"
+                };
+                await userManager.CreateAsync(createdAdmin, DefaultAdminPassword);
+                await userManager.AddToRoleAsync(createdAdmin, roles[0].Name);
+            }
+
         }
         public static void ApplyMigrations(this IApplicationBuilder app)
         {
