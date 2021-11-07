@@ -62,7 +62,7 @@ const doctorModule = {
             });
         },
         createDoctor({ commit }, payload) {
-            return axios.post("doctor", payload)
+            return axios.post("doctor/create", payload)
                 .then(res => {
                     commit('addDoctor', res.data);
                     return Promise.resolve();

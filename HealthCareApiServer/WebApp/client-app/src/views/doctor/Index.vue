@@ -19,7 +19,7 @@
           <v-dialog v-model="dialog" max-width="450px">
             <template v-slot:activator="{ on, attrs }">
               <v-btn color="primary" dark class="mb-2" v-bind="attrs" v-on="on">
-                New Hospital
+                New Doctor
               </v-btn>
             </template>
             <v-card>
@@ -32,9 +32,41 @@
                   <v-row>
                     <v-col>
                       <v-text-field
-                        v-model="editedItem.name"
-                        label="Hospital Name"
+                        v-model="editedItem.firstName"
+                        label="First Name"
                       ></v-text-field>
+                    </v-col>
+                  </v-row>
+                  <v-row>
+                    <v-col>
+                      <v-text-field
+                        v-model="editedItem.lastName"
+                        label="Last Name"
+                      ></v-text-field>
+                    </v-col>
+                  </v-row>
+                  <v-row>
+                    <v-col>
+                      <v-select
+                        :items="hospitals"
+                        item-value="id"
+                        item-text="name"
+                        label="Hospital"
+                        v-model="editedItem.hospitalId"
+                      >
+                      </v-select>
+                    </v-col>
+                  </v-row>
+                  <v-row>
+                    <v-col>
+                      <v-select
+                        :items="departments"
+                        item-value="id"
+                        item-text="name"
+                        label="Department"
+                        v-model="editedItem.departmentId"
+                      >
+                      </v-select>
                     </v-col>
                   </v-row>
                 </v-container>
@@ -51,12 +83,11 @@
           </v-dialog>
 
           <DeleteDialog
-           :showDialog="dialogDelete"
-           :onConfirm="deleteItemConfirm"
-           :onClose="closeDelete"
-           :item="editedItem"
+            :showDialog="dialogDelete"
+            :onConfirm="deleteItemConfirm"
+            :onClose="closeDelete"
+            :item="editedItem"
           ></DeleteDialog>
-          
         </v-toolbar>
       </template>
       <template v-slot:item.actions="{ item }">
@@ -68,12 +99,13 @@
 </template>
 
 <script>
-import { doctorHelpers } from "@/store";
-import DeleteDialog from "@/components/base/DeleteDialog"
+import { mapGetters } from "vuex";
+import { doctorHelpers, hospitalHelpers } from "@/store";
+import DeleteDialog from "@/components/base/DeleteDialog";
 
 export default {
   components: {
-    DeleteDialog
+    DeleteDialog,
   },
   created() {
     this.initialize();
@@ -111,17 +143,26 @@ export default {
     ],
     editedIndex: -1,
     editedItem: {
-      name: "",
+      firstName: "",
+      lastName: "",
+      hospitalId: null,
+      departmentId: null,
+      
     },
     defaultItem: {
-      name: "",
+      firstName: "",
+      lastName: "",
+      hospitalId: null,
+      departmentId: null,
     },
   }),
 
   computed: {
     ...doctorHelpers.mapGetters(["doctors"]),
+    ...hospitalHelpers.mapGetters(["hospitals"]),
+    ...mapGetters(["departments"]),
     formTitle() {
-      return this.editedIndex === -1 ? "New Hospital" : "Edit Hospital";
+      return this.editedIndex === -1 ? "New Doctor" : "Edit Doctor";
     },
   },
 
@@ -137,10 +178,13 @@ export default {
   methods: {
     initialize() {
       this.$store.dispatch("doctor/getDoctors");
+      this.$store.dispatch("hospital/getHospitals");
+      this.$store.dispatch("getDepartments");
+      debugger;
     },
 
     editItem(item) {
-      this.editedIndex = this.doctors.map(x => x.id).indexOf(item.id);
+      this.editedIndex = this.doctors.map((x) => x.id).indexOf(item.id);
       this.editedItem = Object.assign({}, item);
       this.dialog = true;
     },
@@ -153,7 +197,7 @@ export default {
 
     async deleteItemConfirm() {
       this.doctors.splice(this.editedIndex, 1);
-      await this.$store.dispatch("hospital/deleteHospital", this.editedItem.id);
+      await this.$store.dispatch("doctor/doctorHospital", this.editedItem.id);
       this.closeDelete();
     },
 
@@ -176,9 +220,9 @@ export default {
     async save() {
       if (this.editedIndex > -1) {
         Object.assign(this.doctors[this.editedIndex], this.editedItem);
-        await this.$store.dispatch("hospital/editHospital", this.editedItem);
+        await this.$store.dispatch("doctor/editDoctor", this.editedItem);
       } else {
-        await this.$store.dispatch("hospital/createHospital", this.editedItem);
+        await this.$store.dispatch("doctor/createDoctor", this.editedItem);
       }
       this.close();
     },
