@@ -3,7 +3,7 @@ import VueRouter from 'vue-router'
 import Home from '@/views/Home.vue'
 import Login from '@/views/authentication/Login'
 import Register from '@/views/authentication/Register'
-import Dashboard from '@/views/dashboard/Index'
+import Dashboard from '@/views/schedule/Index'
 import store from '@/store'
 
 Vue.use(VueRouter)
@@ -60,10 +60,11 @@ const routes = [
     component: () => import('@/views/doctor/Index')
   },
   {
-    path: '/dashboard',
-    name: 'Dashboard',
+    path: '/schedule',
+    name: 'Schedule',
     component: Dashboard
-  }
+  },
+  
 ]
 
 const router = new VueRouter({
