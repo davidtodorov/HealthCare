@@ -1,0 +1,33 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.13.35931.197 d17.13
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{54A90642-561A-4BB1-A94E-469ADEE60C69}") = "healthcare.client", "healthcare.client\healthcare.client.esproj", "{90786321-4135-7E07-0129-A087437B3B44}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HealthCare.Server", "HealthCare.Server\HealthCare.Server.csproj", "{05388418-A011-4663-8756-4E48FF29A564}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{90786321-4135-7E07-0129-A087437B3B44}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{90786321-4135-7E07-0129-A087437B3B44}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{90786321-4135-7E07-0129-A087437B3B44}.Debug|Any CPU.Deploy.0 = Debug|Any CPU
+		{90786321-4135-7E07-0129-A087437B3B44}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{90786321-4135-7E07-0129-A087437B3B44}.Release|Any CPU.Build.0 = Release|Any CPU
+		{90786321-4135-7E07-0129-A087437B3B44}.Release|Any CPU.Deploy.0 = Release|Any CPU
+		{05388418-A011-4663-8756-4E48FF29A564}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{05388418-A011-4663-8756-4E48FF29A564}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{05388418-A011-4663-8756-4E48FF29A564}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{05388418-A011-4663-8756-4E48FF29A564}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {08A2185E-EF80-4268-B7E3-96693EE3F2D3}
+	EndGlobalSection
+EndGlobal
