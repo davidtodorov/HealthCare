@@ -7,7 +7,7 @@ namespace HealthCare.Authorization.Users;
 
 public class User : AbpUser<User>
 {
-    public const string DefaultPassword = "123qwe";
+    public const string DefaultPassword = "123";
 
     public static string CreateRandomPassword()
     {
