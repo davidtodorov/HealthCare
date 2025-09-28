@@ -16,6 +16,20 @@ public static class AppRoleConfig
             )
         );
 
+        roleManagementConfig.StaticRoles.Add(
+            new StaticRoleDefinition(
+                StaticRoleNames.Host.Doctor,
+                MultiTenancySides.Host
+            )
+        );
+
+        roleManagementConfig.StaticRoles.Add(
+            new StaticRoleDefinition(
+                StaticRoleNames.Host.Patient,
+                MultiTenancySides.Host
+            )
+        );
+
         // Static tenant roles
 
         roleManagementConfig.StaticRoles.Add(

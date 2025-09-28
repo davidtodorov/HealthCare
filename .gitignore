@@ -4,9 +4,9 @@
 .vs/
 obj/
 bin/
-aspnet-core/src/HealthCare.Web.Host/App_Data/Logs/
-aspnet-core/src/HealthCare.Web.Mvc/App_Data/Logs/
-aspnet-core/src/HealthCare.Migrator/Logs/Logs.txt
-aspnet-core/build/outputs/
-aspnet-core/docker/mvc/Mvc-Logs/
-
+/backend/src/HealthCare.Web.Host/App_Data/Logs/
+/backend/src/HealthCare.Web.Mvc/App_Data/Logs/
+/backend/src/HealthCare.Migrator/Logs/Logs.txt
+/backend/build/outputs/
+/backend/docker/mvc/Mvc-Logs/
+/backend/src/HealthCare.Web.Host/App_Data/Logs/Logs.txt
