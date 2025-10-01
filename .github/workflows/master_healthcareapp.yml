@@ -26,9 +26,9 @@ jobs:
       - name: Setup Node
         uses: actions/setup-node@v4
         with:
-          node-version: '18'          # use 20 if your SPA requires it
+          node-version: '22'          # use 20 if your SPA requires it
           cache: 'npm'
-          cache-dependency-path: client-app/package-lock.json
+          #cache-dependency-path: client-app/package-lock.json
 
       - name: Restore .NET
         run: dotnet restore
