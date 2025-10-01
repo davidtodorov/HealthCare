@@ -27,16 +27,14 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: '18'          # use 20 if your SPA requires it
-          cache: 'npm'
-          #cache-dependency-path: client-app/package-lock.json
 
       - name: Restore .NET
         run: dotnet restore
 
       - name: Build SPA
-        working-directory: client-app
+        working-directory: WebApp/client-app
         run: |
-          npm ci
+          if [ -f package-lock.json ]; then npm ci; else npm install; fi
           npm run build
 
       # Publish the web app to a folder we’ll deploy
