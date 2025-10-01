@@ -83,7 +83,7 @@ namespace WebApp
 
                 if (env.IsDevelopment())
                 {
-                    spa.UseProxyToSpaDevelopmentServer("http://localhost:8080");
+                    spa.UseProxyToSpaDevelopmentServer("http://localhost:4200");
                 }
             });
 
