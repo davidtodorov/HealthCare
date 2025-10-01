@@ -17,6 +17,13 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
+      - name: Show tree
+        run: |
+        pwd
+        ls -la
+        ls -la WebApp || true
+        ls -la WebApp/client-app || true
+
       - name: Set up .NET Core
         uses: actions/setup-dotnet@v4
         with:
