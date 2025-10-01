@@ -42,7 +42,7 @@ namespace WebApp
             // In production, the Vue files will be served from this directory
             services.AddSpaStaticFiles(configuration =>
             {
-                configuration.RootPath = "client-app/dist";
+                configuration.RootPath = "client-app/dist/client-app/browser";
             });
         }
 

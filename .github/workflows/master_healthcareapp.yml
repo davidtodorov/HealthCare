@@ -27,13 +27,13 @@ jobs:
       - name: Setup Node
         uses: actions/setup-node@v4
         with:
-          node-version: '18'          # use 20 if your SPA requires it
+          node-version: '20'          # use 20 if your SPA requires it
 
       - name: Restore .NET
         run: dotnet restore
 
       - name: Build SPA
-        working-directory: client-app
+        working-directory: WebApp/client-app
         run: |
           if [ -f package-lock.json ]; then npm ci; else npm install; fi
           npm run build
