@@ -70,7 +70,7 @@ namespace WebApp.Extensions
             var mapperConfig = new MapperConfiguration(mc =>
             {
                 mc.AddProfile(new MappingProfile());
-            });
+            }, null);
 
             IMapper mapper = mapperConfig.CreateMapper();
             return services.AddSingleton(mapper);
