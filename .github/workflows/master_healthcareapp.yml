@@ -33,7 +33,7 @@ jobs:
         run: dotnet restore
 
       - name: Build SPA
-        working-directory: WebApp/client-app
+        working-directory: ./HealthCareApiServer/WebApp/client-app
         run: |
           if [ -f package-lock.json ]; then npm ci; else npm install; fi
           npm run build
