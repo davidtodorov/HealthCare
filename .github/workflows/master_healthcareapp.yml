@@ -40,7 +40,7 @@ jobs:
 
       # Publish the web app to a folder we’ll deploy
       - name: Publish .NET
-        run: dotnet publish WebApp/WebApp.csproj -c Release -o ./publish
+        run: dotnet publish ./HealthCareApiServer/WebApp/WebApp.csproj -c Release -o ./publish
 
       - name: Upload artifact
         uses: actions/upload-artifact@v4
