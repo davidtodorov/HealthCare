@@ -31,7 +31,7 @@ namespace WebApp
                 {
                     options.AddPolicy("CorsApi", builder =>
                         builder
-                            .WithOrigins("http://localhost:8080")
+                            .WithOrigins("*")
                             .AllowAnyHeader()
                             .AllowAnyMethod());
                 })
