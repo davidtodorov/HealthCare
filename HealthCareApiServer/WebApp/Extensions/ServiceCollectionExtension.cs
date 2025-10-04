@@ -9,7 +9,9 @@ using HealthCare.Infrastructure;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
 using Microsoft.IdentityModel.Tokens;
+using System;
 using System.Text;
 
 namespace WebApp.Extensions
@@ -66,15 +68,20 @@ namespace WebApp.Extensions
 
         public static IServiceCollection AddMapperConfig(this IServiceCollection services)
         {
-            // Auto Mapper Configurations
-            var mapperConfig = new MapperConfiguration(mc =>
+            services.AddSingleton<IMapper>(sp =>
             {
-                mc.AddProfile(new MappingProfile());
-            }, null);
+                var loggerFactory = sp.GetRequiredService<ILoggerFactory>();
 
-            IMapper mapper = mapperConfig.CreateMapper();
-            return services.AddSingleton(mapper);
-                    
+                var config = new MapperConfiguration(cfg =>
+                {
+                    cfg.AddProfile<MappingProfile>();
+                }, loggerFactory);
+
+                return config.CreateMapper();
+            });
+
+            return services;
+
         }
     }
 }
