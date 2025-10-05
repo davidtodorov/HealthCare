@@ -35,10 +35,10 @@ jobs:
       - name: Build SPA
         working-directory: ./HealthCareApiServer/WebApp/client-app
         run: |
-          if [ -f package-lock.json ]; then npm ci; else npm install; fi
+          npm i --force
           npm run build
 
-      # Publish the web app to a folder we’ll deploy
+      # Publish the web app to a folder weï¿½ll deploy
       - name: Publish .NET
         run: dotnet publish ./HealthCareApiServer/WebApp/WebApp.csproj -c Release -o ./publish
 
