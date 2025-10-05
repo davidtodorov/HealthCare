@@ -1,0 +1,120 @@
+<div class="grid grid-cols-1 lg:grid-cols-[380px_1fr] gap-6">
+  <!-- Left: Doctor list -->
+  <section class="card bg-white p-4 md:p-6">
+    <div class="flex items-center gap-2 mb-4">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-5 h-5 text-slate-500">
+        <path fill-rule="evenodd" d="M10.5 3.75a6.75 6.75 0 1 0 3.93 12.285l4.767 4.768a.75.75 0 1 0 1.06-1.06l-4.768-4.767A6.75 6.75 0 0 0 10.5 3.75ZM5.25 10.5a5.25 5.25 0 1 1 10.5 0 5.25 5.25 0 0 1-10.5 0Z" clip-rule="evenodd" />
+      </svg>
+      <input id="search" type="text" placeholder="Search name or specialty"
+        [(ngModel)]="search"
+        class="w-full border border-slate-200 rounded-xl px-3 py-2 outline-none focus:ring-2 focus:ring-slate-300" />
+    </div>
+
+    <div id="doctorList" class="space-y-3 max-h-[70vh] overflow-auto pr-1 scrollbar-thin">
+      <ng-container *ngIf="filteredDoctors.length; else noDocs">
+        <button *ngFor="let d of filteredDoctors; trackBy: trackByDoctor"
+                (click)="onSelectDoctor(d)"
+                class="w-full text-left p-3 border border-slate-200 hover:bg-slate-50 rounded-2xl flex gap-3 items-center">
+          <img [src]="d.photo" [alt]="d.name" class="w-14 h-14 object-cover rounded-xl ring-1 ring-slate-200" />
+          <div class="flex-1">
+            <div class="font-medium">{{ d.name }}</div>
+            <div class="text-sm text-slate-600">{{ d.specialty }}</div>
+          </div>
+        </button>
+      </ng-container>
+      <ng-template #noDocs>
+        <div class="text-sm text-slate-500">No doctors match your search.</div>
+      </ng-template>
+    </div>
+  </section>
+
+  <!-- Right: Details & Booking -->
+  <section class="space-y-6">
+    <!-- Doctor details card -->
+    <div class="card bg-white p-4 md:p-6" id="doctorDetails">
+      <div class="flex items-start gap-4">
+        <img [src]="selectedDoctor?.photo || ''" alt="Doctor photo" class="w-24 h-24 object-cover rounded-2xl ring-1 ring-slate-200" />
+        <div class="flex-1">
+          <h2 class="text-xl font-semibold">{{ selectedDoctor?.name || 'Select a doctor' }}</h2>
+          <p class="text-slate-600">{{ selectedDoctor?.specialty || '—' }}</p>
+          <p class="mt-2 text-slate-700 leading-relaxed">
+            {{ selectedDoctor?.bio || 'Choose someone from the list to see their profile, available dates, and hours.' }}
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Calendar + time slots -->
+    <div class="card bg-white p-4 md:p-6">
+      <div class="flex flex-col md:flex-row md:items-start gap-6">
+        <!-- Calendar -->
+        <div class="md:w-[360px]">
+          <div class="flex items-center justify-between mb-3">
+            <button (click)="prevMonth()" class="btn px-3 py-2 border border-slate-200 hover:bg-slate-50">←</button>
+            <h3 class="text-lg font-semibold">{{ monthLabel }}</h3>
+            <button (click)="nextMonth()" class="btn px-3 py-2 border border-slate-200 hover:bg-slate-50">→</button>
+          </div>
+          <div class="grid grid-cols-7 text-xs text-slate-500 mb-2">
+            <div class="text-center">Mon</div>
+            <div class="text-center">Tue</div>
+            <div class="text-center">Wed</div>
+            <div class="text-center">Thu</div>
+            <div class="text-center">Fri</div>
+            <div class="text-center">Sat</div>
+            <div class="text-center">Sun</div>
+          </div>
+
+          <div id="calendar" class="calendar-grid grid grid-cols-7 gap-1">
+            <ng-container *ngFor="let cell of calendarGrid; trackBy: trackByIndex">
+              <div *ngIf="!cell.date" class="day rounded-xl"></div>
+              <button *ngIf="cell.date"
+                      (click)="selectDate(cell)"
+                      [disabled]="cell.isPast"
+                      class="day rounded-xl border border-slate-200 hover:bg-slate-50 relative flex items-center justify-center"
+                      [ngClass]="{
+                        'opacity-40': cell.isPast,
+                        'ring-2 ring-slate-900 bg-slate-900/5': cell.isSelected,
+                        'slot-btn-disabled': !cell.hasAvailability
+                      }">
+                {{ cell.label }}
+                <span *ngIf="cell.hasAvailability" class="absolute bottom-1 w-1.5 h-1.5 rounded-full bg-slate-900"></span>
+              </button>
+            </ng-container>
+          </div>
+          <p class="mt-3 text-xs text-slate-500">Dates with a dot • have available hours.</p>
+        </div>
+
+        <!-- Time slots & booking -->
+        <div class="flex-1">
+          <h4 class="font-semibold mb-2">Available time slots</h4>
+          <div class="text-slate-600 mb-3">{{ dateLabel }}</div>
+
+          <div id="slots" class="flex flex-wrap gap-2">
+            <ng-container *ngIf="slotsForSelected.length; else noSlots">
+              <button *ngFor="let t of slotsForSelected; trackBy: trackByIndex"
+                      (click)="selectTime(t)"
+                      class="slot-btn btn px-3 py-2 border border-slate-200 hover:bg-slate-50"
+                      [ngClass]="{'ring-2 ring-slate-900 bg-slate-900/5': selectedTime === t}">
+                {{ t }}
+              </button>
+            </ng-container>
+            <ng-template #noSlots>
+              <div class="text-slate-500">No hours on this date.</div>
+            </ng-template>
+          </div>
+
+          <div class="mt-6 border-t pt-4">
+            <h4 class="font-semibold mb-2">Appointment summary</h4>
+            <div class="text-slate-700">{{ summary }}</div>
+            <button (click)="book()"
+                    class="btn mt-4 px-4 py-2 bg-slate-900 text-white hover:opacity-90 disabled:opacity-40"
+                    [disabled]="!(selectedDoctor && selectedDate && selectedTime)">
+              Book appointment
+            </button>
+            <p *ngIf="bookedOk" class="mt-3 text-green-700 font-medium">✓ Appointment booked!</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+</div>
