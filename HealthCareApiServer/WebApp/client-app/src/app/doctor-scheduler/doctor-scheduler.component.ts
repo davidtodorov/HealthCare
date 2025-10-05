@@ -39,11 +39,10 @@ interface Appointment {
 
 // --- Component Definition ---
 @Component({
-  selector: 'app-doctor-scheduler',
-  standalone: true,
-  imports: [CommonModule, FormsModule],
-  templateUrl: './doctor-scheduler.component.html',
-  styleUrls: ['./doctor-scheduler.component.scss']
+    selector: 'app-doctor-scheduler',
+    imports: [CommonModule, FormsModule],
+    templateUrl: './doctor-scheduler.component.html',
+    styleUrls: ['./doctor-scheduler.component.scss']
 })
 export class DoctorSchedulerComponent implements OnInit {
   // --- Constants & Mock Data ---

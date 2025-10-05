@@ -32,11 +32,10 @@ interface DayCell {
 }
 
 @Component({
-  selector: 'app-appointment-scheduler',
-  standalone: true,
-  imports: [CommonModule, FormsModule],
-  templateUrl: './appointment-scheduler.component.html',
-  styleUrl: './appointment-scheduler.component.scss'
+    selector: 'app-appointment-scheduler',
+    imports: [CommonModule, FormsModule],
+    templateUrl: './appointment-scheduler.component.html',
+    styleUrl: './appointment-scheduler.component.scss'
 })
 export class AppointmentSchedulerComponent {
   // --- Mock data ---
