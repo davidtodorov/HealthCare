@@ -1,0 +1,42 @@
+<div class="flex items-center justify-between gap-2 mb-3">
+    <div class="flex items-center gap-1">
+        <button class="px-2 py-2 rounded-xl border border-slate-200 hover:bg-slate-100 transition" (click)="prevMonth()">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"/></svg>
+        </button>
+        <button class="px-2 py-2 rounded-xl border border-slate-200 hover:bg-slate-100 transition text-sm font-medium" (click)="goToday(true)">Today</button>
+        <button class="px-2 py-2 rounded-xl border border-slate-200 hover:bg-slate-100 transition" (click)="nextMonth()">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6"/></svg>
+        </button>
+    </div>
+    <div class="flex items-center gap-2">
+        <select class="border border-slate-200 rounded-xl px-2 py-1 text-sm" [(ngModel)]="viewMonth" (change)="handleCalendarChange()">
+            <option *ngFor="let m of monthOptions" [value]="m.value">{{ m.text }}</option>
+        </select>
+        <select class="border border-slate-200 rounded-xl px-2 py-1 text-sm" [(ngModel)]="viewYear" (change)="handleCalendarChange()">
+            <option *ngFor="let y of yearOptions" [value]="y.value">{{ y.text }}</option>
+        </select>
+    </div>
+</div>
+<h2 id="monthLabel" class="text-xl font-semibold text-center mb-4 text-indigo-700">{{ monthLabel }}</h2>
+<div class="grid grid-cols-7 text-xs text-slate-500 font-medium mb-2">
+    <div class="text-center">Mon</div>
+    <div class="text-center">Tue</div>
+    <div class="text-center">Wed</div>
+    <div class="text-center">Thu</div>
+    <div class="text-center">Fri</div>
+    <div class="text-center">Sat</div>
+    <div class="text-center">Sun</div>
+</div>
+<div class="grid grid-cols-7 gap-1" id="calendar">
+    <ng-container *ngFor="let day of calendarDays">
+        <div *ngIf="day.d === 0" class="h-10"></div>
+        <button *ngIf="day.d > 0" 
+                class="h-10 relative rounded-xl flex items-center justify-center font-medium text-sm transition"
+                [ngClass]="day.classes"
+                (click)="selectDate(day.date)">
+            {{ day.d }}
+            <span *ngIf="day.hasAppts" class="absolute bottom-1 w-1.5 h-1.5 rounded-full bg-indigo-500"></span>
+        </button>
+    </ng-container>
+</div>
+<p class="text-xs text-slate-500 mt-4 text-center">Click a date to view its daily schedule.</p>

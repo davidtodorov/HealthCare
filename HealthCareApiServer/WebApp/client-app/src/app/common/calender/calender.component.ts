@@ -1,0 +1,182 @@
+import { Component, OnInit, Input, Output, EventEmitter, OnChanges, SimpleChanges } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
+import moment from 'moment';
+
+// --- Interfaces for Inputs ---
+interface AppointmentStub {
+  doctorId: string;
+  date: string; // YYYY-MM-DD
+  id: string;
+}
+
+interface CalendarDay {
+  date: Date, 
+  ymd: string, 
+  d: number, 
+  classes: string, 
+  hasAppts: boolean 
+}
+
+@Component({
+  selector: 'app-calender',
+  imports: [CommonModule, FormsModule],
+  templateUrl: './calender.component.html',
+  styleUrl: './calender.component.scss'
+})
+export class CalendarComponent implements OnInit, OnChanges {
+  @Input() doctorId: string = '';
+  @Input() appointments: AppointmentStub[] = [];
+  @Input() selectedDate: Date | null = null;
+  @Input() currentView: 'day' | 'week' | 'month' = 'day';
+
+  @Output() dateSelected = new EventEmitter<Date>();
+  @Output() viewChanged = new EventEmitter<void>();
+
+  months: string[] = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+  
+  viewYear!: number;
+  viewMonth!: number; // 0-based month
+  monthLabel: string = '—';
+  
+  calendarDays: CalendarDay[] = [];
+  monthOptions: { value: number, text: string }[] = [];
+  yearOptions: { value: number, text: string }[] = [];
+
+  ngOnInit() {
+    this.initSelectors();
+    this.goToday(false); // Initialize to today's month/year
+    this.buildMonth(this.viewYear, this.viewMonth);
+  }
+
+  ngOnChanges(changes: SimpleChanges): void {
+    if (changes['appointments'] || changes['selectedDate'] || changes['currentView']) {
+      this.highlightCalendarDays();
+    }
+  }
+
+  // --- Initialization (Copied from original) ---
+  private initSelectors() {
+    this.months.forEach((nm, idx) => {
+      this.monthOptions.push({ value: idx, text: nm });
+    });
+    const nowY = moment().year();
+    for (let yy = nowY - 5; yy <= nowY + 5; yy++) {
+      this.yearOptions.push({ value: yy, text: String(yy) });
+    }
+  }
+
+  // Set initial month/year to today
+  public goToday(selectDay: boolean): void {
+    const now = moment();
+    this.viewYear = now.year();
+    this.viewMonth = now.month();
+    
+    if (selectDay && this.selectedDate !== null) {
+      this.selectDate(now.toDate());
+    } else {
+      this.buildMonth(this.viewYear, this.viewMonth);
+    }
+  }
+
+  // --- Calendar Logic (Copied from original) ---
+  buildMonth(y: number, m: number): void {
+    this.viewYear = y;
+    this.viewMonth = m;
+    this.calendarDays = [];
+
+    const first = moment({ year: y, month: m, day: 1 });
+    const last = moment(first).endOf('month');
+    const leading = first.isoWeekday() - 1;
+    const days = last.date();
+
+    this.monthLabel = first.format('MMMM YYYY');
+
+    // Leading blanks
+    for (let i = 0; i < leading; i++) {
+      this.calendarDays.push({ date: new Date(), ymd: '', d: 0, classes: 'h-10', hasAppts: false }); // Placeholder
+    }
+
+    for (let d = 1; d <= days; d++) {
+      const date = moment({ year: y, month: m, day: d });
+      const ymd = date.format('YYYY-MM-DD');
+
+      const hasAppts = this.appointments.some(a => a.doctorId === this.doctorId && a.date === ymd);
+
+      this.calendarDays.push({ date: date.toDate(), ymd, d, classes: '', hasAppts });
+    }
+
+    this.highlightCalendarDays();
+  }
+
+  // Extracted method for highlighting calendar days
+  private highlightCalendarDays(): void {
+    const selectedYMD = this.selectedDate ? moment(this.selectedDate).format('YYYY-MM-DD') : null;
+    const today = moment().startOf('day');
+
+    let weekHighlightStart: moment.Moment | null = null;
+    let weekHighlightEnd: moment.Moment | null = null;
+
+    if (this.currentView === 'week' && this.selectedDate) {
+      weekHighlightStart = moment(this.selectedDate).startOf('isoWeek');
+      weekHighlightEnd = moment(weekHighlightStart).add(6, 'days');
+    }
+
+    this.calendarDays.forEach(day => {
+      if (!day.ymd) return; // Skip placeholder days
+
+      const date = moment(day.date);
+      let classes = 'bg-white hover:bg-slate-100 text-slate-900';
+      let isWeekHighlighted = false;
+
+      // 1. Check for Weekly Highlight
+      if (this.currentView === 'week' && weekHighlightStart && weekHighlightEnd && date.isBetween(weekHighlightStart, weekHighlightEnd, 'day', '[]')) {
+        isWeekHighlighted = true;
+        classes = 'bg-indigo-100/70 text-indigo-800 hover:bg-indigo-200/70';
+      }
+
+      // 2. Check for Day Highlight (selected date)
+      if (this.currentView === 'day' && day.ymd === selectedYMD) {
+        classes = 'ring-2 ring-indigo-500 bg-indigo-50 text-indigo-800';
+        isWeekHighlighted = false;
+      }
+
+      // 3. Check for Today
+      if (date.isSame(today, 'day')) {
+        if (day.ymd === selectedYMD) {
+          classes = 'ring-2 ring-indigo-500 bg-indigo-50 font-bold text-indigo-800';
+        } else if (isWeekHighlighted) {
+          classes = classes.replace('bg-indigo-100/70', 'bg-indigo-200/70');
+          classes += ' font-bold border-2 border-indigo-400';
+        } else {
+          classes = 'bg-slate-900 text-white hover:bg-slate-700';
+        }
+      } else if (isWeekHighlighted && day.ymd === selectedYMD) {
+        classes += ' !font-bold';
+      }
+
+      day.classes = classes;
+    });
+  }
+
+  handleCalendarChange(): void {
+    this.buildMonth(this.viewYear, this.viewMonth);
+    this.viewChanged.emit();
+  }
+
+  prevMonth(): void {
+    if (this.viewMonth === 0) { this.viewMonth = 11; this.viewYear--; } else this.viewMonth--;
+    this.handleCalendarChange();
+  }
+  nextMonth(): void {
+    if (this.viewMonth === 11) { this.viewMonth = 0; this.viewYear++; } else this.viewMonth++;
+    this.handleCalendarChange();
+  }
+
+  selectDate(date: Date): void {
+    this.selectedDate = date; 
+    this.dateSelected.emit(date); // Emit the date to the parent
+    this.buildMonth(this.viewYear, this.viewMonth); // Re-render to show selection highlight
+  }
+
+}

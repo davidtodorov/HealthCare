@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { CalendarComponent } from '../common/calender/calender.component';
 
 // --- Mock Data Interfaces ---
 
@@ -39,29 +40,30 @@ interface Appointment {
 
 // --- Component Definition ---
 @Component({
-    selector: 'app-doctor-scheduler',
-    imports: [CommonModule, FormsModule],
-    templateUrl: './doctor-scheduler.component.html',
-    styleUrls: ['./doctor-scheduler.component.scss']
+  selector: 'app-doctor-scheduler',
+  imports: [CommonModule, FormsModule, CalendarComponent],
+  templateUrl: './doctor-scheduler.component.html',
+  styleUrls: ['./doctor-scheduler.component.scss']
 })
 export class DoctorSchedulerComponent implements OnInit {
-  // --- Constants & Mock Data ---
-  months: string[] = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
   doctorId: string = 'd1';
 
   patients: Patient[] = [
-    { id: 'p1', name: 'Nikolay Petrov', age: 34, phone: '+359 88 123 4567', email: 'nikolay@example.com',
-        photo: 'https://images.unsplash.com/photo-1519345182560-3f2917c472ef?q=80&w=256&auto=format&fit=crop',
-        tags: ['Hypertension', 'Smoker'], notes: ['Home BP readings borderline'], prescriptions: []
+    {
+      id: 'p1', name: 'Nikolay Petrov', age: 34, phone: '+359 88 123 4567', email: 'nikolay@example.com',
+      photo: 'https://images.unsplash.com/photo-1519345182560-3f2917c472ef?q=80&w=256&auto=format&fit=crop',
+      tags: ['Hypertension', 'Smoker'], notes: ['Home BP readings borderline'], prescriptions: []
     },
-    { id: 'p2', name: 'Elena Ivanova', age: 29, phone: '+359 88 765 4321', email: 'elena@example.com',
-        photo: 'https://images.unsplash.com/photo-1524504388940-b1c1722653e1?q=80&w=256&auto=format&fit=crop',
-        tags: ['Eczema', 'Allergies'], notes: ['Responding well to emollients'], 
-        prescriptions: [{ id: 'rx_1', doctorId: 'd1', medication: 'Betamethasone', dose: '10 mg', durationDays: 14, times: ['08:00', '20:00'], startDate: '2025-09-28', active: true }]
+    {
+      id: 'p2', name: 'Elena Ivanova', age: 29, phone: '+359 88 765 4321', email: 'elena@example.com',
+      photo: 'https://images.unsplash.com/photo-1524504388940-b1c1722653e1?q=80&w=256&auto=format&fit=crop',
+      tags: ['Eczema', 'Allergies'], notes: ['Responding well to emollients'],
+      prescriptions: [{ id: 'rx_1', doctorId: 'd1', medication: 'Betamethasone', dose: '10 mg', durationDays: 14, times: ['08:00', '20:00'], startDate: '2025-09-28', active: true }]
     },
-    { id: 'p3', name: 'Georgi Stoyanov', age: 41, phone: '+359 87 222 0000', email: 'georgi@example.com',
-        photo: 'https://images.unsplash.com/photo-1544005313-94ddf0286df2?q=80&w=256&auto=format&fit=crop',
-        tags: ['Pediatric guardian'], notes: ['Brings child for checkups'], prescriptions: []
+    {
+      id: 'p3', name: 'Georgi Stoyanov', age: 41, phone: '+359 87 222 0000', email: 'georgi@example.com',
+      photo: 'https://images.unsplash.com/photo-1544005313-94ddf0286df2?q=80&w=256&auto=format&fit=crop',
+      tags: ['Pediatric guardian'], notes: ['Brings child for checkups'], prescriptions: []
     }
   ];
 
@@ -78,17 +80,9 @@ export class DoctorSchedulerComponent implements OnInit {
   ];
 
   // --- Component State (Properties) ---
-  viewYear!: number;
-  viewMonth!: number; // 0-based month
   selectedDate: Date | null = null;
   selectedAppt: Appointment | null = null;
   currentView: 'day' | 'week' | 'month' = 'day';
-
-  // Calendar rendering properties
-  calendarDays: { date: Date, ymd: string, d: number, classes: string, hasAppts: boolean }[] = [];
-  monthLabel: string = '—';
-  monthOptions: { value: number, text: string }[] = [];
-  yearOptions: { value: number, text: string }[] = [];
 
   // Schedule properties
   searchQuery: string = '';
@@ -96,7 +90,7 @@ export class DoctorSchedulerComponent implements OnInit {
   dateHeading: string = 'Select a date…';
   filteredAppointments: { appt: Appointment, patient: Patient | undefined }[] = [];
   groupedAppointments: { date: string, appts: { appt: Appointment, patient: Patient | undefined }[] }[] = [];
-  
+
   // Detail View properties
   currentPatient: Patient | undefined;
   newNoteText: string = '';
@@ -107,7 +101,6 @@ export class DoctorSchedulerComponent implements OnInit {
   rxTimeInputs: string[] = ['08:00', '20:00'];
 
   ngOnInit() {
-    this.initSelectors();
     this.goToday(true);
     this.setView('day');
   }
@@ -116,14 +109,14 @@ export class DoctorSchedulerComponent implements OnInit {
   private pad(n: number): string { return String(n).padStart(2, '0'); }
   private formatYMD(d: Date): string { return `${d.getFullYear()}-${this.pad(d.getMonth() + 1)}-${this.pad(d.getDate())}`; }
   private isoWeekday(d: Date): number { return (d.getDay() || 7); } // Returns 1 (Mon) to 7 (Sun)
-  
+
   // Helper to ensure patient objects have required properties for details view
   getPatient(id: string): Patient | undefined {
     const p = this.patients.find(p => p.id === id);
     if (p) {
-        // Ensure properties exist for template safety
-        p.notes = p.notes || [];
-        p.prescriptions = p.prescriptions || [];
+      // Ensure properties exist for template safety
+      p.notes = p.notes || [];
+      p.prescriptions = p.prescriptions || [];
     }
     return p;
   }
@@ -139,125 +132,30 @@ export class DoctorSchedulerComponent implements OnInit {
     return rx.id;
   }
 
-  // --- Initialization ---
-  private initSelectors() {
-    this.months.forEach((nm, idx) => {
-      this.monthOptions.push({ value: idx, text: nm });
-    });
-    const nowY = new Date().getFullYear();
-    for (let yy = nowY - 5; yy <= nowY + 5; yy++) {
-      this.yearOptions.push({ value: yy, text: String(yy) });
-    }
-  }
-
-  // --- Calendar Logic ---
-  buildMonth(y: number, m: number): void {
-    this.viewYear = y;
-    this.viewMonth = m;
-    this.calendarDays = [];
-
-    const first = new Date(y, m, 1);
-    const last = new Date(y, m + 1, 0);
-    const leading = (this.isoWeekday(first) - 1);
-    const days = last.getDate();
-
-    this.monthLabel = first.toLocaleDateString(undefined, { month: 'long', year: 'numeric' });
-
-    // Determine the date range for week highlighting
-    let weekHighlightStart: Date | null = null;
-    let weekHighlightEnd: Date | null = null;
-    const selectedYMD = this.selectedDate ? this.formatYMD(this.selectedDate) : null;
-    const today = new Date(); today.setHours(0, 0, 0, 0);
-
-    if (this.currentView === 'week' && this.selectedDate) {
-      weekHighlightStart = new Date(this.selectedDate);
-      weekHighlightStart.setDate(this.selectedDate.getDate() - (this.isoWeekday(this.selectedDate) - 1));
-      
-      weekHighlightEnd = new Date(weekHighlightStart);
-      weekHighlightEnd.setDate(weekHighlightStart.getDate() + 6);
-    }
-
-    // Leading blanks
-    for (let i = 0; i < leading; i++) {
-      this.calendarDays.push({ date: new Date(), ymd: '', d: 0, classes: 'h-10', hasAppts: false }); // Placeholder
-    }
-
-    for (let d = 1; d <= days; d++) {
-      const date = new Date(y, m, d);
-      const ymd = this.formatYMD(date);
-      
-      let classes = 'bg-white hover:bg-slate-100 text-slate-900';
-      let isWeekHighlighted = false;
-
-      // 1. Check for Weekly Highlight
-      if (this.currentView === 'week' && weekHighlightStart && weekHighlightEnd && date >= weekHighlightStart && date <= weekHighlightEnd) {
-        isWeekHighlighted = true;
-        classes = 'bg-indigo-100/70 text-indigo-800 hover:bg-indigo-200/70';
-      }
-
-      // 2. Check for Day Highlight (selected date)
-      if (this.currentView === 'day' && ymd === selectedYMD) {
-        classes = 'ring-2 ring-indigo-500 bg-indigo-50 text-indigo-800';
-        isWeekHighlighted = false;
-      }
-      
-      // 3. Check for Today
-      if (date.getTime() === today.getTime()) {
-        if (ymd === selectedYMD) {
-          classes = 'ring-2 ring-indigo-500 bg-indigo-50 font-bold text-indigo-800';
-        } else if (isWeekHighlighted) {
-          classes = classes.replace('bg-indigo-100/70', 'bg-indigo-200/70'); // Better highlight for today in week view
-          classes += ' font-bold border-2 border-indigo-400';
-        } else {
-          classes = 'bg-slate-900 text-white hover:bg-slate-700';
-        }
-      } else if (isWeekHighlighted && ymd === selectedYMD) {
-          classes += ' !font-bold';
-      }
-
-      const hasAppts = this.appointments.some(a => a.doctorId === this.doctorId && a.date === ymd);
-
-      this.calendarDays.push({ date, ymd, d, classes, hasAppts });
-    }
-  }
-
-  handleCalendarChange(): void {
-    this.buildMonth(this.viewYear, this.viewMonth);
-    this.renderSchedule();
-  }
-
-  prevMonth(): void {
-    if (this.viewMonth === 0) { this.viewMonth = 11; this.viewYear--; } else this.viewMonth--;
-    this.handleCalendarChange();
-  }
-  nextMonth(): void {
-    if (this.viewMonth === 11) { this.viewMonth = 0; this.viewYear++; } else this.viewMonth++;
-    this.handleCalendarChange();
-  }
-
   goToday(selectDay: boolean = true): void {
     const now = new Date();
-    this.viewYear = now.getFullYear();
-    this.viewMonth = now.getMonth();
     if (selectDay) {
       this.selectedDate = new Date(now.getFullYear(), now.getMonth(), now.getDate());
       this.setView('day'); // setView calls buildMonth and renderSchedule
     } else {
-      this.buildMonth(this.viewYear, this.viewMonth);
       this.renderSchedule();
     }
   }
 
-  selectDate(date: Date): void {
+  // Method called when a date is clicked in the Calendar
+  handleDateSelect(date: Date): void {
     this.selectedDate = date; 
     this.setView('day'); // Switch to Day view on calendar click (setView handles updates)
+  }
+
+  // Method called when the month/year changes in the Calendar
+  handleCalendarViewChange(): void {
+    this.renderSchedule();
   }
 
   // --- View and Navigation Logic ---
   setView(view: 'day' | 'week' | 'month'): void {
     this.currentView = view;
-    // Update calendar to show new highlights (day vs week)
-    this.buildMonth(this.viewYear, this.viewMonth); 
     this.renderSchedule();
   }
 
@@ -273,9 +171,6 @@ export class DoctorSchedulerComponent implements OnInit {
       const newDate = new Date(this.selectedDate);
       newDate.setDate(this.selectedDate.getDate() + amount);
       this.selectedDate = newDate;
-      this.viewYear = newDate.getFullYear(); // Update calendar context
-      this.viewMonth = newDate.getMonth();
-      this.buildMonth(this.viewYear, this.viewMonth);
       this.renderSchedule();
     }
   }
@@ -297,10 +192,23 @@ export class DoctorSchedulerComponent implements OnInit {
     let endDate: Date;
     let title: string;
 
-    // Ensure selectedDate is available for Day/Week context if it's null (e.g., first load of Month view)
-    let contextDate: Date = this.selectedDate || new Date(this.viewYear, this.viewMonth, 1);
-    contextDate.setHours(0,0,0,0);
-    
+    // Use a context date to determine the range
+    let contextDate: Date;
+    // If selectedDate is null (e.g., on first load with currentView='month'),
+    // we need to set a temporary context date for the month view.
+    // We'll use the first day of the current month.
+    if (!this.selectedDate && this.currentView === 'month') {
+      const now = new Date();
+      contextDate = new Date(now.getFullYear(), now.getMonth(), 1);
+    } else if (!this.selectedDate) {
+      // Fallback for Day/Week if selectedDate is null (shouldn't happen after goToday)
+      contextDate = new Date();
+    } else {
+      contextDate = new Date(this.selectedDate);
+    }
+
+    contextDate.setHours(0, 0, 0, 0);
+
     if (this.currentView === 'day') {
       startDate = new Date(contextDate);
       endDate = new Date(contextDate);
@@ -318,8 +226,10 @@ export class DoctorSchedulerComponent implements OnInit {
       title = `Week of ${startStr} – ${endStr}`;
 
     } else { // 'month'
-      startDate = new Date(this.viewYear, this.viewMonth, 1);
-      endDate = new Date(this.viewYear, this.viewMonth + 1, 0);
+      const year = contextDate.getFullYear();
+      const month = contextDate.getMonth();
+      startDate = new Date(year, month, 1);
+      endDate = new Date(year, month + 1, 0);
       title = startDate.toLocaleDateString(undefined, { year: 'numeric', month: 'long' });
     }
 
@@ -370,11 +280,11 @@ export class DoctorSchedulerComponent implements OnInit {
       this.groupedAppointments = [];
       let currentDate = new Date(startDate);
       while (currentDate <= endDate) {
-          const ymd = this.formatYMD(currentDate);
-          if (tempGroup[ymd]) {
-              this.groupedAppointments.push({ date: ymd, appts: tempGroup[ymd] });
-          }
-          currentDate.setDate(currentDate.getDate() + 1);
+        const ymd = this.formatYMD(currentDate);
+        if (tempGroup[ymd]) {
+          this.groupedAppointments.push({ date: ymd, appts: tempGroup[ymd] });
+        }
+        currentDate.setDate(currentDate.getDate() + 1);
       }
     }
   }
@@ -387,10 +297,10 @@ export class DoctorSchedulerComponent implements OnInit {
 
   getApptStatusClasses(status: string): string {
     switch (status) {
-        case 'upcoming': return 'bg-indigo-100 border-indigo-300 text-indigo-800';
-        case 'completed': return 'bg-green-100 border-green-300 text-green-800';
-        case 'canceled': return 'bg-red-100 border-red-300 text-red-800';
-        default: return 'bg-slate-100 border-slate-300 text-slate-800';
+      case 'upcoming': return 'bg-indigo-100 border-indigo-300 text-indigo-800';
+      case 'completed': return 'bg-green-100 border-green-300 text-green-800';
+      case 'canceled': return 'bg-red-100 border-red-300 text-red-800';
+      default: return 'bg-slate-100 border-slate-300 text-slate-800';
     }
   }
 
@@ -398,9 +308,9 @@ export class DoctorSchedulerComponent implements OnInit {
   openDetail(appt: Appointment): void {
     this.selectedAppt = appt;
     this.currentPatient = this.getPatient(appt.patientId);
-    
+
     if (!this.currentPatient) return;
-    
+
     // Reset inputs
     this.newNoteText = '';
     this.rxNameInput = '';
@@ -434,8 +344,8 @@ export class DoctorSchedulerComponent implements OnInit {
   get previousVisits(): Appointment[] {
     if (!this.currentPatient) return [];
     return this.appointments
-        .filter(a => a.patientId === this.currentPatient!.id && a.doctorId === this.doctorId && a.id !== (this.selectedAppt?.id || '') && (a.status === 'completed' || a.status === 'canceled'))
-        .sort((a, b) => b.date.localeCompare(a.date));
+      .filter(a => a.patientId === this.currentPatient!.id && a.doctorId === this.doctorId && a.id !== (this.selectedAppt?.id || '') && (a.status === 'completed' || a.status === 'canceled'))
+      .sort((a, b) => b.date.localeCompare(a.date));
   }
 
   // --- Prescriptions ---
@@ -443,16 +353,16 @@ export class DoctorSchedulerComponent implements OnInit {
     this.rxTimesPerDayInput = count;
     this.rxTimeInputs = [];
     for (let i = 0; i < count; i++) {
-        // Simple default times
-        let defaultTime: string;
-        switch (i) {
-            case 0: defaultTime = '08:00'; break;
-            case 1: defaultTime = '20:00'; break;
-            case 2: defaultTime = '12:00'; break;
-            case 3: defaultTime = '16:00'; break;
-            default: defaultTime = '00:00';
-        }
-        this.rxTimeInputs.push(defaultTime);
+      // Simple default times
+      let defaultTime: string;
+      switch (i) {
+        case 0: defaultTime = '08:00'; break;
+        case 1: defaultTime = '20:00'; break;
+        case 2: defaultTime = '12:00'; break;
+        case 3: defaultTime = '16:00'; break;
+        default: defaultTime = '00:00';
+      }
+      this.rxTimeInputs.push(defaultTime);
     }
   }
 
