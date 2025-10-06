@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { CalendarComponent } from '../common/calender/calender.component';
+import { CalendarComponent } from '../common/calendar/calendar.component';
 
 // --- Mock Data Interfaces ---
 

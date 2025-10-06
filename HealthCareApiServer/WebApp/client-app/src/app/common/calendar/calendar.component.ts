@@ -19,10 +19,10 @@ interface CalendarDay {
 }
 
 @Component({
-  selector: 'app-calender',
+  selector: 'app-calendar',
   imports: [CommonModule, FormsModule],
-  templateUrl: './calender.component.html',
-  styleUrl: './calender.component.scss'
+  templateUrl: './calendar.component.html',
+  styleUrl: './calendar.component.scss'
 })
 export class CalendarComponent implements OnInit, OnChanges {
   @Input() doctorId: string = '';
