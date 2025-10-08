@@ -13,7 +13,7 @@
     <div id="doctorList" class="space-y-3 max-h-[70vh] overflow-auto pr-1 scrollbar-thin">
       <ng-container *ngIf="filteredDoctors.length; else noDocs">
         <button *ngFor="let d of filteredDoctors; trackBy: trackByDoctor"
-                (click)="onSelectDoctor(d)"
+                (click)="onDoctorSelect(d)"
                 class="w-full text-left p-3 border border-slate-200 hover:bg-slate-50 rounded-2xl flex gap-3 items-center">
           <img [src]="d.photo" [alt]="d.name" class="w-14 h-14 object-cover rounded-xl ring-1 ring-slate-200" />
           <div class="flex-1">
@@ -49,39 +49,9 @@
       <div class="flex flex-col md:flex-row md:items-start gap-6">
         <!-- Calendar -->
         <div class="md:w-[360px]">
-          <div class="flex items-center justify-between mb-3">
-            <button (click)="prevMonth()" class="btn px-3 py-2 border border-slate-200 hover:bg-slate-50">←</button>
-            <h3 class="text-lg font-semibold">{{ monthLabel }}</h3>
-            <button (click)="nextMonth()" class="btn px-3 py-2 border border-slate-200 hover:bg-slate-50">→</button>
-          </div>
-          <div class="grid grid-cols-7 text-xs text-slate-500 mb-2">
-            <div class="text-center">Mon</div>
-            <div class="text-center">Tue</div>
-            <div class="text-center">Wed</div>
-            <div class="text-center">Thu</div>
-            <div class="text-center">Fri</div>
-            <div class="text-center">Sat</div>
-            <div class="text-center">Sun</div>
-          </div>
-
-          <div id="calendar" class="calendar-grid grid grid-cols-7 gap-1">
-            <ng-container *ngFor="let cell of calendarGrid; trackBy: trackByIndex">
-              <div *ngIf="!cell.date" class="day rounded-xl"></div>
-              <button *ngIf="cell.date"
-                      (click)="selectDate(cell)"
-                      [disabled]="cell.isPast"
-                      class="day rounded-xl border border-slate-200 hover:bg-slate-50 relative flex items-center justify-center"
-                      [ngClass]="{
-                        'opacity-40': cell.isPast,
-                        'ring-2 ring-slate-900 bg-slate-900/5': cell.isSelected,
-                        'slot-btn-disabled': !cell.hasAvailability
-                      }">
-                {{ cell.label }}
-                <span *ngIf="cell.hasAvailability" class="absolute bottom-1 w-1.5 h-1.5 rounded-full bg-slate-900"></span>
-              </button>
-            </ng-container>
-          </div>
-          <p class="mt-3 text-xs text-slate-500">Dates with a dot • have available hours.</p>
+          <app-calendar [doctorId]="selectedDoctor?.id || ''"
+                        [dates]="dates"
+                        (dateSelected)="onDateSelect($event)"></app-calendar>
         </div>
 
         <!-- Time slots & booking -->

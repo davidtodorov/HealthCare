@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { CalendarComponent } from '../common/calendar/calendar.component';
+import moment from 'moment';
 
 // --- Mock Data Interfaces ---
 
@@ -28,7 +29,7 @@ interface Patient {
   prescriptions: Prescription[];
 }
 
-interface Appointment {
+export interface Appointment {
   id: string;
   doctorId: string;
   date: string; // YYYY-MM-DD
@@ -79,6 +80,7 @@ export class DoctorSchedulerComponent implements OnInit {
     { id: 'a9', doctorId: 'd1', date: '2025-11-03', time: '10:00', patientId: 'p1', reason: 'Medication review', status: 'upcoming' },
   ];
 
+  dates: string[] = [];
   // --- Component State (Properties) ---
   selectedDate: Date | null = null;
   selectedAppt: Appointment | null = null;
@@ -103,14 +105,10 @@ export class DoctorSchedulerComponent implements OnInit {
   ngOnInit() {
     this.goToday(true);
     this.setView('day');
+    this.dates = this.appointments.map(x => x.date);
+
   }
 
-  // --- Utility Functions ---
-  private pad(n: number): string { return String(n).padStart(2, '0'); }
-  private formatYMD(d: Date): string { return `${d.getFullYear()}-${this.pad(d.getMonth() + 1)}-${this.pad(d.getDate())}`; }
-  private isoWeekday(d: Date): number { return (d.getDay() || 7); } // Returns 1 (Mon) to 7 (Sun)
-
-  // Helper to ensure patient objects have required properties for details view
   getPatient(id: string): Patient | undefined {
     const p = this.patients.find(p => p.id === id);
     if (p) {
@@ -215,13 +213,12 @@ export class DoctorSchedulerComponent implements OnInit {
       title = contextDate.toLocaleDateString(undefined, { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
 
     } else if (this.currentView === 'week') {
-      startDate = new Date(contextDate);
-      startDate.setDate(contextDate.getDate() - (this.isoWeekday(contextDate) - 1));
+      // Set startDate to the beginning of the week (Monday) using moment
+      startDate = moment(contextDate).startOf('isoWeek').toDate();
 
-      endDate = new Date(startDate);
-      endDate.setDate(startDate.getDate() + 6);
+      endDate = moment(startDate).endOf('isoWeek').toDate();
 
-      const startStr = startDate.toLocaleDateString(undefined, { month: 'short', day: 'numeric' });
+      const startStr = moment(startDate).format('MMM D');
       const endStr = endDate.toLocaleDateString(undefined, { month: 'short', day: 'numeric', year: 'numeric' });
       title = `Week of ${startStr} – ${endStr}`;
 
@@ -235,8 +232,8 @@ export class DoctorSchedulerComponent implements OnInit {
 
     this.dateHeading = title;
 
-    const startYMD = this.formatYMD(startDate);
-    const endYMD = this.formatYMD(endDate);
+    const startYMD = moment(startDate).format('YYYY-MM-DD');
+    const endYMD = moment(endDate).format('YYYY-MM-DD');
 
     // 2. Filtering
     const q = this.searchQuery.trim().toLowerCase();
@@ -280,7 +277,7 @@ export class DoctorSchedulerComponent implements OnInit {
       this.groupedAppointments = [];
       let currentDate = new Date(startDate);
       while (currentDate <= endDate) {
-        const ymd = this.formatYMD(currentDate);
+        const ymd = moment(currentDate).format('YYYY-MM-DD');
         if (tempGroup[ymd]) {
           this.groupedAppointments.push({ date: ymd, appts: tempGroup[ymd] });
         }
@@ -409,6 +406,6 @@ export class DoctorSchedulerComponent implements OnInit {
     const start = new Date(startYmd + 'T00:00:00'); // Use T00:00:00 to avoid timezone issues
     const end = new Date(start.getTime());
     end.setDate(start.getDate() + (days - 1));
-    return this.formatYMD(end);
+    return moment(end).format('YYYY-MM-DD');
   }
 }

@@ -4,7 +4,7 @@ import { FormsModule } from '@angular/forms';
 import moment from 'moment';
 
 // --- Interfaces for Inputs ---
-interface AppointmentStub {
+export interface AppointmentStub {
   doctorId: string;
   date: string; // YYYY-MM-DD
   id: string;
@@ -26,7 +26,7 @@ interface CalendarDay {
 })
 export class CalendarComponent implements OnInit, OnChanges {
   @Input() doctorId: string = '';
-  @Input() appointments: AppointmentStub[] = [];
+  @Input() dates: string[] = []; // Array of date strings in "YYYY-MM-DD" format
   @Input() selectedDate: Date | null = null;
   @Input() currentView: 'day' | 'week' | 'month' = 'day';
 
@@ -43,6 +43,7 @@ export class CalendarComponent implements OnInit, OnChanges {
   monthOptions: { value: number, text: string }[] = [];
   yearOptions: { value: number, text: string }[] = [];
 
+
   ngOnInit() {
     this.initSelectors();
     this.goToday(false); // Initialize to today's month/year
@@ -50,8 +51,8 @@ export class CalendarComponent implements OnInit, OnChanges {
   }
 
   ngOnChanges(changes: SimpleChanges): void {
-    if (changes['appointments'] || changes['selectedDate'] || changes['currentView']) {
-      this.highlightCalendarDays();
+    if (changes['appointments'] || changes['dates'] || changes['availabilitySlots'] || changes['selectedDate'] || changes['currentView']) {
+      this.buildMonth(this.viewYear, this.viewMonth);
     }
   }
 
@@ -101,8 +102,7 @@ export class CalendarComponent implements OnInit, OnChanges {
       const date = moment({ year: y, month: m, day: d });
       const ymd = date.format('YYYY-MM-DD');
 
-      const hasAppts = this.appointments.some(a => a.doctorId === this.doctorId && a.date === ymd);
-
+      let hasAppts = this.dates.indexOf(ymd) !== -1 ? true : false; 
       this.calendarDays.push({ date: date.toDate(), ymd, d, classes: '', hasAppts });
     }
 
