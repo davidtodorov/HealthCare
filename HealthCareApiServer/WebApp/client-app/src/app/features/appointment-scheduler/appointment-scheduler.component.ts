@@ -182,12 +182,12 @@ export class AppointmentSchedulerComponent {
     this.dates = this.availabilitySlots ? Object.keys(this.availabilitySlots) : [];
 
     this.resetSelection();
-    this.goToday();
-
+    
     const now = new Date();
     const viewYear = now.getFullYear();
     const viewMonth = now.getMonth();
     this.calendarComponent.buildMonth(viewYear, viewMonth)
+    this.calendarComponent.goToday(true);
   }
 
   onDateSelect(date: any) {
@@ -266,10 +266,11 @@ export class AppointmentSchedulerComponent {
     if (!(doctor && d && t)) return;
     const w = this.isoWeekday(d);
     const list = this.availability[doctor.id][w];
-    this.availability[doctor.id][w] = list.filter((x) => x !== t);
+    //this.availability[doctor.id][w] = list.filter((x) => x !== t);
     this.bookedOk = true;
     // Reset the chosen time to force refresh of slots
     this.selectedTime = null;
+    // TODO: after booking, refresh the availability slots
   }
 
   // --- Helpers ---
