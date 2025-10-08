@@ -31,13 +31,16 @@ namespace WebApp
                 {
                     options.AddPolicy("CorsApi", builder =>
                         builder
-                            .WithOrigins("*")
+                            .AllowAnyOrigin()
                             .AllowAnyHeader()
                             .AllowAnyMethod());
                 })
                 .AddMapperConfig()
                 .AddApplicationServices()
                 .AddControllers();
+
+            services.AddEndpointsApiExplorer();
+            services.AddSwaggerGen();
 
             // In production, the Vue files will be served from this directory
             services.AddSpaStaticFiles(configuration =>
@@ -56,7 +59,6 @@ namespace WebApp
             else
             {
                 app.UseExceptionHandler("/Error");
-                // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
                 app.UseHsts();
             }
 
@@ -72,6 +74,14 @@ namespace WebApp
             }
             app.UseAuthentication();
             app.UseAuthorization();
+
+            app.UseSwagger();
+            app.UseSwaggerUI(c =>
+            {
+                c.SwaggerEndpoint("/swagger/v1/swagger.json", "WebApp v1");
+                c.RoutePrefix = "swagger"; // so UI is at /swagger
+            });
+
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();
@@ -90,5 +100,6 @@ namespace WebApp
             app.ApplyMigrations();
             app.SeedDatabase();
         }
+
     }
 }
