@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading.Tasks;
 using HealthCare.Core.Entities;
 
 namespace HealthCare.Infrastructure
@@ -29,7 +30,7 @@ namespace HealthCare.Infrastructure
             context.Dispose();
         }
 
-        public async void SaveChangesAsync()
+        public async Task SaveChangesAsync()
         {
             await context.SaveChangesAsync();
         }

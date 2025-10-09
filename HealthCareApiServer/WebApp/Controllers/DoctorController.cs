@@ -25,6 +25,8 @@ namespace WebApp.Controllers
         [HttpPost(nameof(Create))]
         public async Task<ActionResult> Create(CreateDoctorModel requestModel)
         {
+            requestModel.DepartmentId = 1;
+            requestModel.HospitalId = 2;
             var result = await this.doctorCreator.CreateDoctor(requestModel);
             if (result.Failure)
             {

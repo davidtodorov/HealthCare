@@ -3,6 +3,7 @@
 import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
+import { IdentityService } from '../../api/services';
 
 @Component({
   selector: 'app-login',
@@ -17,14 +18,14 @@ export class LoginComponent implements OnInit {
   loginForm!: FormGroup;
 
   // Inject FormBuilder to easily create the form structure
-  constructor(private fb: FormBuilder) { }
+  constructor(private fb: FormBuilder, private identityService: IdentityService) { }
 
   ngOnInit(): void {
     // Initialize the form structure with default values and Validators
     this.loginForm = this.fb.group({
-      email: ['', [
+      username: ['', [
         Validators.required, 
-        Validators.email
+        Validators.minLength(3)
       ]],
       password: ['', [
         Validators.required, 
@@ -34,8 +35,8 @@ export class LoginComponent implements OnInit {
   }
 
   // Convenience getter for easy access to form controls in the template
-  get email() {
-    return this.loginForm.get('email');
+  get username() {
+    return this.loginForm.get('username');
   }
 
   get password() {
@@ -55,10 +56,21 @@ export class LoginComponent implements OnInit {
     const formData = this.loginForm.value;
 
     console.log('Login successful! Submitting data:', {
-      email: formData.email,
+      username: formData.username,
       password: '***', // Never log actual password in real apps
     });
 
+    this.identityService.apiIdentityLoginPost({ body: { 
+      username: formData.username, 
+      password: formData.password 
+    }}).subscribe({
+      next: () => {
+        console.log('Login API call successful');
+      },
+      error: (err) => {
+        console.error('Login API call failed', err);
+      }
+    });
     // 3. Call your authentication service here (e.g., this.authService.login(formData.email, formData.password))
     
     // Optional: Reset the form after successful submission

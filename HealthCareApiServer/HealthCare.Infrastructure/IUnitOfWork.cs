@@ -13,6 +13,6 @@ namespace HealthCare.Infrastructure
         IRepository<Doctor> DoctorRepository { get; set; }
         IRepository<User> UserRepository { get; set; }
         void SaveChanges();
-        void SaveChangesAsync();
+        Task SaveChangesAsync();
     }
 }

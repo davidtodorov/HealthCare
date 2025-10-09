@@ -1,0 +1,8 @@
+{
+  "input": "openapi.json",
+  "output": "src/app/api",
+  "ignoreUnusedModels": false,
+  "services": true,
+  "keepFullResponseMediaType": false,
+  "promises": false
+}

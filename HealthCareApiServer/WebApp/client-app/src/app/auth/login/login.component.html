@@ -8,27 +8,26 @@
     <form class="space-y-6" [formGroup]="loginForm" (ngSubmit)="onSubmit()">
       
       <div>
-        <label for="email" class="block text-sm font-medium text-gray-700">
-          Email address
+        <label for="username" class="block text-sm font-medium text-gray-700">
+          Username
         </label>
         <div class="mt-1">
           <input
-            id="email"
-            name="email"
-            type="email"
-            autocomplete="email"
-            formControlName="email"
-            placeholder="you@example.com"
+            id="username"
+            name="username"
+            type="text"
+            autocomplete="username"
+            formControlName="username"
             class="appearance-none block w-full px-4 py-3 border border-gray-300 rounded-lg shadow-sm placeholder-gray-400 focus:outline-none sm:text-sm transition duration-150 ease-in-out"
-            [class.border-red-500]="email?.invalid && email?.touched"
-            [class.focus:ring-red-500]="email?.invalid && email?.touched"
-            [class.focus:border-red-500]="email?.invalid && email?.touched"
+            [class.border-red-500]="username?.invalid && username?.touched"
+            [class.focus:ring-red-500]="username?.invalid && username?.touched"
+            [class.focus:border-red-500]="username?.invalid && username?.touched"
           />
         </div>
-        
-        <div *ngIf="email?.invalid && email?.touched" class="text-red-500 text-xs mt-1">
-          <div *ngIf="email?.errors?.['required']">Email is required.</div>
-          <div *ngIf="email?.errors?.['email']">Enter a valid email address.</div>
+
+        <div *ngIf="username?.invalid && username?.touched" class="text-red-500 text-xs mt-1">
+          <div *ngIf="username?.errors?.['required']">Username is required.</div>
+          <div *ngIf="username?.errors?.['minlength']">Username must be at least 3 characters.</div>
         </div>
       </div>
 

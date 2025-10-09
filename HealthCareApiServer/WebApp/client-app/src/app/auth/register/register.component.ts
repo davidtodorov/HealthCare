@@ -3,6 +3,9 @@
 import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule, AbstractControl, ValidationErrors } from '@angular/forms';
+import { RegisterUserRequestModel }  from '../../api/models';
+import { apiIdentityRegisterPost } from '../../api/functions';
+import { IdentityService } from '../../api/services';
 
 // --- Custom Validator Function ---
 // This function is applied to the entire FormGroup (it takes a control, which is the FormGroup)
@@ -33,11 +36,19 @@ export class RegisterComponent implements OnInit {
   // Define the FormGroup for the registration form
   registerForm!: FormGroup;
 
-  constructor(private fb: FormBuilder) { }
+  constructor(private fb: FormBuilder, private service: IdentityService) { }
 
   ngOnInit(): void {
     this.registerForm = this.fb.group({
       username: ['', [
+        Validators.required, 
+        Validators.minLength(3)
+      ]],
+      firstName: ['', [
+        Validators.required, 
+        Validators.minLength(3)
+      ]],
+      lastName: ['', [
         Validators.required, 
         Validators.minLength(3)
       ]],
@@ -62,6 +73,8 @@ export class RegisterComponent implements OnInit {
 
   // Convenience getters for easy access to form controls in the template
   get username() { return this.registerForm.get('username'); }
+  get firstName() { return this.registerForm.get('firstName'); }
+  get lastName() { return this.registerForm.get('lastName'); }
   get email() { return this.registerForm.get('email'); }
   get password() { return this.registerForm.get('password'); }
   get confirmPassword() { return this.registerForm.get('confirmPassword'); }
@@ -79,12 +92,28 @@ export class RegisterComponent implements OnInit {
     }
 
     const formData = this.registerForm.value;
-
-    console.log('Registration successful! Submitting data:', {
+    let model = {
+      firstName: formData.firstName,
+      lastName: formData.lastName,
       username: formData.username,
       email: formData.email,
-      password: '***', 
-    });
+      password: formData.password
+    } as RegisterUserRequestModel;
+
+    this.service.apiIdentityRegisterPost({ body: model }).subscribe({});
+
+    // this.clientService.register(model).subscribe({
+    //   next: () => {
+    //     console.log('Registration successful! Submitting data:', {
+    //       username: formData.username,
+    //       email: formData.email,
+    //       password: '***',
+    //     });
+    //   },
+    //   error: (err) => {
+    //     console.error('Registration failed:', err);
+    //   }
+    // });
     
     // Call your registration service here
   }

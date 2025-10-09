@@ -31,29 +31,29 @@ namespace HealthCare.Application.Services.Doctors
         }
         public async Task<Result> CreateDoctor(CreateDoctorModel model)
         {
-            //var registerUserModel = new RegisterUserRequestModel()
-            //{
-            //    FirstName = model.FirstName,
-            //    LastName = model.LastName,
-            //    Email = model.Email,
-            //    Username = model.Username,
-            //    Password = model.Password
-            //};
-            //var result = await userCreator.CreateUserAsync(registerUserModel);
-            //if (result.Result.Succeeded)
-            //{
-            //    await userManager.AddToRoleAsync(result.User, RoleConstants.DOCTOR_ROLE);
-            //}
+            var registerUserModel = new RegisterUserRequestModel()
+            {
+                FirstName = model.FirstName,
+                LastName = model.LastName,
+                Email = model.Email,
+                Username = model.Username,
+                Password = model.Password
+            };
+            var result = await userCreator.CreateUserAsync(registerUserModel);
+            if (result.Result.Succeeded)
+            {
+                await userManager.AddToRoleAsync(result.User, RoleConstants.DOCTOR_ROLE);
+            }
 
-            //var user = unitOfWork.UserRepository.GetById(model.UserId);
+            //var user = unitOfWork.UserRepository.GetById(result.User.Id);
 
             var doctorFromDTO = mapper.Map<CreateDoctorModel, Doctor>(model);
 
             var doctor = new Doctor()
             {
-                UserId = model.UserId,
-                DepartmentId = model.DepartmentId,
-                HospitalId = model.HospitalId
+                UserId = result.User.Id,
+                //DepartmentId = model.DepartmentId,
+                //HospitalId = model.HospitalId
             };
 
             try
@@ -64,7 +64,7 @@ namespace HealthCare.Application.Services.Doctors
             {
                 return e.Message;
             }
-            unitOfWork.SaveChanges();
+            await unitOfWork.SaveChangesAsync();
             return true;
 
             //TODO: Add doctor's department and hospital

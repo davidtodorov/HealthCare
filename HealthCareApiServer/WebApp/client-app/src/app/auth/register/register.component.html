@@ -26,6 +26,42 @@
       </div>
 
       <div>
+        <label for="firstName" class="block text-sm font-medium text-gray-700">
+          First Name
+        </label>
+        <input
+          id="firstName"
+          type="text"
+          formControlName="firstName"
+          placeholder="Enter your first name"
+          class="mt-1 block w-full px-4 py-3 border border-gray-300 rounded-lg shadow-sm placeholder-gray-400 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+          [class.border-red-500]="firstName?.invalid && firstName?.touched"
+        />
+        <div *ngIf="firstName?.invalid && firstName?.touched" class="text-red-500 text-xs mt-1">
+          <div *ngIf="firstName?.errors?.['required']">First Name is required.</div>
+          <div *ngIf="firstName?.errors?.['minlength']">First Name must be at least 3 characters.</div>
+        </div>
+      </div>
+
+      <div>
+        <label for="lastName" class="block text-sm font-medium text-gray-700">
+          Last Name
+        </label>
+        <input
+          id="lastName"
+          type="text"
+          formControlName="lastName"
+          placeholder="Enter your last name"
+          class="mt-1 block w-full px-4 py-3 border border-gray-300 rounded-lg shadow-sm placeholder-gray-400 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+          [class.border-red-500]="lastName?.invalid && lastName?.touched"
+        />
+        <div *ngIf="lastName?.invalid && lastName?.touched" class="text-red-500 text-xs mt-1">
+          <div *ngIf="lastName?.errors?.['required']">Last Name is required.</div>
+          <div *ngIf="lastName?.errors?.['minlength']">Last Name must be at least 3 characters.</div>
+        </div>
+      </div>
+
+      <div>
         <label for="email" class="block text-sm font-medium text-gray-700">
           Email address
         </label>
