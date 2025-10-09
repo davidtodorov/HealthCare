@@ -31,44 +31,44 @@ namespace HealthCare.Application.Services.Doctors
         }
         public async Task<Result> CreateDoctor(CreateDoctorModel model)
         {
-            var registerUserModel = new RegisterUserRequestModel()
+            using (var transaction = await unitOfWork.Context.Database.BeginTransactionAsync())
             {
-                FirstName = model.FirstName,
-                LastName = model.LastName,
-                Email = model.Email,
-                Username = model.Username,
-                Password = model.Password
-            };
-            var result = await userCreator.CreateUserAsync(registerUserModel);
-            if (result.Result.Succeeded)
-            {
+                var registerUserModel = new RegisterUserRequestModel()
+                {
+                    FirstName = model.FirstName,
+                    LastName = model.LastName,
+                    Email = model.Email,
+                    Username = model.Username,
+                    Password = model.Password
+                };
+                var result = await userCreator.CreateUserAsync(registerUserModel);
+                if (!result.Result.Succeeded)
+                {
+                    return result.Result.Errors.FirstOrDefault()?.Description ?? "User creation failed";
+                }
+
                 await userManager.AddToRoleAsync(result.User, RoleConstants.DOCTOR_ROLE);
+
+                var doctor = new Doctor()
+                {
+                    UserId = result.User.Id,
+                    DepartmentId = model.DepartmentId,
+                    HospitalId = model.HospitalId
+                };
+
+                try
+                {
+                    unitOfWork.DoctorRepository.Insert(doctor);
+                    await unitOfWork.SaveChangesAsync();
+                    await transaction.CommitAsync();
+                    return true;
+                }
+                catch (Exception e)
+                {
+                    await transaction.RollbackAsync();
+                    return e.Message;
+                }
             }
-
-            //var user = unitOfWork.UserRepository.GetById(result.User.Id);
-
-            var doctorFromDTO = mapper.Map<CreateDoctorModel, Doctor>(model);
-
-            var doctor = new Doctor()
-            {
-                UserId = result.User.Id,
-                //DepartmentId = model.DepartmentId,
-                //HospitalId = model.HospitalId
-            };
-
-            try
-            {
-                unitOfWork.DoctorRepository.Insert(doctorFromDTO);
-            }
-            catch (Exception e)
-            {
-                return e.Message;
-            }
-            await unitOfWork.SaveChangesAsync();
-            return true;
-
-            //TODO: Add doctor's department and hospital
-
         }
     }
 }

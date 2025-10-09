@@ -8,20 +8,20 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace HealthCare.Application.Services.User
+namespace HealthCare.Application.Services.Users
 {
     public class UserCreator : IUserCreator
     {
-        private UserManager<Core.Entities.User> userManager;
+        private UserManager<User> userManager;
 
-        public UserCreator(UserManager<Core.Entities.User> userManager)
+        public UserCreator(UserManager<User> userManager)
         {
             this.userManager = userManager;
         }
         public async Task<CreateUserResult> CreateUserAsync(RegisterUserRequestModel model)
         {
             var result = new CreateUserResult();
-            var user = new Core.Entities.User
+            var user = new User
             {
                 Email = model.Email,
                 UserName = model.Username,

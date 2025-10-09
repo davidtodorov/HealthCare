@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using HealthCare.Core.Base;
 using HealthCare.Infrastructure;
+using HealthCare.Infrastructure.Repositories;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;

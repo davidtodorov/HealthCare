@@ -1,4 +1,5 @@
 ﻿using HealthCare.Core.Entities;
+using HealthCare.Infrastructure.Repositories;
 using System;
 using System.Collections.Generic;
 using System.Linq;

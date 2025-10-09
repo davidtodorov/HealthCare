@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Threading.Tasks;
 using HealthCare.Core.Entities;
+using HealthCare.Infrastructure.Repositories;
 
 namespace HealthCare.Infrastructure
 {
@@ -11,6 +12,8 @@ namespace HealthCare.Infrastructure
         public IRepository<User> UserRepository { get; set; }
 
         public IRepository<Department> DepartmentRepository { get; set; }
+
+        public HealthCareDbContext Context => context;
 
         public UnitOfWork(HealthCareDbContext context)
         {

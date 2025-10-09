@@ -3,7 +3,7 @@ using HealthCare.Application.AutoMapper;
 using HealthCare.Application.Interfaces.Doctor;
 using HealthCare.Application.Interfaces.User;
 using HealthCare.Application.Services.Doctors;
-using HealthCare.Application.Services.User;
+using HealthCare.Application.Services.Users;
 using HealthCare.Core.Entities;
 using HealthCare.Infrastructure;
 using Microsoft.AspNetCore.Authentication.JwtBearer;

@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 
-namespace HealthCare.Infrastructure
+namespace HealthCare.Infrastructure.Repositories
 {
     public interface IRepository<TEntity>
         where TEntity : IEntity

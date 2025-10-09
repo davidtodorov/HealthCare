@@ -5,7 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 
-namespace HealthCare.Infrastructure
+namespace HealthCare.Infrastructure.Repositories
 {
     public class Repository<TEntity> : IRepository<TEntity>
         where TEntity : class, IEntity
@@ -16,7 +16,7 @@ namespace HealthCare.Infrastructure
         public Repository(HealthCareDbContext context)
         {
             this.context = context;
-            this.dbSet = context.Set<TEntity>();
+            dbSet = context.Set<TEntity>();
         }
 
         public virtual IEnumerable<TEntity> GetAll(
