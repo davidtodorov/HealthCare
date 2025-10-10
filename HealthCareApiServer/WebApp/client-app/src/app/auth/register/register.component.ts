@@ -1,28 +1,10 @@
-// src/app/register/register.component.ts
-
 import { CommonModule } from '@angular/common';
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule, AbstractControl, ValidationErrors } from '@angular/forms';
 import { RegisterUserRequestModel } from '../../api/models';
 import { apiIdentityRegisterPost } from '../../api/functions';
 import { DoctorService, IdentityService } from '../../api/services';
-
-// --- Custom Validator Function ---
-// This function is applied to the entire FormGroup (it takes a control, which is the FormGroup)
-function passwordMatchValidator(control: AbstractControl): ValidationErrors | null {
-  const password = control.get('password');
-  const confirmPassword = control.get('confirmPassword');
-
-  // Only validate if both controls exist and the password has been entered
-  if (password?.value && confirmPassword?.value) {
-    // If values don't match, return the error object
-    return password.value === confirmPassword.value ? null : { 'mismatch': true };
-  }
-
-  // No error if one or both fields are empty (basic required validation handles this)
-  return null;
-}
-// ---------------------------------
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-register',
@@ -32,11 +14,14 @@ function passwordMatchValidator(control: AbstractControl): ValidationErrors | nu
   styleUrls: ['./register.component.scss']
 })
 export class RegisterComponent implements OnInit {
+  @Input() isDoctorRegister: boolean = false;
 
-  // Define the FormGroup for the registration form
   registerForm!: FormGroup;
 
-  constructor(private fb: FormBuilder, private service: IdentityService, private doctorService: DoctorService) { }
+  constructor(private fb: FormBuilder,
+    private identityService: IdentityService,
+    private doctorService: DoctorService,
+    private router: Router) { }
 
   ngOnInit(): void {
     this.registerForm = this.fb.group({
@@ -59,19 +44,26 @@ export class RegisterComponent implements OnInit {
       password: ['', [
         Validators.required,
         Validators.minLength(3),
-        // Add a regex for strength validation (e.g., must contain a number)
-        Validators.pattern(/^(?=.*[0-9])(?=.*[a-zA-Z])([a-zA-Z0-9]+)$/)
       ]],
       confirmPassword: ['', [
         Validators.required
       ]],
     }, {
-      // Apply the custom validator to the entire FormGroup
-      validators: passwordMatchValidator
+      validators: this.passwordMatchValidator
     });
   }
 
-  // Convenience getters for easy access to form controls in the template
+  passwordMatchValidator(control: AbstractControl): ValidationErrors | null {
+    const password = control.get('password');
+    const confirmPassword = control.get('confirmPassword');
+
+    if (password?.value && confirmPassword?.value) {
+      return password.value === confirmPassword.value ? null : { 'mismatch': true };
+    }
+
+    return null;
+  }
+
   get username() { return this.registerForm.get('username'); }
   get firstName() { return this.registerForm.get('firstName'); }
   get lastName() { return this.registerForm.get('lastName'); }
@@ -79,7 +71,6 @@ export class RegisterComponent implements OnInit {
   get password() { return this.registerForm.get('password'); }
   get confirmPassword() { return this.registerForm.get('confirmPassword'); }
 
-  // Getter to easily check for the custom password mismatch error on the FormGroup
   get passwordMismatch() {
     return this.registerForm.errors?.['mismatch'] && this.confirmPassword?.touched;
   }
@@ -92,42 +83,33 @@ export class RegisterComponent implements OnInit {
     }
 
     const formData = this.registerForm.value;
-    let model = {
-      firstName: formData.firstName,
-      lastName: formData.lastName,
-      username: formData.username,
-      email: formData.email,
-      password: formData.password
-    } as RegisterUserRequestModel;
+    if (this.isDoctorRegister) {
+      this.doctorService.apiDoctorCreatePost({
+        body:
+        {
+          firstName: formData.firstName,
+          lastName: formData.lastName,
+          username: formData.username,
+          email: formData.email,
+          password: formData.password
 
-    this.doctorService.apiDoctorCreatePost({
-      body:
-      {
+        }
+      }).subscribe(res => {
+        console.log('Doctor created successfully');
+      });
+    } else {
+
+      let model = {
         firstName: formData.firstName,
         lastName: formData.lastName,
-        username: formData.username, 
+        username: formData.username,
         email: formData.email,
         password: formData.password
-        
-      }
-    }).subscribe(res => {
-      console.log('Doctor created successfully');
-    });
-    //this.service.apiIdentityRegisterPost({ body: model }).subscribe({});
+      } as RegisterUserRequestModel;
 
-    // this.clientService.register(model).subscribe({
-    //   next: () => {
-    //     console.log('Registration successful! Submitting data:', {
-    //       username: formData.username,
-    //       email: formData.email,
-    //       password: '***',
-    //     });
-    //   },
-    //   error: (err) => {
-    //     console.error('Registration failed:', err);
-    //   }
-    // });
-
-    // Call your registration service here
+      this.identityService.apiIdentityRegisterPost({ body: model }).subscribe(() => {
+        this.router.navigateByUrl('/');
+      });
+    }
   }
 }

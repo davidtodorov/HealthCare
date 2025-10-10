@@ -16,7 +16,7 @@ export const roleGuard: CanMatchFn = (route, segments) => {
         || required.some(r => roles.includes(r))) {
         return true;
       }
-
+      
       return router.createUrlTree(['/forbidden']);
     }),
     catchError(() => of(router.createUrlTree(['/login'])))

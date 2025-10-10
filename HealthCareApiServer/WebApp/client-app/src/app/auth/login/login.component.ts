@@ -2,8 +2,11 @@
 
 import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { IdentityService } from '../../api/services';
+import { AuthService } from '../auth.service';
+import { ROLE_ADMIN, ROLE_DOCTOR, ROLE_PATIENT } from '../../common/roles';
 
 @Component({
   selector: 'app-login',
@@ -13,15 +16,16 @@ import { IdentityService } from '../../api/services';
   styleUrls: ['./login.component.scss']
 })
 export class LoginComponent implements OnInit {
-  
-  // Define the FormGroup that will represent our login form model
   loginForm!: FormGroup;
 
-  // Inject FormBuilder to easily create the form structure
-  constructor(private fb: FormBuilder, private identityService: IdentityService) { }
+  constructor(
+    private fb: FormBuilder, 
+    private identityService: IdentityService, 
+    private router: Router,
+    private auth: AuthService
+  ) { }
 
   ngOnInit(): void {
-    // Initialize the form structure with default values and Validators
     this.loginForm = this.fb.group({
       username: ['', [
         Validators.required, 
@@ -34,7 +38,6 @@ export class LoginComponent implements OnInit {
     });
   }
 
-  // Convenience getter for easy access to form controls in the template
   get username() {
     return this.loginForm.get('username');
   }
@@ -44,35 +47,34 @@ export class LoginComponent implements OnInit {
   }
 
   onSubmit(): void {
-    // 1. Check if the entire form is valid
     if (this.loginForm.invalid) {
-      // Mark all fields as touched to display errors if the user clicks submit too early
       this.loginForm.markAllAsTouched();
-      console.error('Login failed: Form is invalid. Please correct the errors.');
       return;
     }
 
-    // 2. Access the form data (value) from the FormGroup
     const formData = this.loginForm.value;
-
-    console.log('Login successful! Submitting data:', {
-      username: formData.username,
-      password: '***', // Never log actual password in real apps
-    });
 
     this.identityService.apiIdentityLoginPost({ body: { 
       username: formData.username, 
       password: formData.password 
     }}).subscribe({
       next: () => {
-        console.log('Login API call successful');
+        this.auth.clear();
+        this.auth.getRoles().subscribe(roles => {
+          if (roles.includes(ROLE_DOCTOR)) {
+            this.router.navigateByUrl('/doctor-scheduler');
+          } else if (roles.includes(ROLE_PATIENT)) {
+            this.router.navigateByUrl('/appointments');
+          } else if (roles.includes(ROLE_ADMIN)) {
+            this.router.navigateByUrl('/');
+          } else {
+            this.router.navigateByUrl('/');
+          }
+        });
       },
       error: (err) => {
         console.error('Login API call failed', err);
       }
     });
-    // 3. Call your authentication service here (e.g., this.authService.login(formData.email, formData.password))
-    
-    // Optional: Reset the form after successful submission
   }
 }

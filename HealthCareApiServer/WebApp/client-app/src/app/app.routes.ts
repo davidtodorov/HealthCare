@@ -6,15 +6,28 @@ import { RegisterComponent } from './auth/register/register.component';
 import { roleGuard } from './auth/role.guard';
 
 export const routes: Routes = [
-  { path: '', redirectTo: 'login', pathMatch: 'full' },
+  {
+    path: '',
+    redirectTo: 'appointments',
+    pathMatch: 'full',
+    data: {}
+  },
   { path: 'login', component: LoginComponent },
   { path: 'register', component: RegisterComponent },
-  { path: 'appointments', component: AppointmentSchedulerComponent },
+  {
+    path: 'appointments',
+    component: AppointmentSchedulerComponent,
+    canMatch: [roleGuard],
+    data: { roles: ['Patient'] }
+  },
   {
     path: 'doctor-scheduler',
     component: DoctorSchedulerComponent,
     canMatch: [roleGuard],
     data: { roles: ['Doctor'] }
   },
-  { path: '**', redirectTo: 'appointments' }
+  {
+    path: '**', redirectTo: 'login',
+    data: {}
+  }
 ];

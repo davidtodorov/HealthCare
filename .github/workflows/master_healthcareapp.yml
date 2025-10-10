@@ -36,7 +36,7 @@ jobs:
         working-directory: ./HealthCareApiServer/WebApp/client-app
         run: |
           npm i --force
-          npm run build
+          npm run build-prod
 
       # Publish the web app to a folder we�ll deploy
       - name: Publish .NET
