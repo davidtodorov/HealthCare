@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
-import { RouterOutlet } from '@angular/router';
+import { Router, RouterOutlet } from '@angular/router';
 import { SwUpdate, VersionReadyEvent } from '@angular/service-worker';
 import { filter } from 'rxjs/operators';
 
@@ -11,7 +11,11 @@ import { filter } from 'rxjs/operators';
     styleUrl: './app.component.scss'
 })
 export class AppComponent implements OnInit {
-  constructor(private swUpdate: SwUpdate) {}
+  constructor(private swUpdate: SwUpdate, private router: Router) {}
+
+  goToMainMenu() {
+    this.router.navigate(['/main-menu']);
+  }
 
   ngOnInit() {
     if (this.swUpdate.isEnabled) {

@@ -4,14 +4,16 @@ import { DoctorSchedulerComponent } from './doctor-scheduler/doctor-scheduler.co
 import { LoginComponent } from './auth/login/login.component';
 import { RegisterComponent } from './auth/register/register.component';
 import { roleGuard } from './auth/role.guard';
+import { MainMenuComponent } from './main-menu/main-menu.component';
 
 export const routes: Routes = [
   {
     path: '',
-    redirectTo: 'appointments',
+    redirectTo: 'main-menu',
     pathMatch: 'full',
     data: {}
   },
+  { path: 'main-menu', component: MainMenuComponent },
   { path: 'login', component: LoginComponent },
   { path: 'register', component: RegisterComponent },
   {
