@@ -12,7 +12,7 @@ export class AuthService {
 
     getRoles(): Observable<string[]> {
         if (!this.rolesCache$) {
-            this.rolesCache$ = this.identityService.apiIdentityRolesGet()
+            this.rolesCache$ = this.identityService.apiIdentityRolesGet$Json()
             .pipe(
                 map(r => r ?? []),
                 shareReplay(1),
