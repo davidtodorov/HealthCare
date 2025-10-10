@@ -26,6 +26,10 @@ namespace HealthCare.Infrastructure
         public DbSet<Doctor> Doctors { get; set; }
         public DbSet<Department> Departments { get; set; }
 
+        public DbSet<Appointment> Appointments { get; set; }
+
+        public DbSet<Prescription> Prescriptions { get; set; }
+
         protected override void OnModelCreating(ModelBuilder builder)
         {
             base.OnModelCreating(builder);
