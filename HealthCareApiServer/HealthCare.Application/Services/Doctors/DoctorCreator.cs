@@ -31,7 +31,7 @@ namespace HealthCare.Application.Services.Doctors
         }
         public async Task<Result> CreateDoctor(CreateDoctorModel model)
         {
-            using (var transaction = await unitOfWork.Context.Database.BeginTransactionAsync())
+            using (var transaction = await unitOfWork.BeginTransactionAsync())
             {
                 var registerUserModel = new RegisterUserRequestModel()
                 {

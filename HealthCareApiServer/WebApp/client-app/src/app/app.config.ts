@@ -4,6 +4,7 @@ import { provideRouter } from '@angular/router';
 import { routes } from './app.routes';
 import { provideServiceWorker } from '@angular/service-worker';
 import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
+import { ApiConfiguration } from './api/api-configuration';
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -14,6 +15,7 @@ export const appConfig: ApplicationConfig = {
     }),
     provideHttpClient(
       withInterceptorsFromDi() // optional, if you use DI-based interceptors
-    )
+    ),
+    { provide: ApiConfiguration, useValue: { rootUrl: 'https://localhost:44351' } }
   ]
 };

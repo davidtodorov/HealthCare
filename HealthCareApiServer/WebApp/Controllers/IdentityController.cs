@@ -13,6 +13,7 @@ using HealthCare.Core;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using System.Linq;
 using HealthCare.Application.Models.User;
+using Microsoft.AspNetCore.Authorization;
 
 namespace WebApp.Controllers
 {
@@ -124,6 +125,16 @@ namespace WebApp.Controllers
         {
             var user = await userManager.GetUserAsync(User);
             return user != null ? Ok(new { Username = user.UserName, FirstName = user.FirstName, LastName = user.LastName }) : Unauthorized();
+        }
+
+        [HttpGet]
+        [Authorize]
+        [Route(nameof(Roles))]
+        public async Task<IEnumerable<string>> Roles()
+        {
+            var user = await userManager.GetUserAsync(User);
+            var roles = await userManager.GetRolesAsync(user);
+            return roles;
         }
     }
 }

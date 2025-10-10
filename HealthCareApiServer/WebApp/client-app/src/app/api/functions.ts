@@ -55,6 +55,10 @@ export type { ApiIdentityLogoutPost$Params } from './fn/identity/api-identity-lo
 export { apiIdentityLogoutPost } from './fn/identity/api-identity-logout-post';
 export type { ApiIdentityVerifyPost$Params } from './fn/identity/api-identity-verify-post';
 export { apiIdentityVerifyPost } from './fn/identity/api-identity-verify-post';
+export type { ApiIdentityRolesGet$Plain$Params } from './fn/identity/api-identity-roles-get-plain';
+export { apiIdentityRolesGet$Plain } from './fn/identity/api-identity-roles-get-plain';
+export type { ApiIdentityRolesGet$Json$Params } from './fn/identity/api-identity-roles-get-json';
+export { apiIdentityRolesGet$Json } from './fn/identity/api-identity-roles-get-json';
 export type { ApiUserGet$Plain$Params } from './fn/user/api-user-get-plain';
 export { apiUserGet$Plain } from './fn/user/api-user-get-plain';
 export type { ApiUserGet$Json$Params } from './fn/user/api-user-get-json';

@@ -6,7 +6,8 @@
     "start": "ng serve",
     "build": "ng build",
     "watch": "ng build --watch --configuration development",
-    "test": "ng test"
+    "test": "ng test",
+    "gen-api": "npx ng-openapi-gen -c openapi-config.json"
   },
   "private": true,
   "dependencies": {

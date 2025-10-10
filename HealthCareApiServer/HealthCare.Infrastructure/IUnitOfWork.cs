@@ -1,10 +1,10 @@
 ﻿using HealthCare.Core.Entities;
 using HealthCare.Infrastructure.Repositories;
+using Microsoft.EntityFrameworkCore.Storage;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
+using System.Transactions;
 
 namespace HealthCare.Infrastructure
 {
@@ -15,5 +15,7 @@ namespace HealthCare.Infrastructure
         IRepository<User> UserRepository { get; set; }
         void SaveChanges();
         Task SaveChangesAsync();
+        Task<IDbContextTransaction> BeginTransactionAsync(IsolationLevel isolationLevel = IsolationLevel.Unspecified, CancellationToken cancellationToken = default);
+
     }
 }

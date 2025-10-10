@@ -1,7 +1,8 @@
-﻿using System;
-using System.Threading.Tasks;
-using HealthCare.Core.Entities;
+﻿using HealthCare.Core.Entities;
 using HealthCare.Infrastructure.Repositories;
+using Microsoft.EntityFrameworkCore.Storage;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace HealthCare.Infrastructure
 {
@@ -12,8 +13,6 @@ namespace HealthCare.Infrastructure
         public IRepository<User> UserRepository { get; set; }
 
         public IRepository<Department> DepartmentRepository { get; set; }
-
-        public HealthCareDbContext Context => context;
 
         public UnitOfWork(HealthCareDbContext context)
         {
@@ -36,6 +35,11 @@ namespace HealthCare.Infrastructure
         public async Task SaveChangesAsync()
         {
             await context.SaveChangesAsync();
+        }
+
+        public Task<IDbContextTransaction> BeginTransactionAsync(System.Transactions.IsolationLevel isolationLevel = System.Transactions.IsolationLevel.Unspecified, CancellationToken cancellationToken = default)
+        {
+            return this.context.Database.BeginTransactionAsync(cancellationToken);
         }
 
         private readonly HealthCareDbContext context;
