@@ -5,6 +5,7 @@ import { LoginComponent } from './auth/login/login.component';
 import { RegisterComponent } from './auth/register/register.component';
 import { roleGuard } from './auth/role.guard';
 import { MainMenuComponent } from './main-menu/main-menu.component';
+import { ForbiddenComponent } from './errors/forbidden/forbidden.component';
 
 export const routes: Routes = [
   {
@@ -13,7 +14,11 @@ export const routes: Routes = [
     pathMatch: 'full',
     data: {}
   },
-  { path: 'main-menu', component: MainMenuComponent },
+  {
+    path: 'main-menu', component: MainMenuComponent,
+    canMatch: [roleGuard],
+    data: { roles: ['Patient', 'Doctor'] }
+  },
   { path: 'login', component: LoginComponent },
   { path: 'register', component: RegisterComponent },
   {
@@ -28,8 +33,9 @@ export const routes: Routes = [
     canMatch: [roleGuard],
     data: { roles: ['Doctor'] }
   },
+  { path: 'forbidden', component: ForbiddenComponent },
   {
-    path: '**', redirectTo: 'login',
-    data: {}
+    path: '**', redirectTo: 'forbidden',
   }
 ];
+

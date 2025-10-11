@@ -1,27 +1,68 @@
-import { Injectable } from '@angular/core';
+import { Inject, Injectable } from '@angular/core';
+import { DOCUMENT } from '@angular/common';
 import { IdentityService } from '../api/services';
-import { catchError, map, Observable, of, shareReplay } from 'rxjs';
+import { BehaviorSubject, Observable, catchError, map, of, shareReplay, tap } from 'rxjs';
 
-@Injectable({providedIn: 'root'})
+@Injectable({ providedIn: 'root' })
 export class AuthService {
     private rolesCache$?: Observable<string[]>;
-    
-    constructor(private identityService: IdentityService) { 
+    private readonly loginState$ = new BehaviorSubject<boolean>(false);
 
+    constructor(private identityService: IdentityService, @Inject(DOCUMENT) private document: Document) {
+        this.updateLoginState();
     }
 
     getRoles(): Observable<string[]> {
         if (!this.rolesCache$) {
-            this.rolesCache$ = this.identityService.apiIdentityRolesGet$Json()
-            .pipe(
-                map(r => r ?? []),
-                shareReplay(1),
-                catchError(() => of([])) // treat failures as no roles
-            );
+            this.rolesCache$ = this.identityService
+                .apiIdentityRolesGet$Json()
+                .pipe(
+                    map(r => r ?? []),
+                    catchError(() => of([])),
+                    tap(roles => this.updateLoginState(roles)),
+                    shareReplay(1)
+                );
         }
+
         return this.rolesCache$;
     }
 
-    clear() { this.rolesCache$ = undefined; }
-    
+    isLoggedIn(): Observable<boolean> {
+        this.updateLoginState();
+        return this.loginState$.asObservable();
+    }
+
+    clear(): void {
+        this.rolesCache$ = undefined;
+        this.updateLoginState();
+    }
+
+    updateLoginStateFromCookie(): void {
+        this.updateLoginState();
+    }
+
+    logout(): Observable<void> {
+        return this.identityService.apiIdentityLogoutPost().pipe(
+            tap(() => {
+                this.rolesCache$ = undefined;
+                this.loginState$.next(false);
+            }),
+            catchError(() => {
+                this.rolesCache$ = undefined;
+                this.loginState$.next(false);
+                return of(void 0);
+            })
+        );
+    }
+
+    private updateLoginState(latestRoles?: string[]): void {
+        const hasCookie = this.hasAuthCookie();
+        const hasRoles = Array.isArray(latestRoles) ? latestRoles.length > 0 : this.loginState$.value;
+        this.loginState$.next(hasCookie || !!hasRoles);
+    }
+
+    private hasAuthCookie(): boolean {
+        const cookieString = this.document?.cookie ?? '';
+        return cookieString.split(';').some(part => part.trim().startsWith('.AspNetCore.Identity.Application='));
+    }
 }

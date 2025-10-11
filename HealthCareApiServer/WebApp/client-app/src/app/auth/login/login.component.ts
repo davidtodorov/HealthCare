@@ -7,6 +7,7 @@ import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angula
 import { IdentityService } from '../../api/services';
 import { AuthService } from '../auth.service';
 import { ROLE_ADMIN, ROLE_DOCTOR, ROLE_PATIENT } from '../../common/roles';
+import { take } from 'rxjs/operators';
 
 @Component({
   selector: 'app-login',
@@ -60,7 +61,7 @@ export class LoginComponent implements OnInit {
     }}).subscribe({
       next: () => {
         this.auth.clear();
-        this.auth.getRoles().subscribe(roles => {
+        this.auth.getRoles().pipe(take(1)).subscribe(roles => {
           if (roles.includes(ROLE_DOCTOR)) {
             this.router.navigateByUrl('/doctor-scheduler');
           } else if (roles.includes(ROLE_PATIENT)) {
