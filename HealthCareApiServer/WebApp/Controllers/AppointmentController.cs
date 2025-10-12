@@ -18,12 +18,10 @@ namespace WebApp.Controllers
 {
     public class AppointmentController : RestController<Appointment, AppointmentModel, AppointmentModel>
     {
-        private IDoctorCreator doctorCreator;
         private readonly IMapper mapper;
 
         public AppointmentController(IUnitOfWork unitOfWork, IMapper mapper, IDoctorCreator doctorCreator) : base(unitOfWork, mapper)
         {
-            this.doctorCreator = doctorCreator;
             this.mapper = mapper;
         }
 

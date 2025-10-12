@@ -84,7 +84,7 @@ export class DoctorSchedulerComponent implements OnInit {
 
   dates: string[] = [];
   // --- Component State (Properties) ---
-  selectedDate: Date | null = null;
+  selectedDate: moment.Moment | null = null;
   selectedAppt: Appointment | null = null;
   currentView: 'day' | 'week' | 'month' = 'day';
 
@@ -133,9 +133,9 @@ export class DoctorSchedulerComponent implements OnInit {
   }
 
   goToday(selectDay: boolean = true): void {
-    const now = new Date();
+    const now = moment();
     if (selectDay) {
-      this.selectedDate = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+      this.selectedDate = moment({ year: now.year(), month: now.month(), day: now.date() });
       this.setView('day'); // setView calls buildMonth and renderSchedule
     } else {
       this.renderSchedule();
@@ -143,7 +143,7 @@ export class DoctorSchedulerComponent implements OnInit {
   }
 
   // Method called when a date is clicked in the Calendar
-  handleDateSelect(date: Date): void {
+  handleDateSelect(date: moment.Moment): void {
     this.selectedDate = date; 
     this.setView('day'); // Switch to Day view on calendar click (setView handles updates)
   }
@@ -168,8 +168,8 @@ export class DoctorSchedulerComponent implements OnInit {
     else if (this.currentView === 'week') amount = 7 * direction;
 
     if (amount !== 0) {
-      const newDate = new Date(this.selectedDate);
-      newDate.setDate(this.selectedDate.getDate() + amount);
+      const newDate = moment(this.selectedDate);
+      newDate.add(amount, 'days');
       this.selectedDate = newDate;
       this.renderSchedule();
     }
@@ -193,26 +193,26 @@ export class DoctorSchedulerComponent implements OnInit {
     let title: string;
 
     // Use a context date to determine the range
-    let contextDate: Date;
+    let contextDate: moment.Moment;
     // If selectedDate is null (e.g., on first load with currentView='month'),
     // we need to set a temporary context date for the month view.
     // We'll use the first day of the current month.
     if (!this.selectedDate && this.currentView === 'month') {
-      const now = new Date();
-      contextDate = new Date(now.getFullYear(), now.getMonth(), 1);
+      const now = moment();
+      contextDate = moment({ year: now.year(), month: now.month(), day: 1 });
     } else if (!this.selectedDate) {
       // Fallback for Day/Week if selectedDate is null (shouldn't happen after goToday)
-      contextDate = new Date();
+      contextDate = moment();
     } else {
-      contextDate = new Date(this.selectedDate);
+      contextDate = moment(this.selectedDate);
     }
 
-    contextDate.setHours(0, 0, 0, 0);
+    contextDate.hour(0).minute(0).second(0).millisecond(0);
 
     if (this.currentView === 'day') {
-      startDate = new Date(contextDate);
-      endDate = new Date(contextDate);
-      title = contextDate.toLocaleDateString(undefined, { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
+      startDate = moment(contextDate).toDate();
+      endDate = moment(contextDate).toDate();
+      title = contextDate.toLocaleString();
 
     } else if (this.currentView === 'week') {
       // Set startDate to the beginning of the week (Monday) using moment
@@ -225,8 +225,8 @@ export class DoctorSchedulerComponent implements OnInit {
       title = `Week of ${startStr} – ${endStr}`;
 
     } else { // 'month'
-      const year = contextDate.getFullYear();
-      const month = contextDate.getMonth();
+      const year = contextDate.year();
+      const month = contextDate.month();
       startDate = new Date(year, month, 1);
       endDate = new Date(year, month + 1, 0);
       title = startDate.toLocaleDateString(undefined, { year: 'numeric', month: 'long' });

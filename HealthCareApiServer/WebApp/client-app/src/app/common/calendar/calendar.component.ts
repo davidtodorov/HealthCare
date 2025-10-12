@@ -11,7 +11,7 @@ export interface AppointmentStub {
 }
 
 interface CalendarDay {
-  date: Date, 
+  date: moment.Moment, 
   ymd: string, 
   d: number, 
   classes: string, 
@@ -27,10 +27,10 @@ interface CalendarDay {
 export class CalendarComponent implements OnInit, OnChanges {
   @Input() doctorId: number = 0;
   @Input() dates: string[] = []; // Array of date strings in "YYYY-MM-DD" format
-  @Input() selectedDate: Date | null = null;
+  @Input() selectedDate: moment.Moment | null = null;
   @Input() currentView: 'day' | 'week' | 'month' = 'day';
 
-  @Output() dateSelected = new EventEmitter<Date>();
+  @Output() dateSelected = new EventEmitter<moment.Moment>();
   @Output() viewChanged = new EventEmitter<void>();
 
   months: string[] = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
@@ -95,15 +95,15 @@ export class CalendarComponent implements OnInit, OnChanges {
 
     // Leading blanks
     for (let i = 0; i < leading; i++) {
-      this.calendarDays.push({ date: new Date(), ymd: '', d: 0, classes: 'h-10', hasAppts: false }); // Placeholder
+      this.calendarDays.push({ date: moment.utc(), ymd: '', d: 0, classes: 'h-10', hasAppts: false }); // Placeholder
     }
 
     for (let d = 1; d <= days; d++) {
-      const date = moment({ year: y, month: m, day: d });
+      const date = moment.utc({ year: y, month: m, day: d });
       const ymd = date.format('YYYY-MM-DD');
 
       let hasAppts = this.dates.indexOf(ymd) !== -1 ? true : false; 
-      this.calendarDays.push({ date: date.toDate(), ymd, d, classes: '', hasAppts });
+      this.calendarDays.push({ date: date, ymd, d, classes: '', hasAppts });
     }
 
     this.highlightCalendarDays();
@@ -173,10 +173,10 @@ export class CalendarComponent implements OnInit, OnChanges {
     this.handleCalendarChange();
   }
 
-  selectDate(date: Date): void {
-    this.selectedDate = date; 
-    this.dateSelected.emit(date); // Emit the date to the parent
-    this.buildMonth(this.viewYear, this.viewMonth); // Re-render to show selection highlight
+  selectDate(date: Date | moment.Moment): void {
+    this.selectedDate = moment.utc(date); 
+    this.dateSelected.emit(this.selectedDate);
+    this.buildMonth(this.viewYear, this.viewMonth);
   }
 
 }

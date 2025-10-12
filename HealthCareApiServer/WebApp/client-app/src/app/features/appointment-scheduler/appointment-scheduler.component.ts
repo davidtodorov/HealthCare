@@ -17,54 +17,10 @@ import { AppointmentModel, AppointmentStatus, DoctorModel } from '../../api/mode
 export class AppointmentSchedulerComponent {
   @ViewChild(CalendarComponent) calendarComponent!: CalendarComponent;
 
-  // --- Mock data ---`
-  // doctors: Doctor[] = [
-  //   {
-  //     id: 'd1',
-  //     name: 'Dr. Elena Petrova',
-  //     specialty: 'Cardiologist',
-  //     photo:
-  //       'https://images.unsplash.com/photo-1550831107-1553da8c8464?q=80&w=640&auto=format&fit=crop',
-  //     bio: 'Board-certified cardiologist with 12+ years of experience focusing on preventive cardiology and patient-centered care.',
-  //   },
-  //   {
-  //     id: 'd2',
-  //     name: 'Dr. Ivan Dimitrov',
-  //     specialty: 'Dermatologist',
-  //     photo:
-  //       'https://images.unsplash.com/photo-1544723795-3fb6469f5b39?q=80&w=640&auto=format&fit=crop',
-  //     bio: 'Dermatology specialist in acne, eczema, and skin cancer screening. Passionate about education and minimally invasive treatments.',
-  //   },
-  //   {
-  //     id: 'd3',
-  //     name: 'Dr. Maria Stoyanova',
-  //     specialty: 'Pediatrician',
-  //     photo:
-  //       'https://images.unsplash.com/photo-1527613426441-4da17471b66d?q=80&w=640&auto=format&fit=crop',
-  //     bio: 'Pediatrician with a gentle approach, focusing on newborn and child wellness, vaccinations, and family guidance.',
-  //   },
-  // ];
   doctorList: DoctorModel[] = [];
-
   dates: string[] = [];
   availabilitySlots: any = {};
-
-  //TODO: replace with real appointments from backend
-
-  scheduledAppointments: AppointmentModel[] = [
-    { id: 1, doctorId: 1, dateTime: '2025-10-05T09:00:00', patientId: 1, reason: 'Follow-up: BP review', status: AppointmentStatus.Upcoming },
-    { id: 2, doctorId: 1, dateTime: '2025-10-05T10:30:00', patientId: 2, reason: 'Skin rash evaluation', status: AppointmentStatus.Upcoming },
-    { id: 3, doctorId: 1, dateTime: '2025-10-06T14:00:00', patientId: 1, reason: 'Holter results', status: AppointmentStatus.Upcoming },
-    { id: 4, doctorId: 2, dateTime: '2025-10-28T11:00:00', patientId: 2, reason: 'Eczema follow-up', status: AppointmentStatus.Completed },
-    { id: 5, doctorId: 2, dateTime: '2025-10-10T09:30:00', patientId: 1, reason: 'Initial consult', status: AppointmentStatus.Completed },
-    { id: 6, doctorId: 2, dateTime: '2025-10-07T09:00:00', patientId: 3, reason: 'Child vaccine Q&A', status: AppointmentStatus.Canceled },
-    { id: 7, doctorId: 3, dateTime: '2025-10-09T16:00:00', patientId: 3, reason: 'Tonsillitis check', status: AppointmentStatus.Upcoming },
-    { id: 10, doctorId: 3, dateTime: '2025-10-09T16:30:00', patientId: 3, reason: 'Tonsillitis check', status: AppointmentStatus.Upcoming },
-    { id: 8, doctorId: 3, dateTime: '2025-10-25T11:00:00', patientId: 2, reason: 'Annual review', status: AppointmentStatus.Upcoming },
-    { id: 9, doctorId: 3, dateTime: '2025-11-03T10:00:00', patientId: 1, reason: 'Medication review', status: AppointmentStatus.Upcoming },
-  ];
-
-  // --- Component state ---
+  scheduledAppointments: AppointmentModel[] = [];
   search: string = '';
   selectedDoctor: DoctorModel | null = null;
   viewYear: number = new Date().getFullYear();
@@ -72,12 +28,6 @@ export class AppointmentSchedulerComponent {
   selectedDate: Date | null = null;
   selectedTime: string | null = null;
   bookedOk: boolean = false;
-
-  // Month/year controls
-  months = [
-    'January', 'February', 'March', 'April', 'May', 'June',
-    'July', 'August', 'September', 'October', 'November', 'December'
-  ];
   years: number[] = [];
 
   constructor(private doctorService: DoctorService, private appointmentService: AppointmentService) {
@@ -92,7 +42,6 @@ export class AppointmentSchedulerComponent {
     for (let y = nowYear - 5; y <= nowYear + 5; y++) this.years.push(y);
   }
 
-  // Derived values as getters
   get filteredDoctors(): DoctorModel[] {
     const q = this.search.trim().toLowerCase();
     if (!q) return this.doctorList;
@@ -113,12 +62,7 @@ export class AppointmentSchedulerComponent {
   get dateLabel(): string {
     const d = this.selectedDate;
     if (!d) return 'Select a date to view hours.';
-    return d.toLocaleDateString(undefined, {
-      weekday: 'long',
-      year: 'numeric',
-      month: 'long',
-      day: 'numeric',
-    });
+    return d.toLocaleString();
   }
 
   get slotsForSelected(): string[] {
@@ -133,9 +77,9 @@ export class AppointmentSchedulerComponent {
     const d = this.selectedDate;
     const t = this.selectedTime;
     if (doctor && d && t) {
-      return `${doctor.firstName} • ${doctor.departmentName} — ${d.toLocaleDateString()} at ${t}`;
+      return `${doctor.firstName} • ${doctor.departmentName} — ${d.toLocaleString()} at ${t}`;
     } else if (doctor && d) {
-      return `${doctor.firstName} — ${d.toLocaleDateString()} • Select a time.`;
+      return `${doctor.firstName} — ${d.toLocaleString()} • Select a time.`;
     } else if (doctor) {
       return `${doctor.firstName} — Select a date.`;
     }
@@ -243,15 +187,16 @@ export class AppointmentSchedulerComponent {
     const t = this.selectedTime;
     if (!(doctor && d && t)) return;
     let date = moment(d).hour(moment.duration(t).hours()).minute(moment.duration(t).minutes()).utc().toDate();
-    this.appointmentService.appointmentBook({ body: { doctorId: doctor.id, dateTime: date as any } }).subscribe({
+    this.appointmentService.appointmentBook({ body: { doctorId: doctor.id, dateTime: moment.utc(date).format() } }).subscribe({
       next: (result) => {
-        console.log('Appointment booked:', result);
+        this.appointmentService.appointmentGetAll().subscribe(result => {
+          this.scheduledAppointments = result;
+          this.availabilitySlots = this.findFreeSlotsForDoctor(this.scheduledAppointments, doctor.id as any, '08:00', '18:00', 30);
+        });
       }
     });
     this.bookedOk = true;
-    // Reset the chosen time to force refresh of slots
     this.selectedTime = null;
-    // TODO: after booking, refresh the availability slots
   }
 
   // --- Helpers ---
