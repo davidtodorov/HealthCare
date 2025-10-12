@@ -10,21 +10,17 @@ import { BaseService } from '../base-service';
 import { ApiConfiguration } from '../api-configuration';
 import { StrictHttpResponse } from '../strict-http-response';
 
-import { apiDepartmentGet$Json } from '../fn/department/api-department-get-json';
-import { ApiDepartmentGet$Json$Params } from '../fn/department/api-department-get-json';
-import { apiDepartmentGet$Plain } from '../fn/department/api-department-get-plain';
-import { ApiDepartmentGet$Plain$Params } from '../fn/department/api-department-get-plain';
-import { apiDepartmentIdDelete } from '../fn/department/api-department-id-delete';
-import { ApiDepartmentIdDelete$Params } from '../fn/department/api-department-id-delete';
-import { apiDepartmentIdGet$Json } from '../fn/department/api-department-id-get-json';
-import { ApiDepartmentIdGet$Json$Params } from '../fn/department/api-department-id-get-json';
-import { apiDepartmentIdGet$Plain } from '../fn/department/api-department-id-get-plain';
-import { ApiDepartmentIdGet$Plain$Params } from '../fn/department/api-department-id-get-plain';
-import { apiDepartmentIdPut } from '../fn/department/api-department-id-put';
-import { ApiDepartmentIdPut$Params } from '../fn/department/api-department-id-put';
-import { apiDepartmentPost } from '../fn/department/api-department-post';
-import { ApiDepartmentPost$Params } from '../fn/department/api-department-post';
+import { departmentDelete } from '../fn/department/department-delete';
+import { DepartmentDelete$Params } from '../fn/department/department-delete';
+import { departmentGet } from '../fn/department/department-get';
+import { DepartmentGet$Params } from '../fn/department/department-get';
+import { departmentGetAll } from '../fn/department/department-get-all';
+import { DepartmentGetAll$Params } from '../fn/department/department-get-all';
 import { DepartmentModel } from '../models/department-model';
+import { departmentPost } from '../fn/department/department-post';
+import { DepartmentPost$Params } from '../fn/department/department-post';
+import { departmentPut } from '../fn/department/department-put';
+import { DepartmentPut$Params } from '../fn/department/department-put';
 
 @Injectable({ providedIn: 'root' })
 export class DepartmentService extends BaseService {
@@ -32,186 +28,138 @@ export class DepartmentService extends BaseService {
     super(config, http);
   }
 
-  /** Path part for operation `apiDepartmentGet()` */
-  static readonly ApiDepartmentGetPath = '/api/Department';
+  /** Path part for operation `departmentGetAll()` */
+  static readonly DepartmentGetAllPath = '/api/Department';
 
   /**
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `apiDepartmentGet$Plain()` instead.
+   * To access only the response body, use `departmentGetAll()` instead.
    *
    * This method doesn't expect any request body.
    */
-  apiDepartmentGet$Plain$Response(params?: ApiDepartmentGet$Plain$Params, context?: HttpContext): Observable<StrictHttpResponse<Array<DepartmentModel>>> {
-    const obs = apiDepartmentGet$Plain(this.http, this.rootUrl, params, context);
+  departmentGetAll$Response(params?: DepartmentGetAll$Params, context?: HttpContext): Observable<StrictHttpResponse<Array<DepartmentModel>>> {
+    const obs = departmentGetAll(this.http, this.rootUrl, params, context);
     return obs;
   }
 
   /**
    * This method provides access only to the response body.
-   * To access the full response (for headers, for example), `apiDepartmentGet$Plain$Response()` instead.
+   * To access the full response (for headers, for example), `departmentGetAll$Response()` instead.
    *
    * This method doesn't expect any request body.
    */
-  apiDepartmentGet$Plain(params?: ApiDepartmentGet$Plain$Params, context?: HttpContext): Observable<Array<DepartmentModel>> {
-    const resp = this.apiDepartmentGet$Plain$Response(params, context);
+  departmentGetAll(params?: DepartmentGetAll$Params, context?: HttpContext): Observable<Array<DepartmentModel>> {
+    const resp = this.departmentGetAll$Response(params, context);
     return resp.pipe(
       map((r: StrictHttpResponse<Array<DepartmentModel>>): Array<DepartmentModel> => r.body)
     );
   }
 
+  /** Path part for operation `departmentPost()` */
+  static readonly DepartmentPostPath = '/api/Department';
+
   /**
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `apiDepartmentGet$Json()` instead.
+   * To access only the response body, use `departmentPost()` instead.
    *
-   * This method doesn't expect any request body.
+   * This method sends `application/json` and handles request body of type `application/json`.
    */
-  apiDepartmentGet$Json$Response(params?: ApiDepartmentGet$Json$Params, context?: HttpContext): Observable<StrictHttpResponse<Array<DepartmentModel>>> {
-    const obs = apiDepartmentGet$Json(this.http, this.rootUrl, params, context);
+  departmentPost$Response(params: DepartmentPost$Params, context?: HttpContext): Observable<StrictHttpResponse<Blob>> {
+    const obs = departmentPost(this.http, this.rootUrl, params, context);
     return obs;
   }
 
   /**
    * This method provides access only to the response body.
-   * To access the full response (for headers, for example), `apiDepartmentGet$Json$Response()` instead.
+   * To access the full response (for headers, for example), `departmentPost$Response()` instead.
    *
-   * This method doesn't expect any request body.
+   * This method sends `application/json` and handles request body of type `application/json`.
    */
-  apiDepartmentGet$Json(params?: ApiDepartmentGet$Json$Params, context?: HttpContext): Observable<Array<DepartmentModel>> {
-    const resp = this.apiDepartmentGet$Json$Response(params, context);
+  departmentPost(params: DepartmentPost$Params, context?: HttpContext): Observable<Blob> {
+    const resp = this.departmentPost$Response(params, context);
     return resp.pipe(
-      map((r: StrictHttpResponse<Array<DepartmentModel>>): Array<DepartmentModel> => r.body)
+      map((r: StrictHttpResponse<Blob>): Blob => r.body)
     );
   }
 
-  /** Path part for operation `apiDepartmentPost()` */
-  static readonly ApiDepartmentPostPath = '/api/Department';
+  /** Path part for operation `departmentGet()` */
+  static readonly DepartmentGetPath = '/api/Department/{id}';
 
   /**
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `apiDepartmentPost()` instead.
+   * To access only the response body, use `departmentGet()` instead.
    *
-   * This method sends `application/*+json` and handles request body of type `application/*+json`.
+   * This method doesn't expect any request body.
    */
-  apiDepartmentPost$Response(params?: ApiDepartmentPost$Params, context?: HttpContext): Observable<StrictHttpResponse<void>> {
-    const obs = apiDepartmentPost(this.http, this.rootUrl, params, context);
+  departmentGet$Response(params: DepartmentGet$Params, context?: HttpContext): Observable<StrictHttpResponse<DepartmentModel>> {
+    const obs = departmentGet(this.http, this.rootUrl, params, context);
     return obs;
   }
 
   /**
    * This method provides access only to the response body.
-   * To access the full response (for headers, for example), `apiDepartmentPost$Response()` instead.
-   *
-   * This method sends `application/*+json` and handles request body of type `application/*+json`.
-   */
-  apiDepartmentPost(params?: ApiDepartmentPost$Params, context?: HttpContext): Observable<void> {
-    const resp = this.apiDepartmentPost$Response(params, context);
-    return resp.pipe(
-      map((r: StrictHttpResponse<void>): void => r.body)
-    );
-  }
-
-  /** Path part for operation `apiDepartmentIdGet()` */
-  static readonly ApiDepartmentIdGetPath = '/api/Department/{id}';
-
-  /**
-   * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `apiDepartmentIdGet$Plain()` instead.
+   * To access the full response (for headers, for example), `departmentGet$Response()` instead.
    *
    * This method doesn't expect any request body.
    */
-  apiDepartmentIdGet$Plain$Response(params: ApiDepartmentIdGet$Plain$Params, context?: HttpContext): Observable<StrictHttpResponse<DepartmentModel>> {
-    const obs = apiDepartmentIdGet$Plain(this.http, this.rootUrl, params, context);
-    return obs;
-  }
-
-  /**
-   * This method provides access only to the response body.
-   * To access the full response (for headers, for example), `apiDepartmentIdGet$Plain$Response()` instead.
-   *
-   * This method doesn't expect any request body.
-   */
-  apiDepartmentIdGet$Plain(params: ApiDepartmentIdGet$Plain$Params, context?: HttpContext): Observable<DepartmentModel> {
-    const resp = this.apiDepartmentIdGet$Plain$Response(params, context);
+  departmentGet(params: DepartmentGet$Params, context?: HttpContext): Observable<DepartmentModel> {
+    const resp = this.departmentGet$Response(params, context);
     return resp.pipe(
       map((r: StrictHttpResponse<DepartmentModel>): DepartmentModel => r.body)
     );
   }
 
+  /** Path part for operation `departmentPut()` */
+  static readonly DepartmentPutPath = '/api/Department/{id}';
+
   /**
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `apiDepartmentIdGet$Json()` instead.
+   * To access only the response body, use `departmentPut()` instead.
    *
-   * This method doesn't expect any request body.
+   * This method sends `application/json` and handles request body of type `application/json`.
    */
-  apiDepartmentIdGet$Json$Response(params: ApiDepartmentIdGet$Json$Params, context?: HttpContext): Observable<StrictHttpResponse<DepartmentModel>> {
-    const obs = apiDepartmentIdGet$Json(this.http, this.rootUrl, params, context);
+  departmentPut$Response(params: DepartmentPut$Params, context?: HttpContext): Observable<StrictHttpResponse<Blob>> {
+    const obs = departmentPut(this.http, this.rootUrl, params, context);
     return obs;
   }
 
   /**
    * This method provides access only to the response body.
-   * To access the full response (for headers, for example), `apiDepartmentIdGet$Json$Response()` instead.
+   * To access the full response (for headers, for example), `departmentPut$Response()` instead.
    *
-   * This method doesn't expect any request body.
+   * This method sends `application/json` and handles request body of type `application/json`.
    */
-  apiDepartmentIdGet$Json(params: ApiDepartmentIdGet$Json$Params, context?: HttpContext): Observable<DepartmentModel> {
-    const resp = this.apiDepartmentIdGet$Json$Response(params, context);
+  departmentPut(params: DepartmentPut$Params, context?: HttpContext): Observable<Blob> {
+    const resp = this.departmentPut$Response(params, context);
     return resp.pipe(
-      map((r: StrictHttpResponse<DepartmentModel>): DepartmentModel => r.body)
+      map((r: StrictHttpResponse<Blob>): Blob => r.body)
     );
   }
 
-  /** Path part for operation `apiDepartmentIdPut()` */
-  static readonly ApiDepartmentIdPutPath = '/api/Department/{id}';
+  /** Path part for operation `departmentDelete()` */
+  static readonly DepartmentDeletePath = '/api/Department/{id}';
 
   /**
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `apiDepartmentIdPut()` instead.
+   * To access only the response body, use `departmentDelete()` instead.
    *
-   * This method sends `application/*+json` and handles request body of type `application/*+json`.
+   * This method doesn't expect any request body.
    */
-  apiDepartmentIdPut$Response(params: ApiDepartmentIdPut$Params, context?: HttpContext): Observable<StrictHttpResponse<void>> {
-    const obs = apiDepartmentIdPut(this.http, this.rootUrl, params, context);
+  departmentDelete$Response(params: DepartmentDelete$Params, context?: HttpContext): Observable<StrictHttpResponse<Blob>> {
+    const obs = departmentDelete(this.http, this.rootUrl, params, context);
     return obs;
   }
 
   /**
    * This method provides access only to the response body.
-   * To access the full response (for headers, for example), `apiDepartmentIdPut$Response()` instead.
-   *
-   * This method sends `application/*+json` and handles request body of type `application/*+json`.
-   */
-  apiDepartmentIdPut(params: ApiDepartmentIdPut$Params, context?: HttpContext): Observable<void> {
-    const resp = this.apiDepartmentIdPut$Response(params, context);
-    return resp.pipe(
-      map((r: StrictHttpResponse<void>): void => r.body)
-    );
-  }
-
-  /** Path part for operation `apiDepartmentIdDelete()` */
-  static readonly ApiDepartmentIdDeletePath = '/api/Department/{id}';
-
-  /**
-   * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `apiDepartmentIdDelete()` instead.
+   * To access the full response (for headers, for example), `departmentDelete$Response()` instead.
    *
    * This method doesn't expect any request body.
    */
-  apiDepartmentIdDelete$Response(params: ApiDepartmentIdDelete$Params, context?: HttpContext): Observable<StrictHttpResponse<void>> {
-    const obs = apiDepartmentIdDelete(this.http, this.rootUrl, params, context);
-    return obs;
-  }
-
-  /**
-   * This method provides access only to the response body.
-   * To access the full response (for headers, for example), `apiDepartmentIdDelete$Response()` instead.
-   *
-   * This method doesn't expect any request body.
-   */
-  apiDepartmentIdDelete(params: ApiDepartmentIdDelete$Params, context?: HttpContext): Observable<void> {
-    const resp = this.apiDepartmentIdDelete$Response(params, context);
+  departmentDelete(params: DepartmentDelete$Params, context?: HttpContext): Observable<Blob> {
+    const resp = this.departmentDelete$Response(params, context);
     return resp.pipe(
-      map((r: StrictHttpResponse<void>): void => r.body)
+      map((r: StrictHttpResponse<Blob>): Blob => r.body)
     );
   }
 

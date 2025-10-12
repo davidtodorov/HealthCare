@@ -3,12 +3,13 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { CalendarComponent } from '../common/calendar/calendar.component';
 import moment from 'moment';
+import { DoctorService } from '../api/services';
 
 // --- Mock Data Interfaces ---
 
 interface Prescription {
   id: string;
-  doctorId: string;
+  doctorId: number;
   medication: string;
   dose: string;
   durationDays: number;
@@ -31,7 +32,7 @@ interface Patient {
 
 export interface Appointment {
   id: string;
-  doctorId: string;
+  doctorId: number;
   date: string; // YYYY-MM-DD
   time: string;
   patientId: string;
@@ -47,7 +48,8 @@ export interface Appointment {
   styleUrls: ['./doctor-scheduler.component.scss']
 })
 export class DoctorSchedulerComponent implements OnInit {
-  doctorId: string = 'd1';
+  
+  doctorId= 1;
 
   patients: Patient[] = [
     {
@@ -59,7 +61,7 @@ export class DoctorSchedulerComponent implements OnInit {
       id: 'p2', name: 'Elena Ivanova', age: 29, phone: '+359 88 765 4321', email: 'elena@example.com',
       photo: 'https://images.unsplash.com/photo-1524504388940-b1c1722653e1?q=80&w=256&auto=format&fit=crop',
       tags: ['Eczema', 'Allergies'], notes: ['Responding well to emollients'],
-      prescriptions: [{ id: 'rx_1', doctorId: 'd1', medication: 'Betamethasone', dose: '10 mg', durationDays: 14, times: ['08:00', '20:00'], startDate: '2025-09-28', active: true }]
+      prescriptions: [{ id: 'rx_1', doctorId: 1, medication: 'Betamethasone', dose: '10 mg', durationDays: 14, times: ['08:00', '20:00'], startDate: '2025-09-28', active: true }]
     },
     {
       id: 'p3', name: 'Georgi Stoyanov', age: 41, phone: '+359 87 222 0000', email: 'georgi@example.com',
@@ -69,15 +71,15 @@ export class DoctorSchedulerComponent implements OnInit {
   ];
 
   appointments: Appointment[] = [
-    { id: 'a1', doctorId: 'd1', date: '2025-10-05', time: '09:00', patientId: 'p1', reason: 'Follow-up: BP review', status: 'upcoming' },
-    { id: 'a2', doctorId: 'd1', date: '2025-10-05', time: '10:30', patientId: 'p2', reason: 'Skin rash evaluation', status: 'upcoming' },
-    { id: 'a3', doctorId: 'd1', date: '2025-10-06', time: '14:00', patientId: 'p1', reason: 'Holter results', status: 'upcoming' },
-    { id: 'a4', doctorId: 'd1', date: '2025-09-28', time: '11:00', patientId: 'p2', reason: 'Eczema follow-up', status: 'completed' },
-    { id: 'a5', doctorId: 'd1', date: '2025-09-10', time: '09:30', patientId: 'p1', reason: 'Initial consult', status: 'completed' },
-    { id: 'a6', doctorId: 'd1', date: '2025-10-07', time: '09:00', patientId: 'p3', reason: 'Child vaccine Q&A', status: 'canceled' },
-    { id: 'a7', doctorId: 'd1', date: '2025-10-09', time: '16:00', patientId: 'p3', reason: 'Tonsillitis check', status: 'upcoming' },
-    { id: 'a8', doctorId: 'd1', date: '2025-10-25', time: '11:00', patientId: 'p2', reason: 'Annual review', status: 'upcoming' },
-    { id: 'a9', doctorId: 'd1', date: '2025-11-03', time: '10:00', patientId: 'p1', reason: 'Medication review', status: 'upcoming' },
+    { id: 'a1', doctorId: 1, date: '2025-10-05', time: '09:00', patientId: 'p1', reason: 'Follow-up: BP review', status: 'upcoming' },
+    { id: 'a2', doctorId: 1, date: '2025-10-05', time: '10:30', patientId: 'p2', reason: 'Skin rash evaluation', status: 'upcoming' },
+    { id: 'a3', doctorId: 1, date: '2025-10-06', time: '14:00', patientId: 'p1', reason: 'Holter results', status: 'upcoming' },
+    { id: 'a4', doctorId: 1, date: '2025-09-28', time: '11:00', patientId: 'p2', reason: 'Eczema follow-up', status: 'completed' },
+    { id: 'a5', doctorId: 1, date: '2025-09-10', time: '09:30', patientId: 'p1', reason: 'Initial consult', status: 'completed' },
+    { id: 'a6', doctorId: 1, date: '2025-10-07', time: '09:00', patientId: 'p3', reason: 'Child vaccine Q&A', status: 'canceled' },
+    { id: 'a7', doctorId: 1, date: '2025-10-09', time: '16:00', patientId: 'p3', reason: 'Tonsillitis check', status: 'upcoming' },
+    { id: 'a8', doctorId: 1, date: '2025-10-25', time: '11:00', patientId: 'p2', reason: 'Annual review', status: 'upcoming' },
+    { id: 'a9', doctorId: 1, date: '2025-11-03', time: '10:00', patientId: 'p1', reason: 'Medication review', status: 'upcoming' },
   ];
 
   dates: string[] = [];

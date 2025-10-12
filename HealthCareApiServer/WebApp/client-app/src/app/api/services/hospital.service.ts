@@ -10,21 +10,17 @@ import { BaseService } from '../base-service';
 import { ApiConfiguration } from '../api-configuration';
 import { StrictHttpResponse } from '../strict-http-response';
 
-import { apiHospitalGet$Json } from '../fn/hospital/api-hospital-get-json';
-import { ApiHospitalGet$Json$Params } from '../fn/hospital/api-hospital-get-json';
-import { apiHospitalGet$Plain } from '../fn/hospital/api-hospital-get-plain';
-import { ApiHospitalGet$Plain$Params } from '../fn/hospital/api-hospital-get-plain';
-import { apiHospitalIdDelete } from '../fn/hospital/api-hospital-id-delete';
-import { ApiHospitalIdDelete$Params } from '../fn/hospital/api-hospital-id-delete';
-import { apiHospitalIdGet$Json } from '../fn/hospital/api-hospital-id-get-json';
-import { ApiHospitalIdGet$Json$Params } from '../fn/hospital/api-hospital-id-get-json';
-import { apiHospitalIdGet$Plain } from '../fn/hospital/api-hospital-id-get-plain';
-import { ApiHospitalIdGet$Plain$Params } from '../fn/hospital/api-hospital-id-get-plain';
-import { apiHospitalIdPut } from '../fn/hospital/api-hospital-id-put';
-import { ApiHospitalIdPut$Params } from '../fn/hospital/api-hospital-id-put';
-import { apiHospitalPost } from '../fn/hospital/api-hospital-post';
-import { ApiHospitalPost$Params } from '../fn/hospital/api-hospital-post';
+import { hospitalDelete } from '../fn/hospital/hospital-delete';
+import { HospitalDelete$Params } from '../fn/hospital/hospital-delete';
+import { hospitalGet } from '../fn/hospital/hospital-get';
+import { HospitalGet$Params } from '../fn/hospital/hospital-get';
+import { hospitalGetAll } from '../fn/hospital/hospital-get-all';
+import { HospitalGetAll$Params } from '../fn/hospital/hospital-get-all';
 import { HospitalModel } from '../models/hospital-model';
+import { hospitalPost } from '../fn/hospital/hospital-post';
+import { HospitalPost$Params } from '../fn/hospital/hospital-post';
+import { hospitalPut } from '../fn/hospital/hospital-put';
+import { HospitalPut$Params } from '../fn/hospital/hospital-put';
 
 @Injectable({ providedIn: 'root' })
 export class HospitalService extends BaseService {
@@ -32,186 +28,138 @@ export class HospitalService extends BaseService {
     super(config, http);
   }
 
-  /** Path part for operation `apiHospitalGet()` */
-  static readonly ApiHospitalGetPath = '/api/Hospital';
+  /** Path part for operation `hospitalGetAll()` */
+  static readonly HospitalGetAllPath = '/api/Hospital';
 
   /**
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `apiHospitalGet$Plain()` instead.
+   * To access only the response body, use `hospitalGetAll()` instead.
    *
    * This method doesn't expect any request body.
    */
-  apiHospitalGet$Plain$Response(params?: ApiHospitalGet$Plain$Params, context?: HttpContext): Observable<StrictHttpResponse<Array<HospitalModel>>> {
-    const obs = apiHospitalGet$Plain(this.http, this.rootUrl, params, context);
+  hospitalGetAll$Response(params?: HospitalGetAll$Params, context?: HttpContext): Observable<StrictHttpResponse<Array<HospitalModel>>> {
+    const obs = hospitalGetAll(this.http, this.rootUrl, params, context);
     return obs;
   }
 
   /**
    * This method provides access only to the response body.
-   * To access the full response (for headers, for example), `apiHospitalGet$Plain$Response()` instead.
+   * To access the full response (for headers, for example), `hospitalGetAll$Response()` instead.
    *
    * This method doesn't expect any request body.
    */
-  apiHospitalGet$Plain(params?: ApiHospitalGet$Plain$Params, context?: HttpContext): Observable<Array<HospitalModel>> {
-    const resp = this.apiHospitalGet$Plain$Response(params, context);
+  hospitalGetAll(params?: HospitalGetAll$Params, context?: HttpContext): Observable<Array<HospitalModel>> {
+    const resp = this.hospitalGetAll$Response(params, context);
     return resp.pipe(
       map((r: StrictHttpResponse<Array<HospitalModel>>): Array<HospitalModel> => r.body)
     );
   }
 
+  /** Path part for operation `hospitalPost()` */
+  static readonly HospitalPostPath = '/api/Hospital';
+
   /**
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `apiHospitalGet$Json()` instead.
+   * To access only the response body, use `hospitalPost()` instead.
    *
-   * This method doesn't expect any request body.
+   * This method sends `application/json` and handles request body of type `application/json`.
    */
-  apiHospitalGet$Json$Response(params?: ApiHospitalGet$Json$Params, context?: HttpContext): Observable<StrictHttpResponse<Array<HospitalModel>>> {
-    const obs = apiHospitalGet$Json(this.http, this.rootUrl, params, context);
+  hospitalPost$Response(params: HospitalPost$Params, context?: HttpContext): Observable<StrictHttpResponse<Blob>> {
+    const obs = hospitalPost(this.http, this.rootUrl, params, context);
     return obs;
   }
 
   /**
    * This method provides access only to the response body.
-   * To access the full response (for headers, for example), `apiHospitalGet$Json$Response()` instead.
+   * To access the full response (for headers, for example), `hospitalPost$Response()` instead.
    *
-   * This method doesn't expect any request body.
+   * This method sends `application/json` and handles request body of type `application/json`.
    */
-  apiHospitalGet$Json(params?: ApiHospitalGet$Json$Params, context?: HttpContext): Observable<Array<HospitalModel>> {
-    const resp = this.apiHospitalGet$Json$Response(params, context);
+  hospitalPost(params: HospitalPost$Params, context?: HttpContext): Observable<Blob> {
+    const resp = this.hospitalPost$Response(params, context);
     return resp.pipe(
-      map((r: StrictHttpResponse<Array<HospitalModel>>): Array<HospitalModel> => r.body)
+      map((r: StrictHttpResponse<Blob>): Blob => r.body)
     );
   }
 
-  /** Path part for operation `apiHospitalPost()` */
-  static readonly ApiHospitalPostPath = '/api/Hospital';
+  /** Path part for operation `hospitalGet()` */
+  static readonly HospitalGetPath = '/api/Hospital/{id}';
 
   /**
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `apiHospitalPost()` instead.
+   * To access only the response body, use `hospitalGet()` instead.
    *
-   * This method sends `application/*+json` and handles request body of type `application/*+json`.
+   * This method doesn't expect any request body.
    */
-  apiHospitalPost$Response(params?: ApiHospitalPost$Params, context?: HttpContext): Observable<StrictHttpResponse<void>> {
-    const obs = apiHospitalPost(this.http, this.rootUrl, params, context);
+  hospitalGet$Response(params: HospitalGet$Params, context?: HttpContext): Observable<StrictHttpResponse<HospitalModel>> {
+    const obs = hospitalGet(this.http, this.rootUrl, params, context);
     return obs;
   }
 
   /**
    * This method provides access only to the response body.
-   * To access the full response (for headers, for example), `apiHospitalPost$Response()` instead.
-   *
-   * This method sends `application/*+json` and handles request body of type `application/*+json`.
-   */
-  apiHospitalPost(params?: ApiHospitalPost$Params, context?: HttpContext): Observable<void> {
-    const resp = this.apiHospitalPost$Response(params, context);
-    return resp.pipe(
-      map((r: StrictHttpResponse<void>): void => r.body)
-    );
-  }
-
-  /** Path part for operation `apiHospitalIdGet()` */
-  static readonly ApiHospitalIdGetPath = '/api/Hospital/{id}';
-
-  /**
-   * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `apiHospitalIdGet$Plain()` instead.
+   * To access the full response (for headers, for example), `hospitalGet$Response()` instead.
    *
    * This method doesn't expect any request body.
    */
-  apiHospitalIdGet$Plain$Response(params: ApiHospitalIdGet$Plain$Params, context?: HttpContext): Observable<StrictHttpResponse<HospitalModel>> {
-    const obs = apiHospitalIdGet$Plain(this.http, this.rootUrl, params, context);
-    return obs;
-  }
-
-  /**
-   * This method provides access only to the response body.
-   * To access the full response (for headers, for example), `apiHospitalIdGet$Plain$Response()` instead.
-   *
-   * This method doesn't expect any request body.
-   */
-  apiHospitalIdGet$Plain(params: ApiHospitalIdGet$Plain$Params, context?: HttpContext): Observable<HospitalModel> {
-    const resp = this.apiHospitalIdGet$Plain$Response(params, context);
+  hospitalGet(params: HospitalGet$Params, context?: HttpContext): Observable<HospitalModel> {
+    const resp = this.hospitalGet$Response(params, context);
     return resp.pipe(
       map((r: StrictHttpResponse<HospitalModel>): HospitalModel => r.body)
     );
   }
 
+  /** Path part for operation `hospitalPut()` */
+  static readonly HospitalPutPath = '/api/Hospital/{id}';
+
   /**
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `apiHospitalIdGet$Json()` instead.
+   * To access only the response body, use `hospitalPut()` instead.
    *
-   * This method doesn't expect any request body.
+   * This method sends `application/json` and handles request body of type `application/json`.
    */
-  apiHospitalIdGet$Json$Response(params: ApiHospitalIdGet$Json$Params, context?: HttpContext): Observable<StrictHttpResponse<HospitalModel>> {
-    const obs = apiHospitalIdGet$Json(this.http, this.rootUrl, params, context);
+  hospitalPut$Response(params: HospitalPut$Params, context?: HttpContext): Observable<StrictHttpResponse<Blob>> {
+    const obs = hospitalPut(this.http, this.rootUrl, params, context);
     return obs;
   }
 
   /**
    * This method provides access only to the response body.
-   * To access the full response (for headers, for example), `apiHospitalIdGet$Json$Response()` instead.
+   * To access the full response (for headers, for example), `hospitalPut$Response()` instead.
    *
-   * This method doesn't expect any request body.
+   * This method sends `application/json` and handles request body of type `application/json`.
    */
-  apiHospitalIdGet$Json(params: ApiHospitalIdGet$Json$Params, context?: HttpContext): Observable<HospitalModel> {
-    const resp = this.apiHospitalIdGet$Json$Response(params, context);
+  hospitalPut(params: HospitalPut$Params, context?: HttpContext): Observable<Blob> {
+    const resp = this.hospitalPut$Response(params, context);
     return resp.pipe(
-      map((r: StrictHttpResponse<HospitalModel>): HospitalModel => r.body)
+      map((r: StrictHttpResponse<Blob>): Blob => r.body)
     );
   }
 
-  /** Path part for operation `apiHospitalIdPut()` */
-  static readonly ApiHospitalIdPutPath = '/api/Hospital/{id}';
+  /** Path part for operation `hospitalDelete()` */
+  static readonly HospitalDeletePath = '/api/Hospital/{id}';
 
   /**
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `apiHospitalIdPut()` instead.
+   * To access only the response body, use `hospitalDelete()` instead.
    *
-   * This method sends `application/*+json` and handles request body of type `application/*+json`.
+   * This method doesn't expect any request body.
    */
-  apiHospitalIdPut$Response(params: ApiHospitalIdPut$Params, context?: HttpContext): Observable<StrictHttpResponse<void>> {
-    const obs = apiHospitalIdPut(this.http, this.rootUrl, params, context);
+  hospitalDelete$Response(params: HospitalDelete$Params, context?: HttpContext): Observable<StrictHttpResponse<Blob>> {
+    const obs = hospitalDelete(this.http, this.rootUrl, params, context);
     return obs;
   }
 
   /**
    * This method provides access only to the response body.
-   * To access the full response (for headers, for example), `apiHospitalIdPut$Response()` instead.
-   *
-   * This method sends `application/*+json` and handles request body of type `application/*+json`.
-   */
-  apiHospitalIdPut(params: ApiHospitalIdPut$Params, context?: HttpContext): Observable<void> {
-    const resp = this.apiHospitalIdPut$Response(params, context);
-    return resp.pipe(
-      map((r: StrictHttpResponse<void>): void => r.body)
-    );
-  }
-
-  /** Path part for operation `apiHospitalIdDelete()` */
-  static readonly ApiHospitalIdDeletePath = '/api/Hospital/{id}';
-
-  /**
-   * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `apiHospitalIdDelete()` instead.
+   * To access the full response (for headers, for example), `hospitalDelete$Response()` instead.
    *
    * This method doesn't expect any request body.
    */
-  apiHospitalIdDelete$Response(params: ApiHospitalIdDelete$Params, context?: HttpContext): Observable<StrictHttpResponse<void>> {
-    const obs = apiHospitalIdDelete(this.http, this.rootUrl, params, context);
-    return obs;
-  }
-
-  /**
-   * This method provides access only to the response body.
-   * To access the full response (for headers, for example), `apiHospitalIdDelete$Response()` instead.
-   *
-   * This method doesn't expect any request body.
-   */
-  apiHospitalIdDelete(params: ApiHospitalIdDelete$Params, context?: HttpContext): Observable<void> {
-    const resp = this.apiHospitalIdDelete$Response(params, context);
+  hospitalDelete(params: HospitalDelete$Params, context?: HttpContext): Observable<Blob> {
+    const resp = this.hospitalDelete$Response(params, context);
     return resp.pipe(
-      map((r: StrictHttpResponse<void>): void => r.body)
+      map((r: StrictHttpResponse<Blob>): Blob => r.body)
     );
   }
 

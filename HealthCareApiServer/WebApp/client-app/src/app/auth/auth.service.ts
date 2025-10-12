@@ -15,7 +15,7 @@ export class AuthService {
     getRoles(): Observable<string[]> {
         if (!this.rolesCache$) {
             this.rolesCache$ = this.identityService
-                .apiIdentityRolesGet$Json()
+                .identityRoles()
                 .pipe(
                     map(r => r ?? []),
                     catchError(() => of([])),
@@ -42,7 +42,8 @@ export class AuthService {
     }
 
     logout(): Observable<void> {
-        return this.identityService.apiIdentityLogoutPost().pipe(
+        return this.identityService.identityLogout().pipe(
+            map(() => void 0),
             tap(() => {
                 this.rolesCache$ = undefined;
                 this.loginState$.next(false);

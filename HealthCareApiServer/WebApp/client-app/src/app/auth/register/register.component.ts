@@ -2,7 +2,6 @@ import { CommonModule } from '@angular/common';
 import { Component, Input, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule, AbstractControl, ValidationErrors } from '@angular/forms';
 import { RegisterUserRequestModel } from '../../api/models';
-import { apiIdentityRegisterPost } from '../../api/functions';
 import { DoctorService, IdentityService } from '../../api/services';
 import { Router } from '@angular/router';
 
@@ -84,7 +83,7 @@ export class RegisterComponent implements OnInit {
 
     const formData = this.registerForm.value;
     if (this.isDoctorRegister) {
-      this.doctorService.apiDoctorCreatePost({
+      this.doctorService.doctorCreate({
         body:
         {
           firstName: formData.firstName,
@@ -107,7 +106,7 @@ export class RegisterComponent implements OnInit {
         password: formData.password
       } as RegisterUserRequestModel;
 
-      this.identityService.apiIdentityRegisterPost({ body: model }).subscribe(() => {
+      this.identityService.identityRegister({ body: model }).subscribe(() => {
         this.router.navigateByUrl('/');
       });
     }

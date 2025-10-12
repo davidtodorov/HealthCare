@@ -5,7 +5,7 @@
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-5 h-5 text-slate-500">
         <path fill-rule="evenodd" d="M10.5 3.75a6.75 6.75 0 1 0 3.93 12.285l4.767 4.768a.75.75 0 1 0 1.06-1.06l-4.768-4.767A6.75 6.75 0 0 0 10.5 3.75ZM5.25 10.5a5.25 5.25 0 1 1 10.5 0 5.25 5.25 0 0 1-10.5 0Z" clip-rule="evenodd" />
       </svg>
-      <input id="search" type="text" placeholder="Search name or specialty"
+      <input id="search" type="text" placeholder="Search name or department"
         [(ngModel)]="search"
         class="w-full border border-slate-200 rounded-xl px-3 py-2 outline-none focus:ring-2 focus:ring-slate-300" />
     </div>
@@ -15,10 +15,10 @@
         <button *ngFor="let d of filteredDoctors; trackBy: trackByDoctor"
                 (click)="onDoctorSelect(d)"
                 class="w-full text-left p-3 border border-slate-200 hover:bg-slate-50 rounded-2xl flex gap-3 items-center">
-          <img [src]="d.photo" [alt]="d.name" class="w-14 h-14 object-cover rounded-xl ring-1 ring-slate-200" />
+          <img [src]="'https://images.unsplash.com/photo-1550831107-1553da8c8464?q=80&w=640&auto=format&fit=crop'" [alt]="d.firstName" class="w-14 h-14 object-cover rounded-xl ring-1 ring-slate-200" />
           <div class="flex-1">
-            <div class="font-medium">{{ d.name }}</div>
-            <div class="text-sm text-slate-600">{{ d.specialty }}</div>
+            <div class="font-medium">{{ d.firstName + ' ' + d.lastName }}</div>
+            <div class="text-sm text-slate-600">{{ d.departmentName }}</div>
           </div>
         </button>
       </ng-container>
@@ -33,12 +33,12 @@
     <!-- Doctor details card -->
     <div class="card bg-white p-4 md:p-6" id="doctorDetails">
       <div class="flex items-start gap-4">
-        <img [src]="selectedDoctor?.photo || ''" alt="Doctor photo" class="w-24 h-24 object-cover rounded-2xl ring-1 ring-slate-200" />
+        <img [src]="'https://images.unsplash.com/photo-1550831107-1553da8c8464?q=80&w=640&auto=format&fit=crop'" alt="Doctor photo" class="w-24 h-24 object-cover rounded-2xl ring-1 ring-slate-200" />
         <div class="flex-1">
-          <h2 class="text-xl font-semibold">{{ selectedDoctor?.name || 'Select a doctor' }}</h2>
-          <p class="text-slate-600">{{ selectedDoctor?.specialty || '—' }}</p>
+          <h2 class="text-xl font-semibold">{{ selectedDoctor?.firstName + ' ' + selectedDoctor?.lastName || 'Select a doctor' }}</h2>
+          <p class="text-slate-600">{{ selectedDoctor?.departmentName || '—' }}</p>
           <p class="mt-2 text-slate-700 leading-relaxed">
-            {{ selectedDoctor?.bio || 'Choose someone from the list to see their profile, available dates, and hours.' }}
+            <!-- {{ selectedDoctor?.bio || 'Choose someone from the list to see their profile, available dates, and hours.' }} -->
           </p>
         </div>
       </div>
@@ -49,9 +49,10 @@
       <div class="flex flex-col md:flex-row md:items-start gap-6">
         <!-- Calendar -->
         <div class="md:w-[360px]">
-          <app-calendar [doctorId]="selectedDoctor?.id || ''"
+          <app-calendar [doctorId]="selectedDoctor?.id || 0"
                         [dates]="dates"
-                        (dateSelected)="onDateSelect($event)"></app-calendar>
+                        (dateSelected)="onDateSelect($event)"
+                        (viewChanged)="onViewChange()"></app-calendar>
         </div>
 
         <!-- Time slots & booking -->

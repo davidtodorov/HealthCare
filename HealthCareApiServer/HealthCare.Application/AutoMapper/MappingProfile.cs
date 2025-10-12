@@ -28,7 +28,7 @@ namespace HealthCare.Application.AutoMapper
                 .ForMember(am => am.Reason, opts => opts.MapFrom(a => a.Reason))
                 .ForMember(am => am.Status, opts => opts.MapFrom(a => a.Status))
                 .ForMember(am => am.PatientId, opts => opts.MapFrom(a => a.PatientId))
-                .ForMember(am => am.DoctorId, opts => opts.MapFrom(a => a.DoctorId));
+                .ForMember(am => am.DoctorId, opts => opts.MapFrom(a => a.DoctorId)).ReverseMap();
 
             CreateMap<Department, DepartmentModel>();
         }

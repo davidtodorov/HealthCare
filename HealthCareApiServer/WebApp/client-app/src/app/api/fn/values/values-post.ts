@@ -9,13 +9,13 @@ import { RequestBuilder } from '../../request-builder';
 
 
 export interface ValuesPost$Params {
-      body?: string
+      body: string
 }
 
-export function valuesPost(http: HttpClient, rootUrl: string, params?: ValuesPost$Params, context?: HttpContext): Observable<StrictHttpResponse<void>> {
+export function valuesPost(http: HttpClient, rootUrl: string, params: ValuesPost$Params, context?: HttpContext): Observable<StrictHttpResponse<void>> {
   const rb = new RequestBuilder(rootUrl, valuesPost.PATH, 'post');
   if (params) {
-    rb.body(params.body, 'application/*+json');
+    rb.body(params.body, 'application/json');
   }
 
   return http.request(

@@ -11,10 +11,8 @@ import { ApiConfiguration } from '../api-configuration';
 import { StrictHttpResponse } from '../strict-http-response';
 
 import { Doctor } from '../models/doctor';
-import { weatherForecastGet$Json } from '../fn/weather-forecast/weather-forecast-get-json';
-import { WeatherForecastGet$Json$Params } from '../fn/weather-forecast/weather-forecast-get-json';
-import { weatherForecastGet$Plain } from '../fn/weather-forecast/weather-forecast-get-plain';
-import { WeatherForecastGet$Plain$Params } from '../fn/weather-forecast/weather-forecast-get-plain';
+import { weatherForecastGet } from '../fn/weather-forecast/weather-forecast-get';
+import { WeatherForecastGet$Params } from '../fn/weather-forecast/weather-forecast-get';
 
 @Injectable({ providedIn: 'root' })
 export class WeatherForecastService extends BaseService {
@@ -27,47 +25,23 @@ export class WeatherForecastService extends BaseService {
 
   /**
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `weatherForecastGet$Plain()` instead.
+   * To access only the response body, use `weatherForecastGet()` instead.
    *
    * This method doesn't expect any request body.
    */
-  weatherForecastGet$Plain$Response(params?: WeatherForecastGet$Plain$Params, context?: HttpContext): Observable<StrictHttpResponse<Array<Doctor>>> {
-    const obs = weatherForecastGet$Plain(this.http, this.rootUrl, params, context);
+  weatherForecastGet$Response(params?: WeatherForecastGet$Params, context?: HttpContext): Observable<StrictHttpResponse<Array<Doctor>>> {
+    const obs = weatherForecastGet(this.http, this.rootUrl, params, context);
     return obs;
   }
 
   /**
    * This method provides access only to the response body.
-   * To access the full response (for headers, for example), `weatherForecastGet$Plain$Response()` instead.
+   * To access the full response (for headers, for example), `weatherForecastGet$Response()` instead.
    *
    * This method doesn't expect any request body.
    */
-  weatherForecastGet$Plain(params?: WeatherForecastGet$Plain$Params, context?: HttpContext): Observable<Array<Doctor>> {
-    const resp = this.weatherForecastGet$Plain$Response(params, context);
-    return resp.pipe(
-      map((r: StrictHttpResponse<Array<Doctor>>): Array<Doctor> => r.body)
-    );
-  }
-
-  /**
-   * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `weatherForecastGet$Json()` instead.
-   *
-   * This method doesn't expect any request body.
-   */
-  weatherForecastGet$Json$Response(params?: WeatherForecastGet$Json$Params, context?: HttpContext): Observable<StrictHttpResponse<Array<Doctor>>> {
-    const obs = weatherForecastGet$Json(this.http, this.rootUrl, params, context);
-    return obs;
-  }
-
-  /**
-   * This method provides access only to the response body.
-   * To access the full response (for headers, for example), `weatherForecastGet$Json$Response()` instead.
-   *
-   * This method doesn't expect any request body.
-   */
-  weatherForecastGet$Json(params?: WeatherForecastGet$Json$Params, context?: HttpContext): Observable<Array<Doctor>> {
-    const resp = this.weatherForecastGet$Json$Response(params, context);
+  weatherForecastGet(params?: WeatherForecastGet$Params, context?: HttpContext): Observable<Array<Doctor>> {
+    const resp = this.weatherForecastGet$Response(params, context);
     return resp.pipe(
       map((r: StrictHttpResponse<Array<Doctor>>): Array<Doctor> => r.body)
     );

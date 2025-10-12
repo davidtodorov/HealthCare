@@ -10,20 +10,16 @@ import { BaseService } from '../base-service';
 import { ApiConfiguration } from '../api-configuration';
 import { StrictHttpResponse } from '../strict-http-response';
 
-import { valuesGet$Json } from '../fn/values/values-get-json';
-import { ValuesGet$Json$Params } from '../fn/values/values-get-json';
-import { valuesGet$Plain } from '../fn/values/values-get-plain';
-import { ValuesGet$Plain$Params } from '../fn/values/values-get-plain';
-import { valuesIdDelete } from '../fn/values/values-id-delete';
-import { ValuesIdDelete$Params } from '../fn/values/values-id-delete';
-import { valuesIdGet$Json } from '../fn/values/values-id-get-json';
-import { ValuesIdGet$Json$Params } from '../fn/values/values-id-get-json';
-import { valuesIdGet$Plain } from '../fn/values/values-id-get-plain';
-import { ValuesIdGet$Plain$Params } from '../fn/values/values-id-get-plain';
-import { valuesIdPut } from '../fn/values/values-id-put';
-import { ValuesIdPut$Params } from '../fn/values/values-id-put';
+import { valuesDelete } from '../fn/values/values-delete';
+import { ValuesDelete$Params } from '../fn/values/values-delete';
+import { valuesGet } from '../fn/values/values-get';
+import { ValuesGet$Params } from '../fn/values/values-get';
+import { valuesGetAll } from '../fn/values/values-get-all';
+import { ValuesGetAll$Params } from '../fn/values/values-get-all';
 import { valuesPost } from '../fn/values/values-post';
 import { ValuesPost$Params } from '../fn/values/values-post';
+import { valuesPut } from '../fn/values/values-put';
+import { ValuesPut$Params } from '../fn/values/values-put';
 
 @Injectable({ providedIn: 'root' })
 export class ValuesService extends BaseService {
@@ -31,52 +27,28 @@ export class ValuesService extends BaseService {
     super(config, http);
   }
 
-  /** Path part for operation `valuesGet()` */
-  static readonly ValuesGetPath = '/Values';
+  /** Path part for operation `valuesGetAll()` */
+  static readonly ValuesGetAllPath = '/Values';
 
   /**
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `valuesGet$Plain()` instead.
+   * To access only the response body, use `valuesGetAll()` instead.
    *
    * This method doesn't expect any request body.
    */
-  valuesGet$Plain$Response(params?: ValuesGet$Plain$Params, context?: HttpContext): Observable<StrictHttpResponse<Array<string>>> {
-    const obs = valuesGet$Plain(this.http, this.rootUrl, params, context);
+  valuesGetAll$Response(params?: ValuesGetAll$Params, context?: HttpContext): Observable<StrictHttpResponse<Array<string>>> {
+    const obs = valuesGetAll(this.http, this.rootUrl, params, context);
     return obs;
   }
 
   /**
    * This method provides access only to the response body.
-   * To access the full response (for headers, for example), `valuesGet$Plain$Response()` instead.
+   * To access the full response (for headers, for example), `valuesGetAll$Response()` instead.
    *
    * This method doesn't expect any request body.
    */
-  valuesGet$Plain(params?: ValuesGet$Plain$Params, context?: HttpContext): Observable<Array<string>> {
-    const resp = this.valuesGet$Plain$Response(params, context);
-    return resp.pipe(
-      map((r: StrictHttpResponse<Array<string>>): Array<string> => r.body)
-    );
-  }
-
-  /**
-   * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `valuesGet$Json()` instead.
-   *
-   * This method doesn't expect any request body.
-   */
-  valuesGet$Json$Response(params?: ValuesGet$Json$Params, context?: HttpContext): Observable<StrictHttpResponse<Array<string>>> {
-    const obs = valuesGet$Json(this.http, this.rootUrl, params, context);
-    return obs;
-  }
-
-  /**
-   * This method provides access only to the response body.
-   * To access the full response (for headers, for example), `valuesGet$Json$Response()` instead.
-   *
-   * This method doesn't expect any request body.
-   */
-  valuesGet$Json(params?: ValuesGet$Json$Params, context?: HttpContext): Observable<Array<string>> {
-    const resp = this.valuesGet$Json$Response(params, context);
+  valuesGetAll(params?: ValuesGetAll$Params, context?: HttpContext): Observable<Array<string>> {
+    const resp = this.valuesGetAll$Response(params, context);
     return resp.pipe(
       map((r: StrictHttpResponse<Array<string>>): Array<string> => r.body)
     );
@@ -89,9 +61,9 @@ export class ValuesService extends BaseService {
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
    * To access only the response body, use `valuesPost()` instead.
    *
-   * This method sends `application/*+json` and handles request body of type `application/*+json`.
+   * This method sends `application/json` and handles request body of type `application/json`.
    */
-  valuesPost$Response(params?: ValuesPost$Params, context?: HttpContext): Observable<StrictHttpResponse<void>> {
+  valuesPost$Response(params: ValuesPost$Params, context?: HttpContext): Observable<StrictHttpResponse<void>> {
     const obs = valuesPost(this.http, this.rootUrl, params, context);
     return obs;
   }
@@ -100,115 +72,91 @@ export class ValuesService extends BaseService {
    * This method provides access only to the response body.
    * To access the full response (for headers, for example), `valuesPost$Response()` instead.
    *
-   * This method sends `application/*+json` and handles request body of type `application/*+json`.
+   * This method sends `application/json` and handles request body of type `application/json`.
    */
-  valuesPost(params?: ValuesPost$Params, context?: HttpContext): Observable<void> {
+  valuesPost(params: ValuesPost$Params, context?: HttpContext): Observable<void> {
     const resp = this.valuesPost$Response(params, context);
     return resp.pipe(
       map((r: StrictHttpResponse<void>): void => r.body)
     );
   }
 
-  /** Path part for operation `valuesIdGet()` */
-  static readonly ValuesIdGetPath = '/Values/{id}';
+  /** Path part for operation `valuesGet()` */
+  static readonly ValuesGetPath = '/Values/{id}';
 
   /**
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `valuesIdGet$Plain()` instead.
+   * To access only the response body, use `valuesGet()` instead.
    *
    * This method doesn't expect any request body.
    */
-  valuesIdGet$Plain$Response(params: ValuesIdGet$Plain$Params, context?: HttpContext): Observable<StrictHttpResponse<string>> {
-    const obs = valuesIdGet$Plain(this.http, this.rootUrl, params, context);
+  valuesGet$Response(params: ValuesGet$Params, context?: HttpContext): Observable<StrictHttpResponse<string>> {
+    const obs = valuesGet(this.http, this.rootUrl, params, context);
     return obs;
   }
 
   /**
    * This method provides access only to the response body.
-   * To access the full response (for headers, for example), `valuesIdGet$Plain$Response()` instead.
+   * To access the full response (for headers, for example), `valuesGet$Response()` instead.
    *
    * This method doesn't expect any request body.
    */
-  valuesIdGet$Plain(params: ValuesIdGet$Plain$Params, context?: HttpContext): Observable<string> {
-    const resp = this.valuesIdGet$Plain$Response(params, context);
+  valuesGet(params: ValuesGet$Params, context?: HttpContext): Observable<string> {
+    const resp = this.valuesGet$Response(params, context);
     return resp.pipe(
       map((r: StrictHttpResponse<string>): string => r.body)
     );
   }
 
+  /** Path part for operation `valuesPut()` */
+  static readonly ValuesPutPath = '/Values/{id}';
+
   /**
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `valuesIdGet$Json()` instead.
+   * To access only the response body, use `valuesPut()` instead.
    *
-   * This method doesn't expect any request body.
+   * This method sends `application/json` and handles request body of type `application/json`.
    */
-  valuesIdGet$Json$Response(params: ValuesIdGet$Json$Params, context?: HttpContext): Observable<StrictHttpResponse<string>> {
-    const obs = valuesIdGet$Json(this.http, this.rootUrl, params, context);
+  valuesPut$Response(params: ValuesPut$Params, context?: HttpContext): Observable<StrictHttpResponse<void>> {
+    const obs = valuesPut(this.http, this.rootUrl, params, context);
     return obs;
   }
 
   /**
    * This method provides access only to the response body.
-   * To access the full response (for headers, for example), `valuesIdGet$Json$Response()` instead.
+   * To access the full response (for headers, for example), `valuesPut$Response()` instead.
    *
-   * This method doesn't expect any request body.
+   * This method sends `application/json` and handles request body of type `application/json`.
    */
-  valuesIdGet$Json(params: ValuesIdGet$Json$Params, context?: HttpContext): Observable<string> {
-    const resp = this.valuesIdGet$Json$Response(params, context);
-    return resp.pipe(
-      map((r: StrictHttpResponse<string>): string => r.body)
-    );
-  }
-
-  /** Path part for operation `valuesIdPut()` */
-  static readonly ValuesIdPutPath = '/Values/{id}';
-
-  /**
-   * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `valuesIdPut()` instead.
-   *
-   * This method sends `application/*+json` and handles request body of type `application/*+json`.
-   */
-  valuesIdPut$Response(params: ValuesIdPut$Params, context?: HttpContext): Observable<StrictHttpResponse<void>> {
-    const obs = valuesIdPut(this.http, this.rootUrl, params, context);
-    return obs;
-  }
-
-  /**
-   * This method provides access only to the response body.
-   * To access the full response (for headers, for example), `valuesIdPut$Response()` instead.
-   *
-   * This method sends `application/*+json` and handles request body of type `application/*+json`.
-   */
-  valuesIdPut(params: ValuesIdPut$Params, context?: HttpContext): Observable<void> {
-    const resp = this.valuesIdPut$Response(params, context);
+  valuesPut(params: ValuesPut$Params, context?: HttpContext): Observable<void> {
+    const resp = this.valuesPut$Response(params, context);
     return resp.pipe(
       map((r: StrictHttpResponse<void>): void => r.body)
     );
   }
 
-  /** Path part for operation `valuesIdDelete()` */
-  static readonly ValuesIdDeletePath = '/Values/{id}';
+  /** Path part for operation `valuesDelete()` */
+  static readonly ValuesDeletePath = '/Values/{id}';
 
   /**
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `valuesIdDelete()` instead.
+   * To access only the response body, use `valuesDelete()` instead.
    *
    * This method doesn't expect any request body.
    */
-  valuesIdDelete$Response(params: ValuesIdDelete$Params, context?: HttpContext): Observable<StrictHttpResponse<void>> {
-    const obs = valuesIdDelete(this.http, this.rootUrl, params, context);
+  valuesDelete$Response(params: ValuesDelete$Params, context?: HttpContext): Observable<StrictHttpResponse<void>> {
+    const obs = valuesDelete(this.http, this.rootUrl, params, context);
     return obs;
   }
 
   /**
    * This method provides access only to the response body.
-   * To access the full response (for headers, for example), `valuesIdDelete$Response()` instead.
+   * To access the full response (for headers, for example), `valuesDelete$Response()` instead.
    *
    * This method doesn't expect any request body.
    */
-  valuesIdDelete(params: ValuesIdDelete$Params, context?: HttpContext): Observable<void> {
-    const resp = this.valuesIdDelete$Response(params, context);
+  valuesDelete(params: ValuesDelete$Params, context?: HttpContext): Observable<void> {
+    const resp = this.valuesDelete$Response(params, context);
     return resp.pipe(
       map((r: StrictHttpResponse<void>): void => r.body)
     );

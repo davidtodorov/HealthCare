@@ -4,5 +4,10 @@
   "ignoreUnusedModels": false,
   "services": true,
   "keepFullResponseMediaType": false,
-  "promises": false
+  "promises": false,
+  "options": {
+    "dateType": "Date"
+  },
+  "enumStyle": "pascal",
+  "enumArray": false
 }

@@ -10,18 +10,16 @@ import { BaseService } from '../base-service';
 import { ApiConfiguration } from '../api-configuration';
 import { StrictHttpResponse } from '../strict-http-response';
 
-import { apiIdentityLoginPost } from '../fn/identity/api-identity-login-post';
-import { ApiIdentityLoginPost$Params } from '../fn/identity/api-identity-login-post';
-import { apiIdentityLogoutPost } from '../fn/identity/api-identity-logout-post';
-import { ApiIdentityLogoutPost$Params } from '../fn/identity/api-identity-logout-post';
-import { apiIdentityRegisterPost } from '../fn/identity/api-identity-register-post';
-import { ApiIdentityRegisterPost$Params } from '../fn/identity/api-identity-register-post';
-import { apiIdentityRolesGet$Json } from '../fn/identity/api-identity-roles-get-json';
-import { ApiIdentityRolesGet$Json$Params } from '../fn/identity/api-identity-roles-get-json';
-import { apiIdentityRolesGet$Plain } from '../fn/identity/api-identity-roles-get-plain';
-import { ApiIdentityRolesGet$Plain$Params } from '../fn/identity/api-identity-roles-get-plain';
-import { apiIdentityVerifyPost } from '../fn/identity/api-identity-verify-post';
-import { ApiIdentityVerifyPost$Params } from '../fn/identity/api-identity-verify-post';
+import { identityLogin } from '../fn/identity/identity-login';
+import { IdentityLogin$Params } from '../fn/identity/identity-login';
+import { identityLogout } from '../fn/identity/identity-logout';
+import { IdentityLogout$Params } from '../fn/identity/identity-logout';
+import { identityRegister } from '../fn/identity/identity-register';
+import { IdentityRegister$Params } from '../fn/identity/identity-register';
+import { identityRoles } from '../fn/identity/identity-roles';
+import { IdentityRoles$Params } from '../fn/identity/identity-roles';
+import { identityVerify } from '../fn/identity/identity-verify';
+import { IdentityVerify$Params } from '../fn/identity/identity-verify';
 
 @Injectable({ providedIn: 'root' })
 export class IdentityService extends BaseService {
@@ -29,160 +27,136 @@ export class IdentityService extends BaseService {
     super(config, http);
   }
 
-  /** Path part for operation `apiIdentityLoginPost()` */
-  static readonly ApiIdentityLoginPostPath = '/api/Identity/Login';
+  /** Path part for operation `identityLogin()` */
+  static readonly IdentityLoginPath = '/api/Identity/Login';
 
   /**
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `apiIdentityLoginPost()` instead.
+   * To access only the response body, use `identityLogin()` instead.
    *
-   * This method sends `application/*+json` and handles request body of type `application/*+json`.
+   * This method sends `application/json` and handles request body of type `application/json`.
    */
-  apiIdentityLoginPost$Response(params?: ApiIdentityLoginPost$Params, context?: HttpContext): Observable<StrictHttpResponse<void>> {
-    const obs = apiIdentityLoginPost(this.http, this.rootUrl, params, context);
+  identityLogin$Response(params: IdentityLogin$Params, context?: HttpContext): Observable<StrictHttpResponse<Blob>> {
+    const obs = identityLogin(this.http, this.rootUrl, params, context);
     return obs;
   }
 
   /**
    * This method provides access only to the response body.
-   * To access the full response (for headers, for example), `apiIdentityLoginPost$Response()` instead.
+   * To access the full response (for headers, for example), `identityLogin$Response()` instead.
    *
-   * This method sends `application/*+json` and handles request body of type `application/*+json`.
+   * This method sends `application/json` and handles request body of type `application/json`.
    */
-  apiIdentityLoginPost(params?: ApiIdentityLoginPost$Params, context?: HttpContext): Observable<void> {
-    const resp = this.apiIdentityLoginPost$Response(params, context);
+  identityLogin(params: IdentityLogin$Params, context?: HttpContext): Observable<Blob> {
+    const resp = this.identityLogin$Response(params, context);
     return resp.pipe(
-      map((r: StrictHttpResponse<void>): void => r.body)
+      map((r: StrictHttpResponse<Blob>): Blob => r.body)
     );
   }
 
-  /** Path part for operation `apiIdentityRegisterPost()` */
-  static readonly ApiIdentityRegisterPostPath = '/api/Identity/Register';
+  /** Path part for operation `identityRegister()` */
+  static readonly IdentityRegisterPath = '/api/Identity/Register';
 
   /**
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `apiIdentityRegisterPost()` instead.
+   * To access only the response body, use `identityRegister()` instead.
    *
-   * This method sends `application/*+json` and handles request body of type `application/*+json`.
+   * This method sends `application/json` and handles request body of type `application/json`.
    */
-  apiIdentityRegisterPost$Response(params?: ApiIdentityRegisterPost$Params, context?: HttpContext): Observable<StrictHttpResponse<void>> {
-    const obs = apiIdentityRegisterPost(this.http, this.rootUrl, params, context);
+  identityRegister$Response(params: IdentityRegister$Params, context?: HttpContext): Observable<StrictHttpResponse<Blob>> {
+    const obs = identityRegister(this.http, this.rootUrl, params, context);
     return obs;
   }
 
   /**
    * This method provides access only to the response body.
-   * To access the full response (for headers, for example), `apiIdentityRegisterPost$Response()` instead.
+   * To access the full response (for headers, for example), `identityRegister$Response()` instead.
    *
-   * This method sends `application/*+json` and handles request body of type `application/*+json`.
+   * This method sends `application/json` and handles request body of type `application/json`.
    */
-  apiIdentityRegisterPost(params?: ApiIdentityRegisterPost$Params, context?: HttpContext): Observable<void> {
-    const resp = this.apiIdentityRegisterPost$Response(params, context);
+  identityRegister(params: IdentityRegister$Params, context?: HttpContext): Observable<Blob> {
+    const resp = this.identityRegister$Response(params, context);
     return resp.pipe(
-      map((r: StrictHttpResponse<void>): void => r.body)
+      map((r: StrictHttpResponse<Blob>): Blob => r.body)
     );
   }
 
-  /** Path part for operation `apiIdentityLogoutPost()` */
-  static readonly ApiIdentityLogoutPostPath = '/api/Identity/Logout';
+  /** Path part for operation `identityLogout()` */
+  static readonly IdentityLogoutPath = '/api/Identity/Logout';
 
   /**
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `apiIdentityLogoutPost()` instead.
+   * To access only the response body, use `identityLogout()` instead.
    *
    * This method doesn't expect any request body.
    */
-  apiIdentityLogoutPost$Response(params?: ApiIdentityLogoutPost$Params, context?: HttpContext): Observable<StrictHttpResponse<void>> {
-    const obs = apiIdentityLogoutPost(this.http, this.rootUrl, params, context);
+  identityLogout$Response(params?: IdentityLogout$Params, context?: HttpContext): Observable<StrictHttpResponse<Blob>> {
+    const obs = identityLogout(this.http, this.rootUrl, params, context);
     return obs;
   }
 
   /**
    * This method provides access only to the response body.
-   * To access the full response (for headers, for example), `apiIdentityLogoutPost$Response()` instead.
+   * To access the full response (for headers, for example), `identityLogout$Response()` instead.
    *
    * This method doesn't expect any request body.
    */
-  apiIdentityLogoutPost(params?: ApiIdentityLogoutPost$Params, context?: HttpContext): Observable<void> {
-    const resp = this.apiIdentityLogoutPost$Response(params, context);
+  identityLogout(params?: IdentityLogout$Params, context?: HttpContext): Observable<Blob> {
+    const resp = this.identityLogout$Response(params, context);
     return resp.pipe(
-      map((r: StrictHttpResponse<void>): void => r.body)
+      map((r: StrictHttpResponse<Blob>): Blob => r.body)
     );
   }
 
-  /** Path part for operation `apiIdentityVerifyPost()` */
-  static readonly ApiIdentityVerifyPostPath = '/api/Identity/Verify';
+  /** Path part for operation `identityVerify()` */
+  static readonly IdentityVerifyPath = '/api/Identity/Verify';
 
   /**
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `apiIdentityVerifyPost()` instead.
+   * To access only the response body, use `identityVerify()` instead.
    *
    * This method doesn't expect any request body.
    */
-  apiIdentityVerifyPost$Response(params?: ApiIdentityVerifyPost$Params, context?: HttpContext): Observable<StrictHttpResponse<void>> {
-    const obs = apiIdentityVerifyPost(this.http, this.rootUrl, params, context);
+  identityVerify$Response(params?: IdentityVerify$Params, context?: HttpContext): Observable<StrictHttpResponse<Blob>> {
+    const obs = identityVerify(this.http, this.rootUrl, params, context);
     return obs;
   }
 
   /**
    * This method provides access only to the response body.
-   * To access the full response (for headers, for example), `apiIdentityVerifyPost$Response()` instead.
+   * To access the full response (for headers, for example), `identityVerify$Response()` instead.
    *
    * This method doesn't expect any request body.
    */
-  apiIdentityVerifyPost(params?: ApiIdentityVerifyPost$Params, context?: HttpContext): Observable<void> {
-    const resp = this.apiIdentityVerifyPost$Response(params, context);
+  identityVerify(params?: IdentityVerify$Params, context?: HttpContext): Observable<Blob> {
+    const resp = this.identityVerify$Response(params, context);
     return resp.pipe(
-      map((r: StrictHttpResponse<void>): void => r.body)
+      map((r: StrictHttpResponse<Blob>): Blob => r.body)
     );
   }
 
-  /** Path part for operation `apiIdentityRolesGet()` */
-  static readonly ApiIdentityRolesGetPath = '/api/Identity/Roles';
+  /** Path part for operation `identityRoles()` */
+  static readonly IdentityRolesPath = '/api/Identity/Roles';
 
   /**
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `apiIdentityRolesGet$Plain()` instead.
+   * To access only the response body, use `identityRoles()` instead.
    *
    * This method doesn't expect any request body.
    */
-  apiIdentityRolesGet$Plain$Response(params?: ApiIdentityRolesGet$Plain$Params, context?: HttpContext): Observable<StrictHttpResponse<Array<string>>> {
-    const obs = apiIdentityRolesGet$Plain(this.http, this.rootUrl, params, context);
+  identityRoles$Response(params?: IdentityRoles$Params, context?: HttpContext): Observable<StrictHttpResponse<Array<string>>> {
+    const obs = identityRoles(this.http, this.rootUrl, params, context);
     return obs;
   }
 
   /**
    * This method provides access only to the response body.
-   * To access the full response (for headers, for example), `apiIdentityRolesGet$Plain$Response()` instead.
+   * To access the full response (for headers, for example), `identityRoles$Response()` instead.
    *
    * This method doesn't expect any request body.
    */
-  apiIdentityRolesGet$Plain(params?: ApiIdentityRolesGet$Plain$Params, context?: HttpContext): Observable<Array<string>> {
-    const resp = this.apiIdentityRolesGet$Plain$Response(params, context);
-    return resp.pipe(
-      map((r: StrictHttpResponse<Array<string>>): Array<string> => r.body)
-    );
-  }
-
-  /**
-   * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `apiIdentityRolesGet$Json()` instead.
-   *
-   * This method doesn't expect any request body.
-   */
-  apiIdentityRolesGet$Json$Response(params?: ApiIdentityRolesGet$Json$Params, context?: HttpContext): Observable<StrictHttpResponse<Array<string>>> {
-    const obs = apiIdentityRolesGet$Json(this.http, this.rootUrl, params, context);
-    return obs;
-  }
-
-  /**
-   * This method provides access only to the response body.
-   * To access the full response (for headers, for example), `apiIdentityRolesGet$Json$Response()` instead.
-   *
-   * This method doesn't expect any request body.
-   */
-  apiIdentityRolesGet$Json(params?: ApiIdentityRolesGet$Json$Params, context?: HttpContext): Observable<Array<string>> {
-    const resp = this.apiIdentityRolesGet$Json$Response(params, context);
+  identityRoles(params?: IdentityRoles$Params, context?: HttpContext): Observable<Array<string>> {
+    const resp = this.identityRoles$Response(params, context);
     return resp.pipe(
       map((r: StrictHttpResponse<Array<string>>): Array<string> => r.body)
     );

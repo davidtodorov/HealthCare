@@ -25,7 +25,7 @@ interface CalendarDay {
   styleUrl: './calendar.component.scss'
 })
 export class CalendarComponent implements OnInit, OnChanges {
-  @Input() doctorId: string = '';
+  @Input() doctorId: number = 0;
   @Input() dates: string[] = []; // Array of date strings in "YYYY-MM-DD" format
   @Input() selectedDate: Date | null = null;
   @Input() currentView: 'day' | 'week' | 'month' = 'day';

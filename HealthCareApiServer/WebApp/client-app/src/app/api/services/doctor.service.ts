@@ -10,23 +10,19 @@ import { BaseService } from '../base-service';
 import { ApiConfiguration } from '../api-configuration';
 import { StrictHttpResponse } from '../strict-http-response';
 
-import { apiDoctorCreatePost } from '../fn/doctor/api-doctor-create-post';
-import { ApiDoctorCreatePost$Params } from '../fn/doctor/api-doctor-create-post';
-import { apiDoctorGet$Json } from '../fn/doctor/api-doctor-get-json';
-import { ApiDoctorGet$Json$Params } from '../fn/doctor/api-doctor-get-json';
-import { apiDoctorGet$Plain } from '../fn/doctor/api-doctor-get-plain';
-import { ApiDoctorGet$Plain$Params } from '../fn/doctor/api-doctor-get-plain';
-import { apiDoctorIdDelete } from '../fn/doctor/api-doctor-id-delete';
-import { ApiDoctorIdDelete$Params } from '../fn/doctor/api-doctor-id-delete';
-import { apiDoctorIdGet$Json } from '../fn/doctor/api-doctor-id-get-json';
-import { ApiDoctorIdGet$Json$Params } from '../fn/doctor/api-doctor-id-get-json';
-import { apiDoctorIdGet$Plain } from '../fn/doctor/api-doctor-id-get-plain';
-import { ApiDoctorIdGet$Plain$Params } from '../fn/doctor/api-doctor-id-get-plain';
-import { apiDoctorIdPut } from '../fn/doctor/api-doctor-id-put';
-import { ApiDoctorIdPut$Params } from '../fn/doctor/api-doctor-id-put';
-import { apiDoctorPost } from '../fn/doctor/api-doctor-post';
-import { ApiDoctorPost$Params } from '../fn/doctor/api-doctor-post';
+import { doctorCreate } from '../fn/doctor/doctor-create';
+import { DoctorCreate$Params } from '../fn/doctor/doctor-create';
+import { doctorDelete } from '../fn/doctor/doctor-delete';
+import { DoctorDelete$Params } from '../fn/doctor/doctor-delete';
+import { doctorGet } from '../fn/doctor/doctor-get';
+import { DoctorGet$Params } from '../fn/doctor/doctor-get';
+import { doctorGetAll } from '../fn/doctor/doctor-get-all';
+import { DoctorGetAll$Params } from '../fn/doctor/doctor-get-all';
 import { DoctorModel } from '../models/doctor-model';
+import { doctorPost } from '../fn/doctor/doctor-post';
+import { DoctorPost$Params } from '../fn/doctor/doctor-post';
+import { doctorPut } from '../fn/doctor/doctor-put';
+import { DoctorPut$Params } from '../fn/doctor/doctor-put';
 
 @Injectable({ providedIn: 'root' })
 export class DoctorService extends BaseService {
@@ -34,213 +30,165 @@ export class DoctorService extends BaseService {
     super(config, http);
   }
 
-  /** Path part for operation `apiDoctorCreatePost()` */
-  static readonly ApiDoctorCreatePostPath = '/api/Doctor/Create';
+  /** Path part for operation `doctorCreate()` */
+  static readonly DoctorCreatePath = '/api/Doctor/Create';
 
   /**
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `apiDoctorCreatePost()` instead.
+   * To access only the response body, use `doctorCreate()` instead.
    *
-   * This method sends `application/*+json` and handles request body of type `application/*+json`.
+   * This method sends `application/json` and handles request body of type `application/json`.
    */
-  apiDoctorCreatePost$Response(params?: ApiDoctorCreatePost$Params, context?: HttpContext): Observable<StrictHttpResponse<void>> {
-    const obs = apiDoctorCreatePost(this.http, this.rootUrl, params, context);
+  doctorCreate$Response(params: DoctorCreate$Params, context?: HttpContext): Observable<StrictHttpResponse<Blob>> {
+    const obs = doctorCreate(this.http, this.rootUrl, params, context);
     return obs;
   }
 
   /**
    * This method provides access only to the response body.
-   * To access the full response (for headers, for example), `apiDoctorCreatePost$Response()` instead.
+   * To access the full response (for headers, for example), `doctorCreate$Response()` instead.
    *
-   * This method sends `application/*+json` and handles request body of type `application/*+json`.
+   * This method sends `application/json` and handles request body of type `application/json`.
    */
-  apiDoctorCreatePost(params?: ApiDoctorCreatePost$Params, context?: HttpContext): Observable<void> {
-    const resp = this.apiDoctorCreatePost$Response(params, context);
+  doctorCreate(params: DoctorCreate$Params, context?: HttpContext): Observable<Blob> {
+    const resp = this.doctorCreate$Response(params, context);
     return resp.pipe(
-      map((r: StrictHttpResponse<void>): void => r.body)
+      map((r: StrictHttpResponse<Blob>): Blob => r.body)
     );
   }
 
-  /** Path part for operation `apiDoctorGet()` */
-  static readonly ApiDoctorGetPath = '/api/Doctor';
+  /** Path part for operation `doctorGetAll()` */
+  static readonly DoctorGetAllPath = '/api/Doctor';
 
   /**
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `apiDoctorGet$Plain()` instead.
+   * To access only the response body, use `doctorGetAll()` instead.
    *
    * This method doesn't expect any request body.
    */
-  apiDoctorGet$Plain$Response(params?: ApiDoctorGet$Plain$Params, context?: HttpContext): Observable<StrictHttpResponse<Array<DoctorModel>>> {
-    const obs = apiDoctorGet$Plain(this.http, this.rootUrl, params, context);
+  doctorGetAll$Response(params?: DoctorGetAll$Params, context?: HttpContext): Observable<StrictHttpResponse<Array<DoctorModel>>> {
+    const obs = doctorGetAll(this.http, this.rootUrl, params, context);
     return obs;
   }
 
   /**
    * This method provides access only to the response body.
-   * To access the full response (for headers, for example), `apiDoctorGet$Plain$Response()` instead.
+   * To access the full response (for headers, for example), `doctorGetAll$Response()` instead.
    *
    * This method doesn't expect any request body.
    */
-  apiDoctorGet$Plain(params?: ApiDoctorGet$Plain$Params, context?: HttpContext): Observable<Array<DoctorModel>> {
-    const resp = this.apiDoctorGet$Plain$Response(params, context);
+  doctorGetAll(params?: DoctorGetAll$Params, context?: HttpContext): Observable<Array<DoctorModel>> {
+    const resp = this.doctorGetAll$Response(params, context);
     return resp.pipe(
       map((r: StrictHttpResponse<Array<DoctorModel>>): Array<DoctorModel> => r.body)
     );
   }
 
+  /** Path part for operation `doctorPost()` */
+  static readonly DoctorPostPath = '/api/Doctor';
+
   /**
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `apiDoctorGet$Json()` instead.
+   * To access only the response body, use `doctorPost()` instead.
    *
-   * This method doesn't expect any request body.
+   * This method sends `application/json` and handles request body of type `application/json`.
    */
-  apiDoctorGet$Json$Response(params?: ApiDoctorGet$Json$Params, context?: HttpContext): Observable<StrictHttpResponse<Array<DoctorModel>>> {
-    const obs = apiDoctorGet$Json(this.http, this.rootUrl, params, context);
+  doctorPost$Response(params: DoctorPost$Params, context?: HttpContext): Observable<StrictHttpResponse<Blob>> {
+    const obs = doctorPost(this.http, this.rootUrl, params, context);
     return obs;
   }
 
   /**
    * This method provides access only to the response body.
-   * To access the full response (for headers, for example), `apiDoctorGet$Json$Response()` instead.
+   * To access the full response (for headers, for example), `doctorPost$Response()` instead.
    *
-   * This method doesn't expect any request body.
+   * This method sends `application/json` and handles request body of type `application/json`.
    */
-  apiDoctorGet$Json(params?: ApiDoctorGet$Json$Params, context?: HttpContext): Observable<Array<DoctorModel>> {
-    const resp = this.apiDoctorGet$Json$Response(params, context);
+  doctorPost(params: DoctorPost$Params, context?: HttpContext): Observable<Blob> {
+    const resp = this.doctorPost$Response(params, context);
     return resp.pipe(
-      map((r: StrictHttpResponse<Array<DoctorModel>>): Array<DoctorModel> => r.body)
+      map((r: StrictHttpResponse<Blob>): Blob => r.body)
     );
   }
 
-  /** Path part for operation `apiDoctorPost()` */
-  static readonly ApiDoctorPostPath = '/api/Doctor';
+  /** Path part for operation `doctorGet()` */
+  static readonly DoctorGetPath = '/api/Doctor/{id}';
 
   /**
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `apiDoctorPost()` instead.
+   * To access only the response body, use `doctorGet()` instead.
    *
-   * This method sends `application/*+json` and handles request body of type `application/*+json`.
+   * This method doesn't expect any request body.
    */
-  apiDoctorPost$Response(params?: ApiDoctorPost$Params, context?: HttpContext): Observable<StrictHttpResponse<void>> {
-    const obs = apiDoctorPost(this.http, this.rootUrl, params, context);
+  doctorGet$Response(params: DoctorGet$Params, context?: HttpContext): Observable<StrictHttpResponse<DoctorModel>> {
+    const obs = doctorGet(this.http, this.rootUrl, params, context);
     return obs;
   }
 
   /**
    * This method provides access only to the response body.
-   * To access the full response (for headers, for example), `apiDoctorPost$Response()` instead.
-   *
-   * This method sends `application/*+json` and handles request body of type `application/*+json`.
-   */
-  apiDoctorPost(params?: ApiDoctorPost$Params, context?: HttpContext): Observable<void> {
-    const resp = this.apiDoctorPost$Response(params, context);
-    return resp.pipe(
-      map((r: StrictHttpResponse<void>): void => r.body)
-    );
-  }
-
-  /** Path part for operation `apiDoctorIdGet()` */
-  static readonly ApiDoctorIdGetPath = '/api/Doctor/{id}';
-
-  /**
-   * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `apiDoctorIdGet$Plain()` instead.
+   * To access the full response (for headers, for example), `doctorGet$Response()` instead.
    *
    * This method doesn't expect any request body.
    */
-  apiDoctorIdGet$Plain$Response(params: ApiDoctorIdGet$Plain$Params, context?: HttpContext): Observable<StrictHttpResponse<DoctorModel>> {
-    const obs = apiDoctorIdGet$Plain(this.http, this.rootUrl, params, context);
-    return obs;
-  }
-
-  /**
-   * This method provides access only to the response body.
-   * To access the full response (for headers, for example), `apiDoctorIdGet$Plain$Response()` instead.
-   *
-   * This method doesn't expect any request body.
-   */
-  apiDoctorIdGet$Plain(params: ApiDoctorIdGet$Plain$Params, context?: HttpContext): Observable<DoctorModel> {
-    const resp = this.apiDoctorIdGet$Plain$Response(params, context);
+  doctorGet(params: DoctorGet$Params, context?: HttpContext): Observable<DoctorModel> {
+    const resp = this.doctorGet$Response(params, context);
     return resp.pipe(
       map((r: StrictHttpResponse<DoctorModel>): DoctorModel => r.body)
     );
   }
 
+  /** Path part for operation `doctorPut()` */
+  static readonly DoctorPutPath = '/api/Doctor/{id}';
+
   /**
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `apiDoctorIdGet$Json()` instead.
+   * To access only the response body, use `doctorPut()` instead.
    *
-   * This method doesn't expect any request body.
+   * This method sends `application/json` and handles request body of type `application/json`.
    */
-  apiDoctorIdGet$Json$Response(params: ApiDoctorIdGet$Json$Params, context?: HttpContext): Observable<StrictHttpResponse<DoctorModel>> {
-    const obs = apiDoctorIdGet$Json(this.http, this.rootUrl, params, context);
+  doctorPut$Response(params: DoctorPut$Params, context?: HttpContext): Observable<StrictHttpResponse<Blob>> {
+    const obs = doctorPut(this.http, this.rootUrl, params, context);
     return obs;
   }
 
   /**
    * This method provides access only to the response body.
-   * To access the full response (for headers, for example), `apiDoctorIdGet$Json$Response()` instead.
+   * To access the full response (for headers, for example), `doctorPut$Response()` instead.
    *
-   * This method doesn't expect any request body.
+   * This method sends `application/json` and handles request body of type `application/json`.
    */
-  apiDoctorIdGet$Json(params: ApiDoctorIdGet$Json$Params, context?: HttpContext): Observable<DoctorModel> {
-    const resp = this.apiDoctorIdGet$Json$Response(params, context);
+  doctorPut(params: DoctorPut$Params, context?: HttpContext): Observable<Blob> {
+    const resp = this.doctorPut$Response(params, context);
     return resp.pipe(
-      map((r: StrictHttpResponse<DoctorModel>): DoctorModel => r.body)
+      map((r: StrictHttpResponse<Blob>): Blob => r.body)
     );
   }
 
-  /** Path part for operation `apiDoctorIdPut()` */
-  static readonly ApiDoctorIdPutPath = '/api/Doctor/{id}';
+  /** Path part for operation `doctorDelete()` */
+  static readonly DoctorDeletePath = '/api/Doctor/{id}';
 
   /**
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `apiDoctorIdPut()` instead.
+   * To access only the response body, use `doctorDelete()` instead.
    *
-   * This method sends `application/*+json` and handles request body of type `application/*+json`.
+   * This method doesn't expect any request body.
    */
-  apiDoctorIdPut$Response(params: ApiDoctorIdPut$Params, context?: HttpContext): Observable<StrictHttpResponse<void>> {
-    const obs = apiDoctorIdPut(this.http, this.rootUrl, params, context);
+  doctorDelete$Response(params: DoctorDelete$Params, context?: HttpContext): Observable<StrictHttpResponse<Blob>> {
+    const obs = doctorDelete(this.http, this.rootUrl, params, context);
     return obs;
   }
 
   /**
    * This method provides access only to the response body.
-   * To access the full response (for headers, for example), `apiDoctorIdPut$Response()` instead.
-   *
-   * This method sends `application/*+json` and handles request body of type `application/*+json`.
-   */
-  apiDoctorIdPut(params: ApiDoctorIdPut$Params, context?: HttpContext): Observable<void> {
-    const resp = this.apiDoctorIdPut$Response(params, context);
-    return resp.pipe(
-      map((r: StrictHttpResponse<void>): void => r.body)
-    );
-  }
-
-  /** Path part for operation `apiDoctorIdDelete()` */
-  static readonly ApiDoctorIdDeletePath = '/api/Doctor/{id}';
-
-  /**
-   * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `apiDoctorIdDelete()` instead.
+   * To access the full response (for headers, for example), `doctorDelete$Response()` instead.
    *
    * This method doesn't expect any request body.
    */
-  apiDoctorIdDelete$Response(params: ApiDoctorIdDelete$Params, context?: HttpContext): Observable<StrictHttpResponse<void>> {
-    const obs = apiDoctorIdDelete(this.http, this.rootUrl, params, context);
-    return obs;
-  }
-
-  /**
-   * This method provides access only to the response body.
-   * To access the full response (for headers, for example), `apiDoctorIdDelete$Response()` instead.
-   *
-   * This method doesn't expect any request body.
-   */
-  apiDoctorIdDelete(params: ApiDoctorIdDelete$Params, context?: HttpContext): Observable<void> {
-    const resp = this.apiDoctorIdDelete$Response(params, context);
+  doctorDelete(params: DoctorDelete$Params, context?: HttpContext): Observable<Blob> {
+    const resp = this.doctorDelete$Response(params, context);
     return resp.pipe(
-      map((r: StrictHttpResponse<void>): void => r.body)
+      map((r: StrictHttpResponse<Blob>): Blob => r.body)
     );
   }
 

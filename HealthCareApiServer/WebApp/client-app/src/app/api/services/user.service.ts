@@ -10,21 +10,17 @@ import { BaseService } from '../base-service';
 import { ApiConfiguration } from '../api-configuration';
 import { StrictHttpResponse } from '../strict-http-response';
 
-import { apiUserGet$Json } from '../fn/user/api-user-get-json';
-import { ApiUserGet$Json$Params } from '../fn/user/api-user-get-json';
-import { apiUserGet$Plain } from '../fn/user/api-user-get-plain';
-import { ApiUserGet$Plain$Params } from '../fn/user/api-user-get-plain';
-import { apiUserIdDelete } from '../fn/user/api-user-id-delete';
-import { ApiUserIdDelete$Params } from '../fn/user/api-user-id-delete';
-import { apiUserIdGet$Json } from '../fn/user/api-user-id-get-json';
-import { ApiUserIdGet$Json$Params } from '../fn/user/api-user-id-get-json';
-import { apiUserIdGet$Plain } from '../fn/user/api-user-id-get-plain';
-import { ApiUserIdGet$Plain$Params } from '../fn/user/api-user-id-get-plain';
-import { apiUserIdPut } from '../fn/user/api-user-id-put';
-import { ApiUserIdPut$Params } from '../fn/user/api-user-id-put';
-import { apiUserPost } from '../fn/user/api-user-post';
-import { ApiUserPost$Params } from '../fn/user/api-user-post';
+import { userDelete } from '../fn/user/user-delete';
+import { UserDelete$Params } from '../fn/user/user-delete';
+import { userGet } from '../fn/user/user-get';
+import { UserGet$Params } from '../fn/user/user-get';
+import { userGetAll } from '../fn/user/user-get-all';
+import { UserGetAll$Params } from '../fn/user/user-get-all';
 import { UserModel } from '../models/user-model';
+import { userPost } from '../fn/user/user-post';
+import { UserPost$Params } from '../fn/user/user-post';
+import { userPut } from '../fn/user/user-put';
+import { UserPut$Params } from '../fn/user/user-put';
 
 @Injectable({ providedIn: 'root' })
 export class UserService extends BaseService {
@@ -32,186 +28,138 @@ export class UserService extends BaseService {
     super(config, http);
   }
 
-  /** Path part for operation `apiUserGet()` */
-  static readonly ApiUserGetPath = '/api/User';
+  /** Path part for operation `userGetAll()` */
+  static readonly UserGetAllPath = '/api/User';
 
   /**
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `apiUserGet$Plain()` instead.
+   * To access only the response body, use `userGetAll()` instead.
    *
    * This method doesn't expect any request body.
    */
-  apiUserGet$Plain$Response(params?: ApiUserGet$Plain$Params, context?: HttpContext): Observable<StrictHttpResponse<Array<UserModel>>> {
-    const obs = apiUserGet$Plain(this.http, this.rootUrl, params, context);
+  userGetAll$Response(params?: UserGetAll$Params, context?: HttpContext): Observable<StrictHttpResponse<Array<UserModel>>> {
+    const obs = userGetAll(this.http, this.rootUrl, params, context);
     return obs;
   }
 
   /**
    * This method provides access only to the response body.
-   * To access the full response (for headers, for example), `apiUserGet$Plain$Response()` instead.
+   * To access the full response (for headers, for example), `userGetAll$Response()` instead.
    *
    * This method doesn't expect any request body.
    */
-  apiUserGet$Plain(params?: ApiUserGet$Plain$Params, context?: HttpContext): Observable<Array<UserModel>> {
-    const resp = this.apiUserGet$Plain$Response(params, context);
+  userGetAll(params?: UserGetAll$Params, context?: HttpContext): Observable<Array<UserModel>> {
+    const resp = this.userGetAll$Response(params, context);
     return resp.pipe(
       map((r: StrictHttpResponse<Array<UserModel>>): Array<UserModel> => r.body)
     );
   }
 
+  /** Path part for operation `userPost()` */
+  static readonly UserPostPath = '/api/User';
+
   /**
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `apiUserGet$Json()` instead.
+   * To access only the response body, use `userPost()` instead.
    *
-   * This method doesn't expect any request body.
+   * This method sends `application/json` and handles request body of type `application/json`.
    */
-  apiUserGet$Json$Response(params?: ApiUserGet$Json$Params, context?: HttpContext): Observable<StrictHttpResponse<Array<UserModel>>> {
-    const obs = apiUserGet$Json(this.http, this.rootUrl, params, context);
+  userPost$Response(params: UserPost$Params, context?: HttpContext): Observable<StrictHttpResponse<Blob>> {
+    const obs = userPost(this.http, this.rootUrl, params, context);
     return obs;
   }
 
   /**
    * This method provides access only to the response body.
-   * To access the full response (for headers, for example), `apiUserGet$Json$Response()` instead.
+   * To access the full response (for headers, for example), `userPost$Response()` instead.
    *
-   * This method doesn't expect any request body.
+   * This method sends `application/json` and handles request body of type `application/json`.
    */
-  apiUserGet$Json(params?: ApiUserGet$Json$Params, context?: HttpContext): Observable<Array<UserModel>> {
-    const resp = this.apiUserGet$Json$Response(params, context);
+  userPost(params: UserPost$Params, context?: HttpContext): Observable<Blob> {
+    const resp = this.userPost$Response(params, context);
     return resp.pipe(
-      map((r: StrictHttpResponse<Array<UserModel>>): Array<UserModel> => r.body)
+      map((r: StrictHttpResponse<Blob>): Blob => r.body)
     );
   }
 
-  /** Path part for operation `apiUserPost()` */
-  static readonly ApiUserPostPath = '/api/User';
+  /** Path part for operation `userGet()` */
+  static readonly UserGetPath = '/api/User/{id}';
 
   /**
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `apiUserPost()` instead.
+   * To access only the response body, use `userGet()` instead.
    *
-   * This method sends `application/*+json` and handles request body of type `application/*+json`.
+   * This method doesn't expect any request body.
    */
-  apiUserPost$Response(params?: ApiUserPost$Params, context?: HttpContext): Observable<StrictHttpResponse<void>> {
-    const obs = apiUserPost(this.http, this.rootUrl, params, context);
+  userGet$Response(params: UserGet$Params, context?: HttpContext): Observable<StrictHttpResponse<UserModel>> {
+    const obs = userGet(this.http, this.rootUrl, params, context);
     return obs;
   }
 
   /**
    * This method provides access only to the response body.
-   * To access the full response (for headers, for example), `apiUserPost$Response()` instead.
-   *
-   * This method sends `application/*+json` and handles request body of type `application/*+json`.
-   */
-  apiUserPost(params?: ApiUserPost$Params, context?: HttpContext): Observable<void> {
-    const resp = this.apiUserPost$Response(params, context);
-    return resp.pipe(
-      map((r: StrictHttpResponse<void>): void => r.body)
-    );
-  }
-
-  /** Path part for operation `apiUserIdGet()` */
-  static readonly ApiUserIdGetPath = '/api/User/{id}';
-
-  /**
-   * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `apiUserIdGet$Plain()` instead.
+   * To access the full response (for headers, for example), `userGet$Response()` instead.
    *
    * This method doesn't expect any request body.
    */
-  apiUserIdGet$Plain$Response(params: ApiUserIdGet$Plain$Params, context?: HttpContext): Observable<StrictHttpResponse<UserModel>> {
-    const obs = apiUserIdGet$Plain(this.http, this.rootUrl, params, context);
-    return obs;
-  }
-
-  /**
-   * This method provides access only to the response body.
-   * To access the full response (for headers, for example), `apiUserIdGet$Plain$Response()` instead.
-   *
-   * This method doesn't expect any request body.
-   */
-  apiUserIdGet$Plain(params: ApiUserIdGet$Plain$Params, context?: HttpContext): Observable<UserModel> {
-    const resp = this.apiUserIdGet$Plain$Response(params, context);
+  userGet(params: UserGet$Params, context?: HttpContext): Observable<UserModel> {
+    const resp = this.userGet$Response(params, context);
     return resp.pipe(
       map((r: StrictHttpResponse<UserModel>): UserModel => r.body)
     );
   }
 
+  /** Path part for operation `userPut()` */
+  static readonly UserPutPath = '/api/User/{id}';
+
   /**
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `apiUserIdGet$Json()` instead.
+   * To access only the response body, use `userPut()` instead.
    *
-   * This method doesn't expect any request body.
+   * This method sends `application/json` and handles request body of type `application/json`.
    */
-  apiUserIdGet$Json$Response(params: ApiUserIdGet$Json$Params, context?: HttpContext): Observable<StrictHttpResponse<UserModel>> {
-    const obs = apiUserIdGet$Json(this.http, this.rootUrl, params, context);
+  userPut$Response(params: UserPut$Params, context?: HttpContext): Observable<StrictHttpResponse<Blob>> {
+    const obs = userPut(this.http, this.rootUrl, params, context);
     return obs;
   }
 
   /**
    * This method provides access only to the response body.
-   * To access the full response (for headers, for example), `apiUserIdGet$Json$Response()` instead.
+   * To access the full response (for headers, for example), `userPut$Response()` instead.
    *
-   * This method doesn't expect any request body.
+   * This method sends `application/json` and handles request body of type `application/json`.
    */
-  apiUserIdGet$Json(params: ApiUserIdGet$Json$Params, context?: HttpContext): Observable<UserModel> {
-    const resp = this.apiUserIdGet$Json$Response(params, context);
+  userPut(params: UserPut$Params, context?: HttpContext): Observable<Blob> {
+    const resp = this.userPut$Response(params, context);
     return resp.pipe(
-      map((r: StrictHttpResponse<UserModel>): UserModel => r.body)
+      map((r: StrictHttpResponse<Blob>): Blob => r.body)
     );
   }
 
-  /** Path part for operation `apiUserIdPut()` */
-  static readonly ApiUserIdPutPath = '/api/User/{id}';
+  /** Path part for operation `userDelete()` */
+  static readonly UserDeletePath = '/api/User/{id}';
 
   /**
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `apiUserIdPut()` instead.
+   * To access only the response body, use `userDelete()` instead.
    *
-   * This method sends `application/*+json` and handles request body of type `application/*+json`.
+   * This method doesn't expect any request body.
    */
-  apiUserIdPut$Response(params: ApiUserIdPut$Params, context?: HttpContext): Observable<StrictHttpResponse<void>> {
-    const obs = apiUserIdPut(this.http, this.rootUrl, params, context);
+  userDelete$Response(params: UserDelete$Params, context?: HttpContext): Observable<StrictHttpResponse<Blob>> {
+    const obs = userDelete(this.http, this.rootUrl, params, context);
     return obs;
   }
 
   /**
    * This method provides access only to the response body.
-   * To access the full response (for headers, for example), `apiUserIdPut$Response()` instead.
-   *
-   * This method sends `application/*+json` and handles request body of type `application/*+json`.
-   */
-  apiUserIdPut(params: ApiUserIdPut$Params, context?: HttpContext): Observable<void> {
-    const resp = this.apiUserIdPut$Response(params, context);
-    return resp.pipe(
-      map((r: StrictHttpResponse<void>): void => r.body)
-    );
-  }
-
-  /** Path part for operation `apiUserIdDelete()` */
-  static readonly ApiUserIdDeletePath = '/api/User/{id}';
-
-  /**
-   * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `apiUserIdDelete()` instead.
+   * To access the full response (for headers, for example), `userDelete$Response()` instead.
    *
    * This method doesn't expect any request body.
    */
-  apiUserIdDelete$Response(params: ApiUserIdDelete$Params, context?: HttpContext): Observable<StrictHttpResponse<void>> {
-    const obs = apiUserIdDelete(this.http, this.rootUrl, params, context);
-    return obs;
-  }
-
-  /**
-   * This method provides access only to the response body.
-   * To access the full response (for headers, for example), `apiUserIdDelete$Response()` instead.
-   *
-   * This method doesn't expect any request body.
-   */
-  apiUserIdDelete(params: ApiUserIdDelete$Params, context?: HttpContext): Observable<void> {
-    const resp = this.apiUserIdDelete$Response(params, context);
+  userDelete(params: UserDelete$Params, context?: HttpContext): Observable<Blob> {
+    const resp = this.userDelete$Response(params, context);
     return resp.pipe(
-      map((r: StrictHttpResponse<void>): void => r.body)
+      map((r: StrictHttpResponse<Blob>): Blob => r.body)
     );
   }
 

@@ -10,7 +10,7 @@ namespace HealthCare.Application.Models.Appointments
 {
     public class AppointmentModel : EntityModel
     {
-        public DateTimeOffset DateTime { get; set; }
+        public DateTime DateTime { get; set; }
         public string Reason { get; set; }
         public AppointmentStatus Status { get; set; }
         public int PatientId { get; set; }

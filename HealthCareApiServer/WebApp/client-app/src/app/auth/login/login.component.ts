@@ -55,7 +55,7 @@ export class LoginComponent implements OnInit {
 
     const formData = this.loginForm.value;
 
-    this.identityService.apiIdentityLoginPost({ body: { 
+    this.identityService.identityLogin({ body: { 
       username: formData.username, 
       password: formData.password 
     }}).subscribe({

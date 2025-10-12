@@ -10,8 +10,8 @@ import { BaseService } from '../base-service';
 import { ApiConfiguration } from '../api-configuration';
 import { StrictHttpResponse } from '../strict-http-response';
 
-import { apiHomeGet } from '../fn/home/api-home-get';
-import { ApiHomeGet$Params } from '../fn/home/api-home-get';
+import { homeIndex } from '../fn/home/home-index';
+import { HomeIndex$Params } from '../fn/home/home-index';
 
 @Injectable({ providedIn: 'root' })
 export class HomeService extends BaseService {
@@ -19,30 +19,30 @@ export class HomeService extends BaseService {
     super(config, http);
   }
 
-  /** Path part for operation `apiHomeGet()` */
-  static readonly ApiHomeGetPath = '/api/Home';
+  /** Path part for operation `homeIndex()` */
+  static readonly HomeIndexPath = '/api/Home';
 
   /**
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `apiHomeGet()` instead.
+   * To access only the response body, use `homeIndex()` instead.
    *
    * This method doesn't expect any request body.
    */
-  apiHomeGet$Response(params?: ApiHomeGet$Params, context?: HttpContext): Observable<StrictHttpResponse<void>> {
-    const obs = apiHomeGet(this.http, this.rootUrl, params, context);
+  homeIndex$Response(params?: HomeIndex$Params, context?: HttpContext): Observable<StrictHttpResponse<Blob>> {
+    const obs = homeIndex(this.http, this.rootUrl, params, context);
     return obs;
   }
 
   /**
    * This method provides access only to the response body.
-   * To access the full response (for headers, for example), `apiHomeGet$Response()` instead.
+   * To access the full response (for headers, for example), `homeIndex$Response()` instead.
    *
    * This method doesn't expect any request body.
    */
-  apiHomeGet(params?: ApiHomeGet$Params, context?: HttpContext): Observable<void> {
-    const resp = this.apiHomeGet$Response(params, context);
+  homeIndex(params?: HomeIndex$Params, context?: HttpContext): Observable<Blob> {
+    const resp = this.homeIndex$Response(params, context);
     return resp.pipe(
-      map((r: StrictHttpResponse<void>): void => r.body)
+      map((r: StrictHttpResponse<Blob>): Blob => r.body)
     );
   }
 
