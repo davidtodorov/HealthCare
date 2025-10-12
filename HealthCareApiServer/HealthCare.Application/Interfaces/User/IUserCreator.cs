@@ -1,4 +1,4 @@
-﻿using HealthCare.Application.Models.User;
+﻿using HealthCare.Application.Models.Users;
 using Microsoft.AspNetCore.Identity;
 using System;
 using System.Collections.Generic;

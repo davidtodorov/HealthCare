@@ -1,5 +1,5 @@
 ﻿using AutoMapper;
-using HealthCare.Application.Interfaces.Doctor;
+using HealthCare.Application.Interfaces.Doctors;
 using HealthCare.Application.Models.Doctor;
 using HealthCare.Core;
 using HealthCare.Core.Entities;
@@ -13,7 +13,7 @@ using System.Threading.Tasks;
 
 namespace WebApp.Controllers
 {
-    public class DoctorController : RestController<Doctor, DoctorModel>
+    public class DoctorController : RestController<Doctor, DoctorModel, DoctorModel>
     {
         private IDoctorCreator doctorCreator;
 

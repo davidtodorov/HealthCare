@@ -1,4 +1,4 @@
-﻿using HealthCare.Application.Models.User;
+﻿using HealthCare.Application.Models.Users;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;

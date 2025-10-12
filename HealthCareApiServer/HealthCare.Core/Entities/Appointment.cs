@@ -16,16 +16,17 @@ namespace HealthCare.Core.Entities
         public AppointmentStatus Status { get; set; }
         public List<string> Notes { get; set; }
 
+
         [ForeignKey(nameof(Patient))]
         public int PatientId { get; set; }
         public virtual User Patient { get; set; }
 
+
         [ForeignKey(nameof(Doctor))]
         public int DoctorId { get; set; }
-        public virtual User Doctor { get; set; }
+        public virtual Doctor Doctor { get; set; }
 
-        [ForeignKey(nameof(Prescription))]
-        public int PrescriptionId { get; set; }
-        public virtual Prescription Prescription { get; set; }
+
+        public virtual List<Prescription> Prescriptions { get; set; } = new List<Prescription>();
     }
 }

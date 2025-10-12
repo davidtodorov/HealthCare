@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace HealthCare.Application.Interfaces.Doctor
+namespace HealthCare.Application.Interfaces.Doctors
 {
     public interface IDoctorCreator
     {

@@ -12,6 +12,7 @@ namespace HealthCare.Infrastructure
     {
         IRepository<Hospital> HospitalRepository { get; set; }
         IRepository<Doctor> DoctorRepository { get; set; }
+        IRepository<Appointment> AppointmentRepository { get; set; }
         IRepository<User> UserRepository { get; set; }
         void SaveChanges();
         Task SaveChangesAsync();

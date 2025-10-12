@@ -2,11 +2,11 @@
 using HealthCare.Infrastructure;
 using AutoMapper;
 using HealthCare.Application.Models.Hospital;
-using HealthCare.Application.Models.User;
+using HealthCare.Application.Models.Users;
 
 namespace WebApp.Controllers
 {
-    public class UserController : RestController<User, UserModel>
+    public class UserController : RestController<User, UserModel, UserModel>
     {
         public UserController(IUnitOfWork unitOfWork, IMapper mapper)
             : base(unitOfWork, mapper)

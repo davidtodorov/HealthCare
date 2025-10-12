@@ -1,4 +1,4 @@
-﻿namespace HealthCare.Application.Models.User
+﻿namespace HealthCare.Application.Models.Users
 {
     public class UserModel : EntityModel
     {

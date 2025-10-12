@@ -12,7 +12,7 @@ using System.Threading.Tasks;
 
 namespace WebApp.Controllers
 {
-    public class HospitalController : RestController<Hospital, HospitalModel>
+    public class HospitalController : RestController<Hospital, HospitalModel, HospitalModel>
     {
         public HospitalController(IUnitOfWork unitOfWork, IMapper mapper)
             : base(unitOfWork, mapper)

@@ -1,4 +1,5 @@
 ﻿using HealthCare.Core.Base;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
 namespace HealthCare.Core.Entities
@@ -14,5 +15,7 @@ namespace HealthCare.Core.Entities
         [Required]
         public virtual int DepartmentId { get; set; }
         public virtual Department Department { get; set; }
+
+        public virtual List<Appointment> Appointments { get; set; } = new List<Appointment>();
     }
 }

@@ -5,6 +5,9 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using NSwag;
+using NSwag.Generation.Processors.Security;
+using System.Linq;
 using WebApp.Extensions;
 
 namespace WebApp
@@ -39,7 +42,22 @@ namespace WebApp
                 .AddControllers();
 
             services.AddEndpointsApiExplorer();
-            services.AddSwaggerGen();
+            services.AddOpenApiDocument(config =>
+            {
+                config.Title = "My API";
+                config.Version = "v1";
+
+                // Optional, but useful:
+                config.AddSecurity("JWT", Enumerable.Empty<string>(), new OpenApiSecurityScheme
+                {
+                    Type = OpenApiSecuritySchemeType.Http,
+                    Scheme = "bearer",
+                    BearerFormat = "JWT",
+                    Description = "Type into the textbox: Bearer {your JWT token}."
+                });
+
+                config.OperationProcessors.Add(new AspNetCoreOperationSecurityScopeProcessor("JWT"));
+            });
 
             // In production, the Vue files will be served from this directory
             services.AddSpaStaticFiles(configuration =>
@@ -70,16 +88,12 @@ namespace WebApp
             if (env.IsDevelopment())
             {
                 app.UseCors("CorsApi");
+                app.UseOpenApi();
+                app.UseSwaggerUi();
             }
+
             app.UseAuthentication();
             app.UseAuthorization();
-
-            app.UseSwagger();
-            app.UseSwaggerUI(c =>
-            {
-                c.SwaggerEndpoint("/swagger/v1/swagger.json", "WebApp v1");
-                c.RoutePrefix = "swagger"; // so UI is at /swagger
-            });
 
             app.UseEndpoints(endpoints =>
             {

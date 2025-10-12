@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using HealthCare.Application.Interfaces.Doctors;
+using HealthCare.Application.Interfaces.Patients;
 using HealthCare.Application.Interfaces.User;
 using HealthCare.Application.Models.Doctor;
 using HealthCare.Application.Models.Users;
@@ -13,52 +14,42 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace HealthCare.Application.Services.Doctors
+namespace HealthCare.Application.Services.Users
 {
-    public class DoctorCreator : IDoctorCreator
+    public class PatientCreator : IPatientCreator
     {
         private IUserCreator userCreator;
-        private UserManager<Core.Entities.User> userManager;
+        private UserManager<User> userManager;
         private IUnitOfWork unitOfWork;
         private IMapper mapper;
 
-        public DoctorCreator(IUserCreator userCreator, UserManager<Core.Entities.User> userManager, IUnitOfWork unitOfWork, IMapper mapper)
+        public PatientCreator(IUserCreator userCreator, UserManager<User> userManager, IUnitOfWork unitOfWork, IMapper mapper)
         {
             this.userCreator = userCreator;
             this.userManager = userManager;
             this.unitOfWork = unitOfWork;
             this.mapper = mapper;
         }
-        public async Task<Result> CreateDoctor(CreateDoctorModel model)
+        public async Task<Result> CreatePatient(RegisterUserRequestModel model)
         {
             using (var transaction = await unitOfWork.BeginTransactionAsync())
             {
-                var registerUserModel = new RegisterUserRequestModel()
-                {
-                    FirstName = model.FirstName,
-                    LastName = model.LastName,
-                    Email = model.Email,
-                    Username = model.Username,
-                    Password = model.Password
-                };
-                var result = await userCreator.CreateUserAsync(registerUserModel);
+                var result = await userCreator.CreateUserAsync(model);
                 if (!result.Result.Succeeded)
                 {
                     return result.Result.Errors.FirstOrDefault()?.Description ?? "User creation failed";
                 }
 
-                await userManager.AddToRoleAsync(result.User, RoleConstants.DOCTOR_ROLE);
+                await userManager.AddToRoleAsync(result.User, RoleConstants.PATIENT_ROLE);
 
-                var doctor = new Doctor()
+                var patient = new Patient()
                 {
-                    UserId = result.User.Id,
-                    DepartmentId = model.DepartmentId,
-                    HospitalId = model.HospitalId
+                    UserId = result.User.Id
                 };
 
                 try
                 {
-                    unitOfWork.DoctorRepository.Insert(doctor);
+                    //unitOfWork.PatientRepository.Insert(patient);
                     await unitOfWork.SaveChangesAsync();
                     await transaction.CommitAsync();
                     return true;

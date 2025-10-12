@@ -1,5 +1,5 @@
 ﻿using HealthCare.Application.Interfaces.User;
-using HealthCare.Application.Models.User;
+using HealthCare.Application.Models.Users;
 using HealthCare.Core.Entities;
 using Microsoft.AspNetCore.Identity;
 using System;

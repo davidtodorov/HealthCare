@@ -12,9 +12,10 @@ using System.Threading.Tasks;
 
 namespace WebApp.Controllers
 {
-    public abstract class RestController<TEntity, TModel> : ApiController
+    public abstract class RestController<TEntity, TModel, TModelUpdate> : ApiController
         where TEntity : IEntity
         where TModel : class
+        where TModelUpdate : class
     {
         public RestController(IUnitOfWork unitOfWork, IMapper mapper)
         {

@@ -12,8 +12,8 @@ using System.Collections.Generic;
 using HealthCare.Core;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using System.Linq;
-using HealthCare.Application.Models.User;
 using Microsoft.AspNetCore.Authorization;
+using HealthCare.Application.Models.Users;
 
 namespace WebApp.Controllers
 {

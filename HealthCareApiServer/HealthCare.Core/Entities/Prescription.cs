@@ -19,9 +19,11 @@ namespace HealthCare.Core.Entities
         public int UserId { get; set; }
         public virtual User Patient { get; set; }
 
+
         [ForeignKey(nameof(Appointment))]
         public int AppointmentId { get; set; }
         public virtual Appointment Appointment{ get; set; }
+
 
         public DateTime StartDate { get; set; }
         public int DurationInDays { get; set; }
