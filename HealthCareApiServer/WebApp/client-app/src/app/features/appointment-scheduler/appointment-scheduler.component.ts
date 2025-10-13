@@ -3,7 +3,6 @@ import { CommonModule } from '@angular/common';
 import { Component, ViewChild } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { CalendarComponent } from '../../common/calendar/calendar.component';
-import { Appointment } from '../../doctor-scheduler/doctor-scheduler.component';
 import { generateTimeSlots } from '../../helpers/dateHelper';
 import moment from 'moment';
 import { AppointmentService, DoctorService } from '../../api/services';
@@ -16,6 +15,7 @@ import { AppointmentModel, AppointmentStatus, DoctorModel } from '../../api/mode
 })
 export class AppointmentSchedulerComponent {
   @ViewChild(CalendarComponent) calendarComponent!: CalendarComponent;
+  AppointmentStatus = AppointmentStatus;
 
   doctorList: DoctorModel[] = [];
   dates: string[] = [];
@@ -185,18 +185,24 @@ export class AppointmentSchedulerComponent {
     const doctor = this.selectedDoctor;
     const d = this.selectedDate;
     const t = this.selectedTime;
-    if (!(doctor && d && t)) return;
-    let date = moment(d).hour(moment.duration(t).hours()).minute(moment.duration(t).minutes()).utc().toDate();
-    this.appointmentService.appointmentBook({ body: { doctorId: doctor.id, dateTime: moment.utc(date).format() } }).subscribe({
+    if (!(doctor && doctor.id !== undefined && d && t)) return;
+    let date = moment(d).utc().hour(moment.duration(t).hours()).minute(moment.duration(t).minutes()).format();
+    this.appointmentService.appointmentBook({
+      body: {
+        doctorId: doctor.id,
+        dateTime: date,
+      }
+    }).subscribe({
       next: (result) => {
         this.appointmentService.appointmentGetAll().subscribe(result => {
           this.scheduledAppointments = result;
           this.availabilitySlots = this.findFreeSlotsForDoctor(this.scheduledAppointments, doctor.id as any, '08:00', '18:00', 30);
+          this.bookedOk = true;
+          this.selectedTime = null;
         });
       }
     });
-    this.bookedOk = true;
-    this.selectedTime = null;
+    
   }
 
   // --- Helpers ---

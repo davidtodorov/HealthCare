@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using HealthCare.Application.AutoMapper;
 using HealthCare.Application.Interfaces.Doctors;
+using HealthCare.Application.Interfaces.Patients;
 using HealthCare.Application.Interfaces.User;
 using HealthCare.Application.Services.Doctors;
 using HealthCare.Application.Services.Users;
@@ -63,7 +64,8 @@ namespace WebApp.Extensions
             return services
                     .AddScoped<IUnitOfWork, UnitOfWork>()
                     .AddTransient<IUserCreator, UserCreator>()
-                    .AddTransient<IDoctorCreator, DoctorCreator>();
+                    .AddTransient<IDoctorCreator, DoctorCreator>()
+                    .AddTransient<IPatientCreator, PatientCreator>();
                     
         }
 

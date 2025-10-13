@@ -3,6 +3,7 @@ using HealthCare.Application.Models;
 using HealthCare.Application.Models.Appointments;
 using HealthCare.Application.Models.Doctor;
 using HealthCare.Application.Models.Hospital;
+using HealthCare.Application.Models.Patients;
 using HealthCare.Application.Models.Users;
 using HealthCare.Core.Entities;
 using System;
@@ -28,9 +29,22 @@ namespace HealthCare.Application.AutoMapper
                 .ForMember(am => am.Reason, opts => opts.MapFrom(a => a.Reason))
                 .ForMember(am => am.Status, opts => opts.MapFrom(a => a.Status))
                 .ForMember(am => am.PatientId, opts => opts.MapFrom(a => a.PatientId))
-                .ForMember(am => am.DoctorId, opts => opts.MapFrom(a => a.DoctorId)).ReverseMap();
+                .ForMember(am => am.DoctorId, opts => opts.MapFrom(a => a.DoctorId));
+
+            CreateMap<Appointment, AppointmentModel>()
+                .ForMember(am => am.DateTime, opts => opts.MapFrom(a => a.DateTime))
+                .ForMember(am => am.Reason, opts => opts.MapFrom(a => a.Reason))
+                .ForMember(am => am.Status, opts => opts.MapFrom(a => a.Status))
+                .ForMember(am => am.PatientId, opts => opts.MapFrom(a => a.PatientId))
+                .ForMember(am => am.DoctorId, opts => opts.MapFrom(a => a.DoctorId));
+
+            CreateMap<Appointment, CreateAppointmentModel>().ReverseMap();
 
             CreateMap<Department, DepartmentModel>();
+            CreateMap<Patient, PatientModel>()
+                .ForMember(am => am.Id, opts => opts.MapFrom(a => a.Id))
+                .ForMember(am => am.FirstName, opts => opts.MapFrom(a => a.User.FirstName))
+                .ForMember(am => am.LastName, opts => opts.MapFrom(a => a.User.LastName));
         }
     }
 }

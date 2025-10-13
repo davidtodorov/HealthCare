@@ -10,6 +10,7 @@ import { BaseService } from '../base-service';
 import { ApiConfiguration } from '../api-configuration';
 import { StrictHttpResponse } from '../strict-http-response';
 
+import { AppointmentModel } from '../models/appointment-model';
 import { doctorCreate } from '../fn/doctor/doctor-create';
 import { DoctorCreate$Params } from '../fn/doctor/doctor-create';
 import { doctorDelete } from '../fn/doctor/doctor-delete';
@@ -18,6 +19,8 @@ import { doctorGet } from '../fn/doctor/doctor-get';
 import { DoctorGet$Params } from '../fn/doctor/doctor-get';
 import { doctorGetAll } from '../fn/doctor/doctor-get-all';
 import { DoctorGetAll$Params } from '../fn/doctor/doctor-get-all';
+import { doctorGetAppointmentsForDoctor } from '../fn/doctor/doctor-get-appointments-for-doctor';
+import { DoctorGetAppointmentsForDoctor$Params } from '../fn/doctor/doctor-get-appointments-for-doctor';
 import { DoctorModel } from '../models/doctor-model';
 import { doctorPost } from '../fn/doctor/doctor-post';
 import { DoctorPost$Params } from '../fn/doctor/doctor-post';
@@ -54,6 +57,33 @@ export class DoctorService extends BaseService {
     const resp = this.doctorCreate$Response(params, context);
     return resp.pipe(
       map((r: StrictHttpResponse<Blob>): Blob => r.body)
+    );
+  }
+
+  /** Path part for operation `doctorGetAppointmentsForDoctor()` */
+  static readonly DoctorGetAppointmentsForDoctorPath = '/api/Doctor/GetAppointmentsForDoctor';
+
+  /**
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `doctorGetAppointmentsForDoctor()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  doctorGetAppointmentsForDoctor$Response(params?: DoctorGetAppointmentsForDoctor$Params, context?: HttpContext): Observable<StrictHttpResponse<Array<AppointmentModel>>> {
+    const obs = doctorGetAppointmentsForDoctor(this.http, this.rootUrl, params, context);
+    return obs;
+  }
+
+  /**
+   * This method provides access only to the response body.
+   * To access the full response (for headers, for example), `doctorGetAppointmentsForDoctor$Response()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  doctorGetAppointmentsForDoctor(params?: DoctorGetAppointmentsForDoctor$Params, context?: HttpContext): Observable<Array<AppointmentModel>> {
+    const resp = this.doctorGetAppointmentsForDoctor$Response(params, context);
+    return resp.pipe(
+      map((r: StrictHttpResponse<Array<AppointmentModel>>): Array<AppointmentModel> => r.body)
     );
   }
 

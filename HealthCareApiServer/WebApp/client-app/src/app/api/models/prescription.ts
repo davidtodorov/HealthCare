@@ -3,12 +3,12 @@
 
 import { Appointment } from '../models/appointment';
 import { Entity } from '../models/entity';
-import { User } from '../models/user';
+import { Patient } from '../models/patient';
 export type Prescription = Entity & {
 'name': string;
 'dose'?: string | null;
-'userId'?: number;
-'patient'?: User | null;
+'patientId'?: number;
+'patient'?: Patient | null;
 'appointmentId'?: number;
 'appointment'?: Appointment | null;
 'startDate'?: string;

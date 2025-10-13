@@ -25,6 +25,8 @@ export type { DepartmentDelete$Params } from './fn/department/department-delete'
 export { departmentDelete } from './fn/department/department-delete';
 export type { DoctorCreate$Params } from './fn/doctor/doctor-create';
 export { doctorCreate } from './fn/doctor/doctor-create';
+export type { DoctorGetAppointmentsForDoctor$Params } from './fn/doctor/doctor-get-appointments-for-doctor';
+export { doctorGetAppointmentsForDoctor } from './fn/doctor/doctor-get-appointments-for-doctor';
 export type { DoctorGetAll$Params } from './fn/doctor/doctor-get-all';
 export { doctorGetAll } from './fn/doctor/doctor-get-all';
 export type { DoctorPost$Params } from './fn/doctor/doctor-post';

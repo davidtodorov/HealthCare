@@ -3,10 +3,12 @@
 
 import { AppointmentStatus } from '../models/appointment-status';
 import { EntityModel } from '../models/entity-model';
+import { PatientModel } from '../models/patient-model';
 export type AppointmentModel = EntityModel & {
-'dateTime'?: string;
+'dateTime': string;
 'reason'?: string | null;
-'status'?: AppointmentStatus;
-'patientId'?: number;
-'doctorId'?: number;
+'status': AppointmentStatus;
+'patientId': number;
+'patient'?: PatientModel | null;
+'doctorId': number;
 };

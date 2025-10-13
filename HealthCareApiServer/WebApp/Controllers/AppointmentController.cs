@@ -16,7 +16,7 @@ using WebApp.Extensions;
 
 namespace WebApp.Controllers
 {
-    public class AppointmentController : RestController<Appointment, AppointmentModel, AppointmentModel>
+    public class AppointmentController : RestController<Appointment, AppointmentModel, CreateAppointmentModel>
     {
         private readonly IMapper mapper;
 
@@ -26,9 +26,11 @@ namespace WebApp.Controllers
         }
 
         [HttpPost(nameof(Book))]
-        public async Task<ActionResult> Book(AppointmentModel requestModel)
+        public async Task<ActionResult> Book(CreateAppointmentModel requestModel)
         {
-            requestModel.PatientId = Int32.Parse(User.GetId());
+            requestModel.PatientId = (await this.unitOfWork.PatientRepository
+                .GetAllAsync(x => x.UserId == Int32.Parse(User.GetId())))
+                .FirstOrDefault().Id;
             var entity = new Appointment();
             this.mapper.Map(requestModel, entity);
             this.unitOfWork.AppointmentRepository.Insert(entity);

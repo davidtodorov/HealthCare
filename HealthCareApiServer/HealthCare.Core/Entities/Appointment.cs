@@ -19,7 +19,7 @@ namespace HealthCare.Core.Entities
 
         [ForeignKey(nameof(Patient))]
         public int PatientId { get; set; }
-        public virtual User Patient { get; set; }
+        public virtual Patient Patient { get; set; }
 
 
         [ForeignKey(nameof(Doctor))]

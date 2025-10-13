@@ -25,9 +25,9 @@ namespace WebApp.Controllers
         }
 
         [HttpGet]
-        public IEnumerable<TModel> Get()
+        public async Task<IEnumerable<TModel>> Get()
         {
-            var entities = repository.GetAll();
+            var entities = await repository.GetAllAsync();
             var result = mapper.Map<IEnumerable<TEntity>, IEnumerable<TModel>>(entities);
             return result.ToList();
         }

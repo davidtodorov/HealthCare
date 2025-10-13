@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using HealthCare.Application.Interfaces.Doctors;
+using HealthCare.Application.Models.Appointments;
 using HealthCare.Application.Models.Doctor;
 using HealthCare.Core;
 using HealthCare.Core.Entities;
@@ -16,10 +17,12 @@ namespace WebApp.Controllers
     public class DoctorController : RestController<Doctor, DoctorModel, DoctorModel>
     {
         private IDoctorCreator doctorCreator;
+        private readonly IMapper mapper; // Add this field to store the injected mapper
 
         public DoctorController(IUnitOfWork unitOfWork, IMapper mapper, IDoctorCreator doctorCreator) : base(unitOfWork, mapper)
         {
             this.doctorCreator = doctorCreator;
+            this.mapper = mapper; // Assign to the new private field
         }
 
         [HttpPost(nameof(Create))]
@@ -33,6 +36,15 @@ namespace WebApp.Controllers
                 return BadRequest(result.Error);
             }
             return Ok();
+        }
+
+        [HttpPost(nameof(GetAppointmentsForDoctor))]
+        public async Task<ActionResult<IEnumerable<AppointmentModel>>> GetAppointmentsForDoctor(int doctorId, int month)
+        {
+            var appointents = (await this.unitOfWork.AppointmentRepository.GetAllAsync(a => a.DateTime.Month == month)).ToList();
+            var listDto = new List<AppointmentModel>();
+            mapper.Map(appointents, listDto);
+            return Ok(listDto);
         }
     }
 }

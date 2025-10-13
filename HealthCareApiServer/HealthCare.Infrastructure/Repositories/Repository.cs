@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
+using System.Threading.Tasks;
 
 namespace HealthCare.Infrastructure.Repositories
 {
@@ -19,7 +20,7 @@ namespace HealthCare.Infrastructure.Repositories
             dbSet = context.Set<TEntity>();
         }
 
-        public virtual IEnumerable<TEntity> GetAll(
+        public virtual Task<List<TEntity>> GetAllAsync(
             Expression<Func<TEntity, bool>> filter = null,
             Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>> orderBy = null,
             string includeProperties = "")
@@ -39,13 +40,15 @@ namespace HealthCare.Infrastructure.Repositories
 
             if (orderBy != null)
             {
-                return orderBy(query).ToList();
+                return orderBy(query).ToListAsync();
             }
             else
             {
-                return query.ToList();
+                return query.ToListAsync();
             }
         }
+
+        
 
         public virtual TEntity GetById(object id)
         {

@@ -4,15 +4,15 @@
 import { AppointmentStatus } from '../models/appointment-status';
 import { Doctor } from '../models/doctor';
 import { Entity } from '../models/entity';
+import { Patient } from '../models/patient';
 import { Prescription } from '../models/prescription';
-import { User } from '../models/user';
 export type Appointment = Entity & {
 'dateTime'?: string;
 'reason'?: string | null;
 'status'?: AppointmentStatus;
 'notes'?: Array<string> | null;
 'patientId'?: number;
-'patient'?: User | null;
+'patient'?: Patient | null;
 'doctorId'?: number;
 'doctor'?: Doctor | null;
 'prescriptions'?: Array<Prescription> | null;

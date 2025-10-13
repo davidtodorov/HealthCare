@@ -22,7 +22,7 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/AppointmentModel"
+                "$ref": "#/components/schemas/CreateAppointmentModel"
               }
             }
           },
@@ -390,6 +390,49 @@
                 "schema": {
                   "type": "string",
                   "format": "binary"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/Doctor/GetAppointmentsForDoctor": {
+      "post": {
+        "tags": [
+          "Doctor"
+        ],
+        "operationId": "Doctor_GetAppointmentsForDoctor",
+        "parameters": [
+          {
+            "name": "doctorId",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            },
+            "x-position": 1
+          },
+          {
+            "name": "month",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            },
+            "x-position": 2
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/AppointmentModel"
+                  }
                 }
               }
             }
@@ -1224,6 +1267,33 @@
   },
   "components": {
     "schemas": {
+      "CreateAppointmentModel": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "dateTime",
+          "doctorId"
+        ],
+        "properties": {
+          "dateTime": {
+            "type": "string",
+            "format": "date-time",
+            "minLength": 1
+          },
+          "reason": {
+            "type": "string",
+            "nullable": true
+          },
+          "patientId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "doctorId": {
+            "type": "integer",
+            "format": "int32"
+          }
+        }
+      },
       "AppointmentModel": {
         "allOf": [
           {
@@ -1232,10 +1302,17 @@
           {
             "type": "object",
             "additionalProperties": false,
+            "required": [
+              "dateTime",
+              "status",
+              "patientId",
+              "doctorId"
+            ],
             "properties": {
               "dateTime": {
                 "type": "string",
-                "format": "date-time"
+                "format": "date-time",
+                "minLength": 1
               },
               "reason": {
                 "type": "string",
@@ -1247,6 +1324,14 @@
               "patientId": {
                 "type": "integer",
                 "format": "int32"
+              },
+              "patient": {
+                "nullable": true,
+                "oneOf": [
+                  {
+                    "$ref": "#/components/schemas/PatientModel"
+                  }
+                ]
               },
               "doctorId": {
                 "type": "integer",
@@ -1273,6 +1358,35 @@
           0,
           1,
           2
+        ]
+      },
+      "PatientModel": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/EntityModel"
+          },
+          {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "userId": {
+                "type": "integer",
+                "format": "int32"
+              },
+              "firstName": {
+                "type": "string",
+                "nullable": true
+              },
+              "lastName": {
+                "type": "string",
+                "nullable": true
+              },
+              "fullName": {
+                "type": "string",
+                "nullable": true
+              }
+            }
+          }
         ]
       },
       "EntityModel": {
@@ -1759,7 +1873,7 @@
                 "nullable": true,
                 "oneOf": [
                   {
-                    "$ref": "#/components/schemas/User"
+                    "$ref": "#/components/schemas/Patient"
                   }
                 ]
               },
@@ -1774,6 +1888,48 @@
                     "$ref": "#/components/schemas/Doctor"
                   }
                 ]
+              },
+              "prescriptions": {
+                "type": "array",
+                "nullable": true,
+                "items": {
+                  "$ref": "#/components/schemas/Prescription"
+                }
+              }
+            }
+          }
+        ]
+      },
+      "Patient": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/Entity"
+          },
+          {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "userId"
+            ],
+            "properties": {
+              "userId": {
+                "type": "integer",
+                "format": "int32"
+              },
+              "user": {
+                "nullable": true,
+                "oneOf": [
+                  {
+                    "$ref": "#/components/schemas/User"
+                  }
+                ]
+              },
+              "appointments": {
+                "type": "array",
+                "nullable": true,
+                "items": {
+                  "$ref": "#/components/schemas/Appointment"
+                }
               },
               "prescriptions": {
                 "type": "array",
@@ -1806,7 +1962,7 @@
                 "type": "string",
                 "nullable": true
               },
-              "userId": {
+              "patientId": {
                 "type": "integer",
                 "format": "int32"
               },
@@ -1814,7 +1970,7 @@
                 "nullable": true,
                 "oneOf": [
                   {
-                    "$ref": "#/components/schemas/User"
+                    "$ref": "#/components/schemas/Patient"
                   }
                 ]
               },

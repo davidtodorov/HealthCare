@@ -14,7 +14,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace HealthCare.Application.Services.Users
+namespace HealthCare.Application.Services.Doctors
 {
     public class PatientCreator : IPatientCreator
     {
@@ -34,7 +34,15 @@ namespace HealthCare.Application.Services.Users
         {
             using (var transaction = await unitOfWork.BeginTransactionAsync())
             {
-                var result = await userCreator.CreateUserAsync(model);
+                var registerUserModel = new RegisterUserRequestModel()
+                {
+                    FirstName = model.FirstName,
+                    LastName = model.LastName,
+                    Email = model.Email,
+                    Username = model.Username,
+                    Password = model.Password
+                };
+                var result = await userCreator.CreateUserAsync(registerUserModel);
                 if (!result.Result.Succeeded)
                 {
                     return result.Result.Errors.FirstOrDefault()?.Description ?? "User creation failed";
@@ -44,12 +52,12 @@ namespace HealthCare.Application.Services.Users
 
                 var patient = new Patient()
                 {
-                    UserId = result.User.Id
+                    UserId = result.User.Id,
                 };
 
                 try
                 {
-                    //unitOfWork.PatientRepository.Insert(patient);
+                    unitOfWork.PatientRepository.Insert(patient);
                     await unitOfWork.SaveChangesAsync();
                     await transaction.CommitAsync();
                     return true;

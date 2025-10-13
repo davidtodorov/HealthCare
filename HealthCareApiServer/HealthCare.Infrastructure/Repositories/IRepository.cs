@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
+using System.Threading.Tasks;
 
 namespace HealthCare.Infrastructure.Repositories
 {
@@ -11,7 +12,7 @@ namespace HealthCare.Infrastructure.Repositories
     {
         TEntity GetById(object id);
 
-        IEnumerable<TEntity> GetAll(
+        Task<List<TEntity>> GetAllAsync(
             Expression<Func<TEntity, bool>> filter = null,
             Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>> orderBy = null,
             string includeProperties = "");

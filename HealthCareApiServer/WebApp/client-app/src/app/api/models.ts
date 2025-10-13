@@ -4,6 +4,7 @@
 export type { Appointment } from './models/appointment';
 export type { AppointmentModel } from './models/appointment-model';
 export { AppointmentStatus } from './models/appointment-status';
+export type { CreateAppointmentModel } from './models/create-appointment-model';
 export type { CreateDoctorModel } from './models/create-doctor-model';
 export type { Department } from './models/department';
 export type { DepartmentModel } from './models/department-model';
@@ -15,6 +16,8 @@ export type { Hospital } from './models/hospital';
 export type { HospitalModel } from './models/hospital-model';
 export type { IdentityUserOfInteger } from './models/identity-user-of-integer';
 export type { LoginRequestModel } from './models/login-request-model';
+export type { Patient } from './models/patient';
+export type { PatientModel } from './models/patient-model';
 export type { Prescription } from './models/prescription';
 export type { RegisterUserRequestModel } from './models/register-user-request-model';
 export type { User } from './models/user';

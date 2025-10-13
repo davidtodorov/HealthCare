@@ -14,6 +14,7 @@ using Microsoft.AspNetCore.Authentication.Cookies;
 using System.Linq;
 using Microsoft.AspNetCore.Authorization;
 using HealthCare.Application.Models.Users;
+using HealthCare.Application.Interfaces.Patients;
 
 namespace WebApp.Controllers
 {
@@ -22,12 +23,14 @@ namespace WebApp.Controllers
         private readonly UserManager<User> userManager;
         private readonly SignInManager<User> signInManager;
         private readonly ApplicationSettings appSettings;
+        private readonly IPatientCreator patientCreator;
 
-        public IdentityController(UserManager<User> userManager, SignInManager<User> signInManager, IOptions<ApplicationSettings> appSettings)
+        public IdentityController(UserManager<User> userManager, SignInManager<User> signInManager, IOptions<ApplicationSettings> appSettings, IPatientCreator patientCreator)
         {
             this.userManager = userManager;
             this.signInManager = signInManager;
             this.appSettings = appSettings.Value;
+            this.patientCreator = patientCreator;
         }
 
         [HttpPost]
@@ -92,23 +95,13 @@ namespace WebApp.Controllers
             {
                 return BadRequest();
             }
-            var user = new User
+            var result = await this.patientCreator.CreatePatient(model);
+            
+            if (result.Failure)
             {
-                Email = model.Email,
-                UserName = model.Username,
-                FirstName = model.FirstName,
-                LastName = model.LastName
-            };
-            var result = await userManager.CreateAsync(user, model.Password);
-
-            if (result.Succeeded)
-            {
-                await userManager.AddToRoleAsync(user, RoleConstants.PATIENT_ROLE);
-                await signInManager.SignInAsync(user, false, CookieAuthenticationDefaults.AuthenticationScheme);
-                return Ok(new { Username = user.UserName, FirstName = user.FirstName, LastName = user.LastName });
+                return BadRequest(result.Error);
             }
-
-            return this.BadRequest(result.Errors);
+            return Ok();
         }
 
         [HttpPost]

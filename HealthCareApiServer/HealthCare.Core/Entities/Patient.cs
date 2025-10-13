@@ -11,6 +11,7 @@ namespace HealthCare.Core.Entities
         [ForeignKey(nameof(User))]
         public virtual int UserId { get; set; }
         public virtual User User { get; set; }
-        public virtual List<Prescription> Prescriptions { get; set; }
+        public virtual List<Appointment> Appointments { get; set; } = new List<Appointment>();
+        public virtual List<Prescription> Prescriptions { get; set; } = new List<Prescription>();
     }
 }

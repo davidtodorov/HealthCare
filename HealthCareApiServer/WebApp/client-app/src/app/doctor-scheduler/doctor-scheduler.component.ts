@@ -4,99 +4,43 @@ import { FormsModule } from '@angular/forms';
 import { CalendarComponent } from '../common/calendar/calendar.component';
 import moment from 'moment';
 import { DoctorService } from '../api/services';
-
-// --- Mock Data Interfaces ---
-
-interface Prescription {
-  id: string;
-  doctorId: number;
-  medication: string;
-  dose: string;
-  durationDays: number;
-  times: string[];
-  startDate: string; // YYYY-MM-DD
-  active: boolean;
-}
-
-interface Patient {
-  id: string;
-  name: string;
-  age: number;
-  phone: string;
-  email: string;
-  photo: string;
-  tags: string[];
-  notes: string[];
-  prescriptions: Prescription[];
-}
-
-export interface Appointment {
-  id: string;
-  doctorId: number;
-  date: string; // YYYY-MM-DD
-  time: string;
-  patientId: string;
-  reason: string;
-  status: 'upcoming' | 'completed' | 'canceled';
-}
+import { AppointmentModel, AppointmentStatus, User } from '../api/models';
+import { A } from '@fullcalendar/core/internal-common';
+import { EnumTextPipe } from '../common/enumPipe';
 
 // --- Component Definition ---
 @Component({
   selector: 'app-doctor-scheduler',
-  imports: [CommonModule, FormsModule, CalendarComponent],
+  imports: [CommonModule, FormsModule, CalendarComponent, EnumTextPipe],
   templateUrl: './doctor-scheduler.component.html',
   styleUrls: ['./doctor-scheduler.component.scss']
 })
 export class DoctorSchedulerComponent implements OnInit {
-  
-  doctorId= 1;
+  constructor(private doctorService: DoctorService) {
 
-  patients: Patient[] = [
-    {
-      id: 'p1', name: 'Nikolay Petrov', age: 34, phone: '+359 88 123 4567', email: 'nikolay@example.com',
-      photo: 'https://images.unsplash.com/photo-1519345182560-3f2917c472ef?q=80&w=256&auto=format&fit=crop',
-      tags: ['Hypertension', 'Smoker'], notes: ['Home BP readings borderline'], prescriptions: []
-    },
-    {
-      id: 'p2', name: 'Elena Ivanova', age: 29, phone: '+359 88 765 4321', email: 'elena@example.com',
-      photo: 'https://images.unsplash.com/photo-1524504388940-b1c1722653e1?q=80&w=256&auto=format&fit=crop',
-      tags: ['Eczema', 'Allergies'], notes: ['Responding well to emollients'],
-      prescriptions: [{ id: 'rx_1', doctorId: 1, medication: 'Betamethasone', dose: '10 mg', durationDays: 14, times: ['08:00', '20:00'], startDate: '2025-09-28', active: true }]
-    },
-    {
-      id: 'p3', name: 'Georgi Stoyanov', age: 41, phone: '+359 87 222 0000', email: 'georgi@example.com',
-      photo: 'https://images.unsplash.com/photo-1544005313-94ddf0286df2?q=80&w=256&auto=format&fit=crop',
-      tags: ['Pediatric guardian'], notes: ['Brings child for checkups'], prescriptions: []
-    }
-  ];
+  }
+  AppointmentStatus = AppointmentStatus;
+  doctorId = 1;
 
-  appointments: Appointment[] = [
-    { id: 'a1', doctorId: 1, date: '2025-10-05', time: '09:00', patientId: 'p1', reason: 'Follow-up: BP review', status: 'upcoming' },
-    { id: 'a2', doctorId: 1, date: '2025-10-05', time: '10:30', patientId: 'p2', reason: 'Skin rash evaluation', status: 'upcoming' },
-    { id: 'a3', doctorId: 1, date: '2025-10-06', time: '14:00', patientId: 'p1', reason: 'Holter results', status: 'upcoming' },
-    { id: 'a4', doctorId: 1, date: '2025-09-28', time: '11:00', patientId: 'p2', reason: 'Eczema follow-up', status: 'completed' },
-    { id: 'a5', doctorId: 1, date: '2025-09-10', time: '09:30', patientId: 'p1', reason: 'Initial consult', status: 'completed' },
-    { id: 'a6', doctorId: 1, date: '2025-10-07', time: '09:00', patientId: 'p3', reason: 'Child vaccine Q&A', status: 'canceled' },
-    { id: 'a7', doctorId: 1, date: '2025-10-09', time: '16:00', patientId: 'p3', reason: 'Tonsillitis check', status: 'upcoming' },
-    { id: 'a8', doctorId: 1, date: '2025-10-25', time: '11:00', patientId: 'p2', reason: 'Annual review', status: 'upcoming' },
-    { id: 'a9', doctorId: 1, date: '2025-11-03', time: '10:00', patientId: 'p1', reason: 'Medication review', status: 'upcoming' },
-  ];
+  patients: User[] = [];
+
+  appointments: AppointmentModel[] = [];
 
   dates: string[] = [];
   // --- Component State (Properties) ---
   selectedDate: moment.Moment | null = null;
-  selectedAppt: Appointment | null = null;
+  selectedAppt: AppointmentModel | null = null;
   currentView: 'day' | 'week' | 'month' = 'day';
 
   // Schedule properties
   searchQuery: string = '';
-  statusFilter: string = 'all';
+  statusFilter: AppointmentStatus | string | undefined = "all";
   dateHeading: string = 'Select a date…';
-  filteredAppointments: { appt: Appointment, patient: Patient | undefined }[] = [];
-  groupedAppointments: { date: string, appts: { appt: Appointment, patient: Patient | undefined }[] }[] = [];
+  filteredAppointments: AppointmentModel[] = [];
+  groupedAppointments: { date: string, appts: AppointmentModel[] }[] = [];
 
   // Detail View properties
-  currentPatient: Patient | undefined;
+  currentPatient: User | undefined;
   newNoteText: string = '';
   rxNameInput: string = '';
   rxDoseInput: string = '';
@@ -107,35 +51,43 @@ export class DoctorSchedulerComponent implements OnInit {
   ngOnInit() {
     this.goToday(true);
     this.setView('day');
-    this.dates = this.appointments.map(x => x.date);
+    this.doctorService.doctorGetAppointmentsForDoctor({ month: this.selectedDate!.month() + 1 }).subscribe(appointments => {
+      this.dates = appointments.map(x => moment(x.dateTime!).format('YYYY-MM-DD'));
+      this.appointments = appointments;
+    });
 
   }
 
-  getPatient(id: string): Patient | undefined {
-    const p = this.patients.find(p => p.id === id);
-    if (p) {
+  getPatient(id?: number): any {
+    const appointment = this.appointments.find(p => p.patientId === id);
+    if (appointment) {
+      let user = {
+        id: appointment?.patientId,
+        fullName: appointment?.patient?.fullName,
+      } as any as User;
+      return user;
+      //TODO: add prescriptions and notes to the mock data
       // Ensure properties exist for template safety
-      p.notes = p.notes || [];
-      p.prescriptions = p.prescriptions || [];
+      //p.notes = ;p.notes || [];
+      //p.prescriptions = p.prescriptions || [];
     }
-    return p;
+    return;
   }
 
   // Getter to provide actively filtered prescriptions for the template, fixing the compilation error
-  get activePrescriptions(): Prescription[] {
-    if (!this.currentPatient) return [];
-    return this.currentPatient.prescriptions.filter(r => r.active);
-  }
+  // get activePrescriptions(): Prescription[] {
+  //   if (!this.currentPatient) return [];
+  //   return []; //TODO: this.currentPatient.prescriptions.filter(r => r.active);
+  // }
 
   // TrackBy function for *ngFor on prescriptions to prevent re-rendering and fix the error
-  trackByRxId(index: number, rx: Prescription): string {
-    return rx.id;
-  }
+  // trackByRxId(index: number, rx: Prescription): string {
+  //   return rx.id;
+  // }
 
   goToday(selectDay: boolean = true): void {
-    const now = moment();
     if (selectDay) {
-      this.selectedDate = moment({ year: now.year(), month: now.month(), day: now.date() });
+      this.selectedDate = moment().utc();
       this.setView('day'); // setView calls buildMonth and renderSchedule
     } else {
       this.renderSchedule();
@@ -144,7 +96,7 @@ export class DoctorSchedulerComponent implements OnInit {
 
   // Method called when a date is clicked in the Calendar
   handleDateSelect(date: moment.Moment): void {
-    this.selectedDate = date; 
+    this.selectedDate = date;
     this.setView('day'); // Switch to Day view on calendar click (setView handles updates)
   }
 
@@ -212,7 +164,7 @@ export class DoctorSchedulerComponent implements OnInit {
     if (this.currentView === 'day') {
       startDate = moment(contextDate).toDate();
       endDate = moment(contextDate).toDate();
-      title = contextDate.toLocaleString();
+      title = contextDate.format('dddd, MMMM D, YYYY');
 
     } else if (this.currentView === 'week') {
       // Set startDate to the beginning of the week (Monday) using moment
@@ -229,7 +181,7 @@ export class DoctorSchedulerComponent implements OnInit {
       const month = contextDate.month();
       startDate = new Date(year, month, 1);
       endDate = new Date(year, month + 1, 0);
-      title = startDate.toLocaleDateString(undefined, { year: 'numeric', month: 'long' });
+      title = moment(startDate).format('MMMM YYYY');
     }
 
     this.dateHeading = title;
@@ -245,22 +197,24 @@ export class DoctorSchedulerComponent implements OnInit {
       if (a.doctorId !== this.doctorId) return false;
 
       // Date range check
-      if (a.date < startYMD || a.date > endYMD) return false;
+      const apptYMD = moment(a.dateTime).format('YYYY-MM-DD');
+      if (moment(apptYMD).isBefore(startYMD) || moment(apptYMD).isAfter(endYMD)) return false;
 
       // Status filter
-      if (status !== 'all' && a.status !== status) return false;
+      if (status !== undefined && status !== "all" && a.status !== status) return false;
 
       // Search filter
       if (q) {
-        const p = this.getPatient(a.patientId);
-        return (p?.name.toLowerCase().includes(q) || a.reason.toLowerCase().includes(q));
+        return (a.patient && a.patient.fullName && a.patient.fullName.toLocaleLowerCase().includes(q.trim())
+          //TODO: || a.reason.toLowerCase().includes(q)
+        );
       }
       return true;
     });
 
-    filtered.sort((a, b) => a.date.localeCompare(b.date) || a.time.localeCompare(b.time));
+    filtered.sort((a, b) => moment.utc(a.dateTime).isBefore(moment.utc(b.dateTime)) ? -1 : moment.utc(a.dateTime).isAfter(moment.utc(b.dateTime)) ? 1 : 0);
 
-    this.filteredAppointments = filtered.map(appt => ({ appt, patient: this.getPatient(appt.patientId) }));
+    this.filteredAppointments = filtered;
 
     // 3. Grouping for Week/Month views
     if (this.currentView === 'day') {
@@ -269,10 +223,10 @@ export class DoctorSchedulerComponent implements OnInit {
         appts: this.filteredAppointments,
       }];
     } else {
-      const tempGroup: { [key: string]: { appt: Appointment, patient: Patient | undefined }[] } = {};
+      const tempGroup: { [key: string]: AppointmentModel[] } = {};
       this.filteredAppointments.forEach(item => {
-        tempGroup[item.appt.date] = tempGroup[item.appt.date] || [];
-        tempGroup[item.appt.date].push(item);
+        tempGroup[moment(item.dateTime).format('YYYY-MM-DD')] = tempGroup[moment(item.dateTime).format('YYYY-MM-DD')] || [];
+        tempGroup[moment(item.dateTime).format('YYYY-MM-DD')].push(item);
       });
 
       // Populate groupedAppointments ensuring dates are in order
@@ -294,17 +248,17 @@ export class DoctorSchedulerComponent implements OnInit {
     return dateObj.toLocaleDateString(undefined, { weekday: 'long', month: 'short', day: 'numeric' });
   }
 
-  getApptStatusClasses(status: string): string {
+  getApptStatusClasses(status: AppointmentStatus): string {
     switch (status) {
-      case 'upcoming': return 'bg-indigo-100 border-indigo-300 text-indigo-800';
-      case 'completed': return 'bg-green-100 border-green-300 text-green-800';
-      case 'canceled': return 'bg-red-100 border-red-300 text-red-800';
+      case AppointmentStatus.Upcoming: return 'bg-indigo-100 border-indigo-300 text-indigo-800';
+      case AppointmentStatus.Completed: return 'bg-green-100 border-green-300 text-green-800';
+      case AppointmentStatus.Canceled: return 'bg-red-100 border-red-300 text-red-800';
       default: return 'bg-slate-100 border-slate-300 text-slate-800';
     }
   }
 
   // --- Detail Panel Logic ---
-  openDetail(appt: Appointment): void {
+  openDetail(appt: AppointmentModel): void {
     this.selectedAppt = appt;
     this.currentPatient = this.getPatient(appt.patientId);
 
@@ -319,7 +273,7 @@ export class DoctorSchedulerComponent implements OnInit {
     this.buildTimeInputs(2);
   }
 
-  updateStatus(next: 'completed' | 'canceled'): void {
+  updateStatus(next: AppointmentStatus.Completed | AppointmentStatus.Canceled): void {
     if (!this.selectedAppt) return;
     this.selectedAppt.status = next;
     // Re-open detail and re-render schedule to reflect changes
@@ -329,22 +283,25 @@ export class DoctorSchedulerComponent implements OnInit {
 
   get patientMeta(): string {
     if (!this.currentPatient) return '';
-    return `${this.currentPatient.age} yrs • ${this.currentPatient.phone} • ${this.currentPatient.email}`;
+    //TODO: return `${this.currentPatient.age} yrs • ${this.currentPatient.phone} • ${this.currentPatient.email}`;
+    return `${this.currentPatient.email}`;
   }
 
   // --- Notes ---
   addNote(): void {
-    if (!this.currentPatient || !this.newNoteText.trim()) return;
-    this.currentPatient.notes.push(this.newNoteText.trim());
-    this.newNoteText = '';
+    // TODO:
+    // if (!this.currentPatient || !this.newNoteText.trim()) return;
+    // this.currentPatient.notes.push(this.newNoteText.trim());
+    // this.newNoteText = '';
   }
 
   // --- Previous Visits ---
-  get previousVisits(): Appointment[] {
+  get previousVisits(): AppointmentModel[] {
     if (!this.currentPatient) return [];
     return this.appointments
-      .filter(a => a.patientId === this.currentPatient!.id && a.doctorId === this.doctorId && a.id !== (this.selectedAppt?.id || '') && (a.status === 'completed' || a.status === 'canceled'))
-      .sort((a, b) => b.date.localeCompare(a.date));
+      .filter(a => a.patientId === this.currentPatient!.id && a.doctorId === this.doctorId && a.id !== (this.selectedAppt?.id || '')
+        && (a.status === AppointmentStatus.Completed || a.status === AppointmentStatus.Canceled))
+      .sort((a, b) => b.dateTime.localeCompare(a.dateTime));
   }
 
   // --- Prescriptions ---
@@ -378,16 +335,17 @@ export class DoctorSchedulerComponent implements OnInit {
 
     if (!medication || !dose || !times.length) return;
 
-    this.currentPatient.prescriptions.push({
-      id: 'rx_' + Math.random().toString(36).slice(2, 9),
-      doctorId: this.doctorId,
-      medication,
-      dose,
-      durationDays,
-      times,
-      startDate: this.selectedAppt.date,
-      active: true,
-    });
+    //todo: prescription
+    // this.currentPatient.prescriptions.push({
+    //   id: 'rx_' + Math.random().toString(36).slice(2, 9),
+    //   doctorId: this.doctorId,
+    //   medication,
+    //   dose,
+    //   durationDays,
+    //   times,
+    //   startDate: this.selectedAppt.date,
+    //   active: true,
+    // });
 
     // Clear inputs
     this.rxNameInput = '';
@@ -399,8 +357,8 @@ export class DoctorSchedulerComponent implements OnInit {
 
   stopPrescription(id: string): void {
     if (!this.currentPatient) return;
-    const item = this.currentPatient.prescriptions.find(r => r.id === id);
-    if (item) { item.active = false; }
+    //TODO: const item = this.currentPatient.prescriptions.find(r => r.id === id);
+    //TODO: if (item) { item.active = false; }
   }
 
   computeEndDate(startYmd: string | undefined, days: number | undefined): string {

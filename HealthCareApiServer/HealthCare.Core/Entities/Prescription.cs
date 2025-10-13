@@ -16,8 +16,8 @@ namespace HealthCare.Core.Entities
         public string Dose { get; set; }
 
         [ForeignKey(nameof(Patient))]
-        public int UserId { get; set; }
-        public virtual User Patient { get; set; }
+        public int PatientId { get; set; }
+        public virtual Patient Patient { get; set; }
 
 
         [ForeignKey(nameof(Appointment))]

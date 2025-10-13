@@ -14,6 +14,7 @@ namespace HealthCare.Infrastructure
 
         public IRepository<Department> DepartmentRepository { get; set; }
         public IRepository<Appointment> AppointmentRepository { get; set; }
+        public IRepository<Patient> PatientRepository { get; set; }
 
         public UnitOfWork(HealthCareDbContext context)
         {
@@ -23,6 +24,7 @@ namespace HealthCare.Infrastructure
             this.UserRepository = new Repository<User>(context);
             this.DepartmentRepository = new Repository<Department>(context);
             this.AppointmentRepository = new Repository<Appointment>(context);
+            this.PatientRepository = new Repository<Patient>(context);
         }
 
         public void SaveChanges()

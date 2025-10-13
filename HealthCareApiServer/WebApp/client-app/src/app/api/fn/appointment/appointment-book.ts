@@ -7,10 +7,10 @@ import { filter, map } from 'rxjs/operators';
 import { StrictHttpResponse } from '../../strict-http-response';
 import { RequestBuilder } from '../../request-builder';
 
-import { AppointmentModel } from '../../models/appointment-model';
+import { CreateAppointmentModel } from '../../models/create-appointment-model';
 
 export interface AppointmentBook$Params {
-      body: AppointmentModel
+      body: CreateAppointmentModel
 }
 
 export function appointmentBook(http: HttpClient, rootUrl: string, params: AppointmentBook$Params, context?: HttpContext): Observable<StrictHttpResponse<Blob>> {

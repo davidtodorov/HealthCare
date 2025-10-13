@@ -51,6 +51,7 @@ export class CalendarComponent implements OnInit, OnChanges {
   }
 
   ngOnChanges(changes: SimpleChanges): void {
+    // Removed UTC normalization to keep UI in local time
     if (changes['appointments'] || changes['dates'] || changes['availabilitySlots'] || changes['selectedDate'] || changes['currentView']) {
       this.buildMonth(this.viewYear, this.viewMonth);
     }
@@ -72,9 +73,8 @@ export class CalendarComponent implements OnInit, OnChanges {
     const now = moment();
     this.viewYear = now.year();
     this.viewMonth = now.month();
-    
-    if (selectDay && this.selectedDate !== null) {
-      this.selectDate(now.toDate());
+    if (selectDay) {
+      this.selectDate(now); // local moment
     } else {
       this.buildMonth(this.viewYear, this.viewMonth);
     }
@@ -86,7 +86,7 @@ export class CalendarComponent implements OnInit, OnChanges {
     this.viewMonth = m;
     this.calendarDays = [];
 
-    const first = moment({ year: y, month: m, day: 1 });
+    const first = moment({ year: y, month: m, date: 1 });
     const last = moment(first).endOf('month');
     const leading = first.isoWeekday() - 1;
     const days = last.date();
@@ -95,11 +95,11 @@ export class CalendarComponent implements OnInit, OnChanges {
 
     // Leading blanks
     for (let i = 0; i < leading; i++) {
-      this.calendarDays.push({ date: moment.utc(), ymd: '', d: 0, classes: 'h-10', hasAppts: false }); // Placeholder
+      this.calendarDays.push({ date: moment(), ymd: '', d: 0, classes: 'h-10', hasAppts: false }); // Placeholder
     }
 
     for (let d = 1; d <= days; d++) {
-      const date = moment.utc({ year: y, month: m, day: d });
+      const date = moment({ year: y, month: m, date: d });
       const ymd = date.format('YYYY-MM-DD');
 
       let hasAppts = this.dates.indexOf(ymd) !== -1 ? true : false; 
@@ -112,7 +112,7 @@ export class CalendarComponent implements OnInit, OnChanges {
   // Extracted method for highlighting calendar days
   private highlightCalendarDays(): void {
     const selectedYMD = this.selectedDate ? moment(this.selectedDate).format('YYYY-MM-DD') : null;
-    const today = moment().startOf('day');
+    const today = moment(); // highlight today using local time
 
     let weekHighlightStart: moment.Moment | null = null;
     let weekHighlightEnd: moment.Moment | null = null;
@@ -141,7 +141,7 @@ export class CalendarComponent implements OnInit, OnChanges {
         isWeekHighlighted = false;
       }
 
-      // 3. Check for Today
+      // 3. Check for Today (local)
       if (date.isSame(today, 'day')) {
         if (day.ymd === selectedYMD) {
           classes = 'ring-2 ring-indigo-500 bg-indigo-50 font-bold text-indigo-800';
@@ -174,7 +174,7 @@ export class CalendarComponent implements OnInit, OnChanges {
   }
 
   selectDate(date: Date | moment.Moment): void {
-    this.selectedDate = moment.utc(date); 
+    this.selectedDate = moment(date); 
     this.dateSelected.emit(this.selectedDate);
     this.buildMonth(this.viewYear, this.viewMonth);
   }
