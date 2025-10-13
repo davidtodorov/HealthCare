@@ -7,6 +7,7 @@ import { AppointmentService, DoctorService, PrescriptionService } from '../api/s
 import { AppointmentModel, AppointmentStatus, PatientModel, Prescription, PrescriptionModel, User } from '../api/models';
 import { A } from '@fullcalendar/core/internal-common';
 import { EnumTextPipe } from '../common/enumPipe';
+import { AuthService } from '../auth/auth.service';
 
 // --- Component Definition ---
 @Component({
@@ -16,16 +17,19 @@ import { EnumTextPipe } from '../common/enumPipe';
   styleUrls: ['./doctor-scheduler.component.scss']
 })
 export class DoctorSchedulerComponent implements OnInit {
-  constructor(private doctorService: DoctorService, private prescriptionService: PrescriptionService, private appointmentService: AppointmentService) {
+  public doctorId: number | null = null;
 
+  constructor(
+    private doctorService: DoctorService, 
+    private prescriptionService: PrescriptionService, 
+    private appointmentService: AppointmentService,
+    private authService: AuthService
+  ) {
+    this.doctorId = this.authService.getUserId();
   }
   AppointmentStatus = AppointmentStatus;
-  doctorId = 1;
-
   patients: User[] = [];
-
   appointments: AppointmentModel[] = [];
-
   dates: string[] = [];
   // --- Component State (Properties) ---
   selectedDate: moment.Moment | null = null;
@@ -194,8 +198,6 @@ export class DoctorSchedulerComponent implements OnInit {
     const status = this.statusFilter;
 
     const filtered = this.appointments.filter(a => {
-      if (a.doctorId !== this.doctorId) return false;
-
       // Date range check
       const apptYMD = moment(a.dateTime).format('YYYY-MM-DD');
       if (moment(apptYMD).isBefore(startYMD) || moment(apptYMD).isAfter(endYMD)) return false;

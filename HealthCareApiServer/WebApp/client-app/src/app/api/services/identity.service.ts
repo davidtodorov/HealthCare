@@ -20,6 +20,7 @@ import { identityRoles } from '../fn/identity/identity-roles';
 import { IdentityRoles$Params } from '../fn/identity/identity-roles';
 import { identityVerify } from '../fn/identity/identity-verify';
 import { IdentityVerify$Params } from '../fn/identity/identity-verify';
+import { UserAndRoles } from '../models/user-and-roles';
 
 @Injectable({ providedIn: 'root' })
 export class IdentityService extends BaseService {
@@ -144,7 +145,7 @@ export class IdentityService extends BaseService {
    *
    * This method doesn't expect any request body.
    */
-  identityRoles$Response(params?: IdentityRoles$Params, context?: HttpContext): Observable<StrictHttpResponse<Array<string>>> {
+  identityRoles$Response(params?: IdentityRoles$Params, context?: HttpContext): Observable<StrictHttpResponse<UserAndRoles>> {
     const obs = identityRoles(this.http, this.rootUrl, params, context);
     return obs;
   }
@@ -155,10 +156,10 @@ export class IdentityService extends BaseService {
    *
    * This method doesn't expect any request body.
    */
-  identityRoles(params?: IdentityRoles$Params, context?: HttpContext): Observable<Array<string>> {
+  identityRoles(params?: IdentityRoles$Params, context?: HttpContext): Observable<UserAndRoles> {
     const resp = this.identityRoles$Response(params, context);
     return resp.pipe(
-      map((r: StrictHttpResponse<Array<string>>): Array<string> => r.body)
+      map((r: StrictHttpResponse<UserAndRoles>): UserAndRoles => r.body)
     );
   }
 

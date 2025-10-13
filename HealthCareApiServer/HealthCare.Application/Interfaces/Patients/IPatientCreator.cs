@@ -10,6 +10,6 @@ namespace HealthCare.Application.Interfaces.Patients
 {
     public interface IPatientCreator
     {
-        Task<Result> CreatePatient(RegisterUserRequestModel model);
+        Task<CreateUserResult> CreatePatient(RegisterUserRequestModel model);
     }
 }

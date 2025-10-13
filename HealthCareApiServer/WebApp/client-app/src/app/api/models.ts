@@ -23,4 +23,5 @@ export type { PrescriptionModel } from './models/prescription-model';
 export type { RegisterUserRequestModel } from './models/register-user-request-model';
 export type { UpdateAppointmentModel } from './models/update-appointment-model';
 export type { User } from './models/user';
+export type { UserAndRoles } from './models/user-and-roles';
 export type { UserModel } from './models/user-model';

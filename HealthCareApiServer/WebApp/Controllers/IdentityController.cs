@@ -1,20 +1,21 @@
-﻿using System;
-using System.Text;
-using System.Security.Claims;
-using System.Threading.Tasks;
-using System.IdentityModel.Tokens.Jwt;
+﻿using HealthCare.Application.Interfaces.Patients;
+using HealthCare.Application.Models.Users;
+using HealthCare.Core;
+using HealthCare.Core.Entities;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
-using HealthCare.Core.Entities;
+using System;
 using System.Collections.Generic;
-using HealthCare.Core;
-using Microsoft.AspNetCore.Authentication.Cookies;
+using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
-using Microsoft.AspNetCore.Authorization;
-using HealthCare.Application.Models.Users;
-using HealthCare.Application.Interfaces.Patients;
+using System.Security.Claims;
+using System.Text;
+using System.Threading.Tasks;
 
 namespace WebApp.Controllers
 {
@@ -50,8 +51,7 @@ namespace WebApp.Controllers
 
 
             await signInManager.SignInAsync(user, false, CookieAuthenticationDefaults.AuthenticationScheme);
-
-            return Ok(new { Username = user.UserName, FirstName = user.FirstName, LastName = user.LastName });
+            return Ok(new { UserId = user.Id, Username = user.UserName, FirstName = user.FirstName, LastName = user.LastName });
 
 
             //USE FOR JWT AUTHENTICATION
@@ -59,6 +59,7 @@ namespace WebApp.Controllers
             //var claims = new List<Claim>
             //{
             //    new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
+            //    new Claim(ClaimTypes.Name, user.UserName),
             //    new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString())
             //};
 
@@ -68,18 +69,29 @@ namespace WebApp.Controllers
             //    claims.Add(new Claim(ClaimTypes.Role, role));
             //}
 
+            //var expires = DateTime.UtcNow.AddDays(7);
             //// generate token that is valid for 7 days
             //var tokenHandler = new JwtSecurityTokenHandler();
             //var key = Encoding.ASCII.GetBytes(appSettings.Secret);
             //var token = new JwtSecurityToken(
             //    claims: claims,
-            //    expires: DateTime.UtcNow.AddDays(7),
+            //    expires: expires,
             //    signingCredentials: new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
             //);
 
             //var encryptedToken = tokenHandler.WriteToken(token);
 
-            //Response.Cookies.Append("token", encryptedToken);
+            //var cookieName = "_auth_token";
+
+            //Response.Cookies.Append(cookieName, encryptedToken, new CookieOptions
+            //{
+            //    HttpOnly = true,              // JS cannot read it (XSS mitigation)
+            //    Secure = true,                // HTTPS only
+            //    SameSite = SameSiteMode.None, // set Lax if your SPA is same-site; use None for cross-site
+            //    Expires = expires,            // align with token expiry
+            //    Path = "/",                   // required for __Host- prefix
+            //                                  // Domain = not set for __Host-; if you need subdomains, drop the __Host- prefix and set Domain explicitly
+            //});
 
             //return new
             //{
@@ -97,10 +109,11 @@ namespace WebApp.Controllers
             }
             var result = await this.patientCreator.CreatePatient(model);
             
-            if (result.Failure)
+            if (!result.Result.Succeeded)
             {
-                return BadRequest(result.Error);
+                return BadRequest(result.Result.Errors);
             }
+            await this.signInManager.SignInAsync(result.User, false, CookieAuthenticationDefaults.AuthenticationScheme);
             return Ok();
         }
 
@@ -123,11 +136,16 @@ namespace WebApp.Controllers
         [HttpGet]
         [Authorize]
         [Route(nameof(Roles))]
-        public async Task<IEnumerable<string>> Roles()
+        public async Task<UserAndRoles> Roles()
         {
             var user = await userManager.GetUserAsync(User);
             var roles = await userManager.GetRolesAsync(user);
-            return roles;
+            var userAndRoles = new UserAndRoles(user.FirstName, user.LastName, user.Id, roles);
+            return userAndRoles;
         }
+
+
     }
+
+    public record UserAndRoles(string firstName, string lastName, int id, IEnumerable<string> roles);
 }

@@ -30,7 +30,7 @@ namespace HealthCare.Application.Services.Doctors
             this.unitOfWork = unitOfWork;
             this.mapper = mapper;
         }
-        public async Task<Result> CreatePatient(RegisterUserRequestModel model)
+        public async Task<CreateUserResult> CreatePatient(RegisterUserRequestModel model)
         {
             using (var transaction = await unitOfWork.BeginTransactionAsync())
             {
@@ -45,7 +45,8 @@ namespace HealthCare.Application.Services.Doctors
                 var result = await userCreator.CreateUserAsync(registerUserModel);
                 if (!result.Result.Succeeded)
                 {
-                    return result.Result.Errors.FirstOrDefault()?.Description ?? "User creation failed";
+                    result.User = null;
+                    return result;
                 }
 
                 await userManager.AddToRoleAsync(result.User, RoleConstants.PATIENT_ROLE);
@@ -60,12 +61,14 @@ namespace HealthCare.Application.Services.Doctors
                     unitOfWork.PatientRepository.Insert(patient);
                     await unitOfWork.SaveChangesAsync();
                     await transaction.CommitAsync();
-                    return true;
+                    return result;
                 }
                 catch (Exception e)
                 {
                     await transaction.RollbackAsync();
-                    return e.Message;
+                    result.User = null;
+                    result.Result = IdentityResult.Failed(new IdentityError { Description = e.Message });
+                    return result;
                 }
             }
         }

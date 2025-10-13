@@ -11,6 +11,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using WebApp.Extensions;
 
 namespace WebApp.Controllers
 {
@@ -41,10 +42,12 @@ namespace WebApp.Controllers
         [HttpGet(nameof(GetAppointmentsForDoctor))]
         public async Task<ActionResult<IEnumerable<AppointmentModel>>> GetAppointmentsForDoctor(int doctorId, int month)
         {
-            var appointents = (await this.unitOfWork.AppointmentRepository.GetAllAsync(a => a.DateTime.Month == month)).ToList();
+            var userId = Int32.Parse(User.GetId());
+            var appointents = (await this.unitOfWork.AppointmentRepository.GetAllAsync(a => a.Doctor.UserId == userId && a.DateTime.Month == month)).ToList();
             var listDto = new List<AppointmentModel>();
             mapper.Map(appointents, listDto);
             return Ok(listDto);
+            
         }
     }
 }

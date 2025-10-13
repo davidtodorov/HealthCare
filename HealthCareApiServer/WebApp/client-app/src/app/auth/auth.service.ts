@@ -8,16 +8,37 @@ export class AuthService {
     private rolesCache$?: Observable<string[]>;
     private readonly loginState$ = new BehaviorSubject<boolean>(false);
 
+    private userId: number | null = null;
+
     constructor(private identityService: IdentityService, @Inject(DOCUMENT) private document: Document) {
         this.updateLoginState();
     }
 
-    getRoles(): Observable<string[]> {
+    getUserId(): number | null {
+        return this.userId;
+    }
+
+    private setUserId(userId: number | null): void {
+        this.userId = userId;
+    }
+
+    private clearUserId(): void {
+        this.userId = null;
+    }
+
+    getRoles(): Observable<any> {
         if (!this.rolesCache$) {
             this.rolesCache$ = this.identityService
                 .identityRoles()
                 .pipe(
-                    map(r => r ?? []),
+                    tap(userAndRoles => {
+                        if (userAndRoles?.id) {
+                            this.setUserId(userAndRoles.id ?? null);
+                        } else {
+                            this.clearUserId();
+                        }
+                    }),
+                    map(userAndRoles => userAndRoles?.roles ?? []),
                     catchError(() => of([])),
                     tap(roles => this.updateLoginState(roles)),
                     shareReplay(1)
@@ -35,6 +56,7 @@ export class AuthService {
     clear(): void {
         this.rolesCache$ = undefined;
         this.updateLoginState();
+        this.clearUserId();
     }
 
     updateLoginStateFromCookie(): void {

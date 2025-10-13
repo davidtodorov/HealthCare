@@ -7,11 +7,12 @@ import { filter, map } from 'rxjs/operators';
 import { StrictHttpResponse } from '../../strict-http-response';
 import { RequestBuilder } from '../../request-builder';
 
+import { UserAndRoles } from '../../models/user-and-roles';
 
 export interface IdentityRoles$Params {
 }
 
-export function identityRoles(http: HttpClient, rootUrl: string, params?: IdentityRoles$Params, context?: HttpContext): Observable<StrictHttpResponse<Array<string>>> {
+export function identityRoles(http: HttpClient, rootUrl: string, params?: IdentityRoles$Params, context?: HttpContext): Observable<StrictHttpResponse<UserAndRoles>> {
   const rb = new RequestBuilder(rootUrl, identityRoles.PATH, 'get');
   if (params) {
   }
@@ -21,7 +22,7 @@ export function identityRoles(http: HttpClient, rootUrl: string, params?: Identi
   ).pipe(
     filter((r: any): r is HttpResponse<any> => r instanceof HttpResponse),
     map((r: HttpResponse<any>) => {
-      return r as StrictHttpResponse<Array<string>>;
+      return r as StrictHttpResponse<UserAndRoles>;
     })
   );
 }
