@@ -1,8 +1,8 @@
-<div class="min-h-screen flex items-center justify-center bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
+<div class="min-h-screen flex items-center justify-center bg-gray-100 py-12 px-4 sm:px-6 lg:px-8 font-sans">
   <div class="w-full max-w-lg bg-white rounded-xl shadow-2xl p-10 space-y-8">
-    
+
     <h2 class="text-3xl font-extrabold text-gray-900 text-center">
-      Create a new account
+      {{ isDoctorRegister ? 'Register a New Doctor' : 'Create a New Account' }}
     </h2>
 
     <form class="space-y-6" [formGroup]="registerForm" (ngSubmit)="onSubmit()">
@@ -17,12 +17,13 @@
           formControlName="username"
           placeholder="Choose a username"
           class="mt-1 block w-full px-4 py-3 border border-gray-300 rounded-lg shadow-sm placeholder-gray-400 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
-          [class.border-red-500]="username?.invalid && username?.touched"
-        />
-        <div *ngIf="username?.invalid && username?.touched" class="text-red-500 text-xs mt-1">
-          <div *ngIf="username?.errors?.['required']">Username is required.</div>
-          <div *ngIf="username?.errors?.['minlength']">Username must be at least 3 characters.</div>
+          [class.border-red-500]="username?.invalid && username?.touched" />
+        @if (username?.invalid && username?.touched) {
+        <div class="text-red-500 text-xs mt-1">
+          @if (username?.errors?.['required']) { <div>Username is required.</div> }
+          @if (username?.errors?.['minlength']) { <div>Username must be at least 3 characters.</div> }
         </div>
+        }
       </div>
 
       <div>
@@ -35,12 +36,12 @@
           formControlName="firstName"
           placeholder="Enter your first name"
           class="mt-1 block w-full px-4 py-3 border border-gray-300 rounded-lg shadow-sm placeholder-gray-400 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
-          [class.border-red-500]="firstName?.invalid && firstName?.touched"
-        />
-        <div *ngIf="firstName?.invalid && firstName?.touched" class="text-red-500 text-xs mt-1">
-          <div *ngIf="firstName?.errors?.['required']">First Name is required.</div>
-          <div *ngIf="firstName?.errors?.['minlength']">First Name must be at least 3 characters.</div>
+          [class.border-red-500]="firstName?.invalid && firstName?.touched" />
+        @if (firstName?.invalid && firstName?.touched) {
+        <div class="text-red-500 text-xs mt-1">
+          @if (firstName?.errors?.['required']) { <div>First Name is required.</div> }
         </div>
+        }
       </div>
 
       <div>
@@ -53,14 +54,35 @@
           formControlName="lastName"
           placeholder="Enter your last name"
           class="mt-1 block w-full px-4 py-3 border border-gray-300 rounded-lg shadow-sm placeholder-gray-400 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
-          [class.border-red-500]="lastName?.invalid && lastName?.touched"
-        />
-        <div *ngIf="lastName?.invalid && lastName?.touched" class="text-red-500 text-xs mt-1">
-          <div *ngIf="lastName?.errors?.['required']">Last Name is required.</div>
-          <div *ngIf="lastName?.errors?.['minlength']">Last Name must be at least 3 characters.</div>
+          [class.border-red-500]="lastName?.invalid && lastName?.touched" />
+        @if (lastName?.invalid && lastName?.touched) {
+        <div class="text-red-500 text-xs mt-1">
+          @if (lastName?.errors?.['required']) { <div>Last Name is required.</div> }
         </div>
+        }
       </div>
 
+      <!-- Department Dropdown (Conditional) -->
+      @if (isDoctorRegister) {
+      <div>
+        <label for="department" class="block text-sm font-medium text-gray-700">Department</label>
+        <select id="department" formControlName="departmentId"
+          class="mt-1 block w-full px-4 py-3 border border-gray-300 bg-white rounded-lg shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+          [class.border-red-500]="departmentId?.invalid && departmentId?.touched">
+          <option value="" disabled>Select a department</option>
+          @for(dept of departments; track dept.id) {
+          <option [value]="dept.id">{{ dept.name }}</option>
+          }
+        </select>
+        @if (departmentId?.invalid && departmentId?.touched) {
+        <div class="text-red-500 text-xs mt-1">
+          @if (departmentId?.errors?.['required']) { <div>Department is required.</div> }
+        </div>
+        }
+      </div>
+      }
+
+      <!-- Email -->
       <div>
         <label for="email" class="block text-sm font-medium text-gray-700">
           Email address
@@ -71,12 +93,13 @@
           formControlName="email"
           placeholder="you@example.com"
           class="mt-1 block w-full px-4 py-3 border border-gray-300 rounded-lg shadow-sm placeholder-gray-400 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
-          [class.border-red-500]="email?.invalid && email?.touched"
-        />
-        <div *ngIf="email?.invalid && email?.touched" class="text-red-500 text-xs mt-1">
-          <div *ngIf="email?.errors?.['required']">Email is required.</div>
-          <div *ngIf="email?.errors?.['email']">Enter a valid email address.</div>
+          [class.border-red-500]="email?.invalid && email?.touched" />
+        @if (email?.invalid && email?.touched) {
+        <div class="text-red-500 text-xs mt-1">
+          @if (email?.errors?.['required']) { <div>Email is required.</div> }
+          @if (email?.errors?.['email']) { <div>Enter a valid email address.</div> }
         </div>
+        }
       </div>
 
       <div>
@@ -89,13 +112,13 @@
           formControlName="password"
           placeholder="••••••••"
           class="mt-1 block w-full px-4 py-3 border border-gray-300 rounded-lg shadow-sm placeholder-gray-400 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
-          [class.border-red-500]="password?.invalid && password?.touched"
-        />
-        <div *ngIf="password?.invalid && password?.touched" class="text-red-500 text-xs mt-1">
-          <div *ngIf="password?.errors?.['required']">Password is required.</div>
-          <div *ngIf="password?.errors?.['minlength']">Password must be at least 8 characters.</div>
-          <div *ngIf="password?.errors?.['pattern']">Must contain letters and numbers.</div>
+          [class.border-red-500]="password?.invalid && password?.touched" />
+        @if (password?.invalid && password?.touched) {
+        <div class="text-red-500 text-xs mt-1">
+          @if (password?.errors?.['required']) { <div>Password is required.</div> }
+          @if (password?.errors?.['minlength']) { <div>Password must be at least 8 characters.</div> }
         </div>
+        }
       </div>
 
       <div>
@@ -108,28 +131,26 @@
           formControlName="confirmPassword"
           placeholder="Re-enter password"
           class="mt-1 block w-full px-4 py-3 border border-gray-300 rounded-lg shadow-sm placeholder-gray-400 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
-          [class.border-red-500]="confirmPassword?.invalid && confirmPassword?.touched || passwordMismatch"
-        />
-        <div *ngIf="confirmPassword?.invalid && confirmPassword?.touched" class="text-red-500 text-xs mt-1">
-          <div *ngIf="confirmPassword?.errors?.['required']">Confirmation is required.</div>
+          [class.border-red-500]="(confirmPassword?.invalid && confirmPassword?.touched) || passwordMismatch" />
+        @if (confirmPassword?.invalid && confirmPassword?.touched) {
+        <div class="text-red-500 text-xs mt-1">
+          @if (confirmPassword?.errors?.['required']) { <div>Confirmation is required.</div> }
         </div>
-        <div *ngIf="passwordMismatch" class="text-red-500 text-xs mt-1">
-          Passwords do not match.
-        </div>
+        }
+        @if (passwordMismatch) {
+        <div class="text-red-500 text-xs mt-1">Passwords do not match.</div>
+        }
       </div>
 
       <div>
-        <button
-          type="submit"
-          [disabled]="registerForm.invalid"
-          class="w-full flex justify-center py-3 px-4 border border-transparent rounded-lg shadow-md text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 disabled:opacity-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition duration-150 ease-in-out"
-        >
-          Register
+        <button type="submit" [disabled]="registerForm.invalid"
+          class="w-full flex justify-center py-3 px-4 border border-transparent rounded-lg shadow-md text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 disabled:opacity-50 disabled:cursor-not-allowed focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition duration-150 ease-in-out">
+          {{ isDoctorRegister ? 'Register Doctor' : 'Register' }}
         </button>
       </div>
     </form>
-    
-    <div class="text-center">
+
+    <div *ngIf="!isDoctorRegister" class="text-center">
       <p class="text-sm text-gray-600">
         Already have an account?
         <a href="/login" class="font-medium text-indigo-600 hover:text-indigo-500">

@@ -1535,6 +1535,17 @@
         "properties": {
           "status": {
             "$ref": "#/components/schemas/AppointmentStatus"
+          },
+          "notes": {
+            "type": "string",
+            "nullable": true
+          },
+          "prescriptions": {
+            "type": "array",
+            "nullable": true,
+            "items": {
+              "$ref": "#/components/schemas/PrescriptionModel"
+            }
           }
         }
       },
@@ -1548,97 +1559,8 @@
         ],
         "x-enum-descriptions": [
           "Upcoming",
-          null,
-          null
-        ],
-        "enum": [
-          0,
-          1,
-          2
-        ]
-      },
-      "AppointmentModel": {
-        "allOf": [
-          {
-            "$ref": "#/components/schemas/EntityModel"
-          },
-          {
-            "type": "object",
-            "additionalProperties": false,
-            "required": [
-              "dateTime",
-              "status",
-              "patientId",
-              "doctorId"
-            ],
-            "properties": {
-              "dateTime": {
-                "type": "string",
-                "format": "date-time",
-                "minLength": 1
-              },
-              "reason": {
-                "type": "string",
-                "nullable": true
-              },
-              "status": {
-                "$ref": "#/components/schemas/AppointmentStatus"
-              },
-              "patientId": {
-                "type": "integer",
-                "format": "int32"
-              },
-              "patient": {
-                "nullable": true,
-                "oneOf": [
-                  {
-                    "$ref": "#/components/schemas/PatientModel"
-                  }
-                ]
-              },
-              "doctorId": {
-                "type": "integer",
-                "format": "int32"
-              }
-            }
-          }
-        ]
-      },
-      "PatientModel": {
-        "allOf": [
-          {
-            "$ref": "#/components/schemas/EntityModel"
-          },
-          {
-            "type": "object",
-            "additionalProperties": false,
-            "properties": {
-              "userId": {
-                "type": "integer",
-                "format": "int32"
-              },
-              "firstName": {
-                "type": "string",
-                "nullable": true
-              },
-              "lastName": {
-                "type": "string",
-                "nullable": true
-              },
-              "fullName": {
-                "type": "string",
-                "nullable": true
-              },
-              "prescriptions": {
-                "type": "array",
-                "nullable": true,
-                "items": {
-                  "$ref": "#/components/schemas/PrescriptionModel"
-                }
-              }
-            }
-          }
-        ]
+          null, null],
+        "enum": [0, 1, 2]
       },
       "PrescriptionModel": {
         "allOf": [
@@ -1716,6 +1638,104 @@
             "nullable": true
           }
         }
+      },
+      "AppointmentModel": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/EntityModel"
+          },
+          {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "dateTime",
+              "status",
+              "patientId",
+              "doctorId"
+            ],
+            "properties": {
+              "dateTime": {
+                "type": "string",
+                "format": "date-time",
+                "minLength": 1
+              },
+              "reason": {
+                "type": "string",
+                "nullable": true
+              },
+              "status": {
+                "$ref": "#/components/schemas/AppointmentStatus"
+              },
+              "patientId": {
+                "type": "integer",
+                "format": "int32"
+              },
+              "patient": {
+                "nullable": true,
+                "oneOf": [
+                  {
+                    "$ref": "#/components/schemas/PatientModel"
+                  }
+                ]
+              },
+              "doctorId": {
+                "type": "integer",
+                "format": "int32"
+              },
+              "notes": {
+                "type": "string",
+                "nullable": true
+              },
+              "prescriptions": {
+                "type": "array",
+                "nullable": true,
+                "items": {
+                  "$ref": "#/components/schemas/PrescriptionModel"
+                }
+              }
+            }
+          }
+        ]
+      },
+      "PatientModel": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/EntityModel"
+          },
+          {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "userId": {
+                "type": "integer",
+                "format": "int32"
+              },
+              "firstName": {
+                "type": "string",
+                "nullable": true
+              },
+              "lastName": {
+                "type": "string",
+                "nullable": true
+              },
+              "fullName": {
+                "type": "string",
+                "nullable": true
+              },
+              "email": {
+                "type": "string",
+                "nullable": true
+              },
+              "prescriptions": {
+                "type": "array",
+                "nullable": true,
+                "items": {
+                  "$ref": "#/components/schemas/PrescriptionModel"
+                }
+              }
+            }
+          }
+        ]
       },
       "DepartmentModel": {
         "type": "object",
@@ -2186,11 +2206,8 @@
                 "$ref": "#/components/schemas/AppointmentStatus"
               },
               "notes": {
-                "type": "array",
-                "nullable": true,
-                "items": {
-                  "type": "string"
-                }
+                "type": "string",
+                "nullable": true
               },
               "patientId": {
                 "type": "integer",

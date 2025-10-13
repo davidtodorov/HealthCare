@@ -29,6 +29,7 @@
     "@tailwindcss/postcss": "^4.1.14",
     "bootstrap": "^5.3.8",
     "moment": "^2.30.1",
+    "ngx-cookie-service": "^19.1.2",
     "postcss": "^8.5.6",
     "rxjs": "~7.8.0",
     "tailwindcss": "^4.1.14",

@@ -22,6 +22,12 @@ export const routes: Routes = [
   { path: 'login', component: LoginComponent },
   { path: 'register', component: RegisterComponent },
   {
+    path: 'doctor-register',
+    component: RegisterComponent,
+    canMatch: [roleGuard],
+    data: { roles: ['Admin'] }
+  },
+  {
     path: 'appointments',
     component: AppointmentSchedulerComponent,
     canMatch: [roleGuard],

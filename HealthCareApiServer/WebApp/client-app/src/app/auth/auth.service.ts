@@ -1,16 +1,20 @@
-import { Inject, Injectable } from '@angular/core';
-import { DOCUMENT } from '@angular/common';
+import { inject, Injectable } from '@angular/core';
 import { IdentityService } from '../api/services';
 import { BehaviorSubject, Observable, catchError, map, of, shareReplay, tap } from 'rxjs';
+import { CookieService } from 'ngx-cookie-service';
+import { UserAndRoles } from '../api/models';
 
 @Injectable({ providedIn: 'root' })
 export class AuthService {
     private rolesCache$?: Observable<string[]>;
     private readonly loginState$ = new BehaviorSubject<boolean>(false);
+    private readonly cookieService = inject(CookieService);
 
     private userId: number | null = null;
+    private firstName: string | null = null;
+    private lastName: string | null = null;
 
-    constructor(private identityService: IdentityService, @Inject(DOCUMENT) private document: Document) {
+    constructor(private identityService: IdentityService) {
         this.updateLoginState();
     }
 
@@ -18,24 +22,32 @@ export class AuthService {
         return this.userId;
     }
 
-    private setUserId(userId: number | null): void {
-        this.userId = userId;
+    getUserFullName(): string | null {
+        return `${this.firstName} ${this.lastName}`;
     }
 
-    private clearUserId(): void {
+    private setUser(user: UserAndRoles): void {
+        this.userId = user.id ?? null;
+        this.firstName = user.firstName ?? null;
+        this.lastName = user.lastName ?? null;
+    }
+
+    private clearUser(): void {
         this.userId = null;
+        this.firstName = null;
+        this.lastName = null;
     }
 
-    getRoles(): Observable<any> {
+    getRoles(): Observable<string[]> {
         if (!this.rolesCache$) {
             this.rolesCache$ = this.identityService
                 .identityRoles()
                 .pipe(
                     tap(userAndRoles => {
                         if (userAndRoles?.id) {
-                            this.setUserId(userAndRoles.id ?? null);
+                            this.setUser(userAndRoles ?? null);
                         } else {
-                            this.clearUserId();
+                            this.clearUser();
                         }
                     }),
                     map(userAndRoles => userAndRoles?.roles ?? []),
@@ -56,7 +68,7 @@ export class AuthService {
     clear(): void {
         this.rolesCache$ = undefined;
         this.updateLoginState();
-        this.clearUserId();
+        this.clearUser();
     }
 
     updateLoginStateFromCookie(): void {
@@ -85,7 +97,7 @@ export class AuthService {
     }
 
     private hasAuthCookie(): boolean {
-        const cookieString = this.document?.cookie ?? '';
-        return cookieString.split(';').some(part => part.trim().startsWith('.AspNetCore.Identity.Application='));
+        const cookieString = this.cookieService.get('.AspNetCore.Identity.Application') ?? '';
+        return !!cookieString;
     }
 }

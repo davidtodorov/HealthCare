@@ -1,8 +1,8 @@
 import { CommonModule } from '@angular/common';
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, inject, Input, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule, AbstractControl, ValidationErrors } from '@angular/forms';
-import { RegisterUserRequestModel } from '../../api/models';
-import { DoctorService, IdentityService } from '../../api/services';
+import { DepartmentModel, RegisterUserRequestModel } from '../../api/models';
+import { DepartmentService, DoctorService, IdentityService } from '../../api/services';
 import { Router } from '@angular/router';
 
 @Component({
@@ -16,11 +16,20 @@ export class RegisterComponent implements OnInit {
   @Input() isDoctorRegister: boolean = false;
 
   registerForm!: FormGroup;
+  departments: DepartmentModel[] = [];
 
-  constructor(private fb: FormBuilder,
-    private identityService: IdentityService,
-    private doctorService: DoctorService,
-    private router: Router) { }
+  private fb = inject(FormBuilder);
+  private departmentService = inject(DepartmentService);
+  private identityService = inject(IdentityService);
+  private doctorService = inject(DoctorService);
+
+  constructor(private router: Router) {
+    const navigation = this.router!.getCurrentNavigation();
+    const state = navigation?.extras.state;
+    if (state && state['isDoctorRegister']) {
+      this.isDoctorRegister = state['isDoctorRegister'];
+    }
+  }
 
   ngOnInit(): void {
     this.registerForm = this.fb.group({
@@ -50,6 +59,18 @@ export class RegisterComponent implements OnInit {
     }, {
       validators: this.passwordMatchValidator
     });
+
+    // If it's a doctor registration, add the department control and load data
+    if (this.isDoctorRegister) {
+      this.registerForm.addControl('departmentId', this.fb.control('', Validators.required));
+      this.loadDepartments();
+    }
+  }
+
+  loadDepartments(): void {
+    this.departmentService.departmentGetAll().subscribe(data => {
+      this.departments = data;
+    });
   }
 
   passwordMatchValidator(control: AbstractControl): ValidationErrors | null {
@@ -59,19 +80,19 @@ export class RegisterComponent implements OnInit {
     if (password?.value && confirmPassword?.value) {
       return password.value === confirmPassword.value ? null : { 'mismatch': true };
     }
-
     return null;
   }
 
   get username() { return this.registerForm.get('username'); }
   get firstName() { return this.registerForm.get('firstName'); }
   get lastName() { return this.registerForm.get('lastName'); }
+  get departmentId() { return this.registerForm.get('departmentId'); }
   get email() { return this.registerForm.get('email'); }
   get password() { return this.registerForm.get('password'); }
   get confirmPassword() { return this.registerForm.get('confirmPassword'); }
 
-  get passwordMismatch() {
-    return this.registerForm.errors?.['mismatch'] && this.confirmPassword?.touched;
+  get passwordMismatch(): boolean {
+    return !!this.registerForm.errors?.['mismatch'] && !!this.confirmPassword?.touched;
   }
 
   onSubmit(): void {
@@ -83,22 +104,12 @@ export class RegisterComponent implements OnInit {
 
     const formData = this.registerForm.value;
     if (this.isDoctorRegister) {
-      this.doctorService.doctorCreate({
-        body:
-        {
-          firstName: formData.firstName,
-          lastName: formData.lastName,
-          username: formData.username,
-          email: formData.email,
-          password: formData.password
-
-        }
-      }).subscribe(res => {
-        console.log('Doctor created successfully');
-      });
+      this.doctorService.doctorCreate({ body: formData })
+        .subscribe(() => {
+          this.router?.navigateByUrl('/');
+        });
     } else {
-
-      let model = {
+      const model: RegisterUserRequestModel = {
         firstName: formData.firstName,
         lastName: formData.lastName,
         username: formData.username,
@@ -107,7 +118,7 @@ export class RegisterComponent implements OnInit {
       } as RegisterUserRequestModel;
 
       this.identityService.identityRegister({ body: model }).subscribe(() => {
-        this.router.navigateByUrl('/');
+        this.router?.navigateByUrl('/');
       });
     }
   }
