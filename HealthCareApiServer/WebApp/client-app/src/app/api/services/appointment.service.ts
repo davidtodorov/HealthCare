@@ -23,6 +23,8 @@ import { appointmentPost } from '../fn/appointment/appointment-post';
 import { AppointmentPost$Params } from '../fn/appointment/appointment-post';
 import { appointmentPut } from '../fn/appointment/appointment-put';
 import { AppointmentPut$Params } from '../fn/appointment/appointment-put';
+import { appointmentUpdateStatus } from '../fn/appointment/appointment-update-status';
+import { AppointmentUpdateStatus$Params } from '../fn/appointment/appointment-update-status';
 
 @Injectable({ providedIn: 'root' })
 export class AppointmentService extends BaseService {
@@ -52,6 +54,33 @@ export class AppointmentService extends BaseService {
    */
   appointmentBook(params: AppointmentBook$Params, context?: HttpContext): Observable<Blob> {
     const resp = this.appointmentBook$Response(params, context);
+    return resp.pipe(
+      map((r: StrictHttpResponse<Blob>): Blob => r.body)
+    );
+  }
+
+  /** Path part for operation `appointmentUpdateStatus()` */
+  static readonly AppointmentUpdateStatusPath = '/api/Appointment/UpdateStatus';
+
+  /**
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `appointmentUpdateStatus()` instead.
+   *
+   * This method sends `application/json` and handles request body of type `application/json`.
+   */
+  appointmentUpdateStatus$Response(params: AppointmentUpdateStatus$Params, context?: HttpContext): Observable<StrictHttpResponse<Blob>> {
+    const obs = appointmentUpdateStatus(this.http, this.rootUrl, params, context);
+    return obs;
+  }
+
+  /**
+   * This method provides access only to the response body.
+   * To access the full response (for headers, for example), `appointmentUpdateStatus$Response()` instead.
+   *
+   * This method sends `application/json` and handles request body of type `application/json`.
+   */
+  appointmentUpdateStatus(params: AppointmentUpdateStatus$Params, context?: HttpContext): Observable<Blob> {
+    const resp = this.appointmentUpdateStatus$Response(params, context);
     return resp.pipe(
       map((r: StrictHttpResponse<Blob>): Blob => r.body)
     );

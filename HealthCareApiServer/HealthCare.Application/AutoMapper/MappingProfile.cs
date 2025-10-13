@@ -4,6 +4,7 @@ using HealthCare.Application.Models.Appointments;
 using HealthCare.Application.Models.Doctor;
 using HealthCare.Application.Models.Hospital;
 using HealthCare.Application.Models.Patients;
+using HealthCare.Application.Models.Prescriptions;
 using HealthCare.Application.Models.Users;
 using HealthCare.Core.Entities;
 using System;
@@ -38,9 +39,14 @@ namespace HealthCare.Application.AutoMapper
                 .ForMember(am => am.PatientId, opts => opts.MapFrom(a => a.PatientId))
                 .ForMember(am => am.DoctorId, opts => opts.MapFrom(a => a.DoctorId));
 
+            CreateMap<UpdateAppointmentModel, Appointment>()
+                .ForMember(am => am.Status, opts => opts.MapFrom(a => a.Status));
+
+
             CreateMap<Appointment, CreateAppointmentModel>().ReverseMap();
 
-            CreateMap<Department, DepartmentModel>();
+            CreateMap<Department, DepartmentModel>().ReverseMap();
+            CreateMap<Prescription, PrescriptionModel>().ReverseMap();
             CreateMap<Patient, PatientModel>()
                 .ForMember(am => am.Id, opts => opts.MapFrom(a => a.Id))
                 .ForMember(am => am.FirstName, opts => opts.MapFrom(a => a.User.FirstName))

@@ -15,7 +15,7 @@ export interface DoctorGetAppointmentsForDoctor$Params {
 }
 
 export function doctorGetAppointmentsForDoctor(http: HttpClient, rootUrl: string, params?: DoctorGetAppointmentsForDoctor$Params, context?: HttpContext): Observable<StrictHttpResponse<Array<AppointmentModel>>> {
-  const rb = new RequestBuilder(rootUrl, doctorGetAppointmentsForDoctor.PATH, 'post');
+  const rb = new RequestBuilder(rootUrl, doctorGetAppointmentsForDoctor.PATH, 'get');
   if (params) {
     rb.query('doctorId', params.doctorId, {});
     rb.query('month', params.month, {});

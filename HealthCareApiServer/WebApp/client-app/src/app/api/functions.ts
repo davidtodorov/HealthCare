@@ -3,6 +3,8 @@
 
 export type { AppointmentBook$Params } from './fn/appointment/appointment-book';
 export { appointmentBook } from './fn/appointment/appointment-book';
+export type { AppointmentUpdateStatus$Params } from './fn/appointment/appointment-update-status';
+export { appointmentUpdateStatus } from './fn/appointment/appointment-update-status';
 export type { AppointmentGetAll$Params } from './fn/appointment/appointment-get-all';
 export { appointmentGetAll } from './fn/appointment/appointment-get-all';
 export type { AppointmentPost$Params } from './fn/appointment/appointment-post';
@@ -59,6 +61,18 @@ export type { IdentityVerify$Params } from './fn/identity/identity-verify';
 export { identityVerify } from './fn/identity/identity-verify';
 export type { IdentityRoles$Params } from './fn/identity/identity-roles';
 export { identityRoles } from './fn/identity/identity-roles';
+export type { PrescriptionGetPrescriptionsByAppointmentId$Params } from './fn/prescription/prescription-get-prescriptions-by-appointment-id';
+export { prescriptionGetPrescriptionsByAppointmentId } from './fn/prescription/prescription-get-prescriptions-by-appointment-id';
+export type { PrescriptionGetAll$Params } from './fn/prescription/prescription-get-all';
+export { prescriptionGetAll } from './fn/prescription/prescription-get-all';
+export type { PrescriptionPost$Params } from './fn/prescription/prescription-post';
+export { prescriptionPost } from './fn/prescription/prescription-post';
+export type { PrescriptionGet$Params } from './fn/prescription/prescription-get';
+export { prescriptionGet } from './fn/prescription/prescription-get';
+export type { PrescriptionPut$Params } from './fn/prescription/prescription-put';
+export { prescriptionPut } from './fn/prescription/prescription-put';
+export type { PrescriptionDelete$Params } from './fn/prescription/prescription-delete';
+export { prescriptionDelete } from './fn/prescription/prescription-delete';
 export type { UserGetAll$Params } from './fn/user/user-get-all';
 export { userGetAll } from './fn/user/user-get-all';
 export type { UserPost$Params } from './fn/user/user-post';

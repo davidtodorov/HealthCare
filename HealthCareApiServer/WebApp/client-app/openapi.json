@@ -44,6 +44,50 @@
         }
       }
     },
+    "/api/Appointment/UpdateStatus": {
+      "put": {
+        "tags": [
+          "Appointment"
+        ],
+        "operationId": "Appointment_UpdateStatus",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            },
+            "x-position": 1
+          }
+        ],
+        "requestBody": {
+          "x-name": "requestModel",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateAppointmentModel"
+              }
+            }
+          },
+          "required": true,
+          "x-position": 2
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/octet-stream": {
+                "schema": {
+                  "type": "string",
+                  "format": "binary"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/Appointment": {
       "get": {
         "tags": [
@@ -398,7 +442,7 @@
       }
     },
     "/api/Doctor/GetAppointmentsForDoctor": {
-      "post": {
+      "get": {
         "tags": [
           "Doctor"
         ],
@@ -945,6 +989,200 @@
         ]
       }
     },
+    "/api/Prescription/GetPrescriptionsByAppointmentId": {
+      "get": {
+        "tags": [
+          "Prescription"
+        ],
+        "operationId": "Prescription_GetPrescriptionsByAppointmentId",
+        "parameters": [
+          {
+            "name": "appId",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            },
+            "x-position": 1
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/PrescriptionModel"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/Prescription": {
+      "get": {
+        "tags": [
+          "Prescription"
+        ],
+        "operationId": "Prescription_GetAll",
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/PrescriptionModel"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "Prescription"
+        ],
+        "operationId": "Prescription_Post",
+        "requestBody": {
+          "x-name": "requestModel",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/PrescriptionModel"
+              }
+            }
+          },
+          "required": true,
+          "x-position": 1
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/octet-stream": {
+                "schema": {
+                  "type": "string",
+                  "format": "binary"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/Prescription/{id}": {
+      "get": {
+        "tags": [
+          "Prescription"
+        ],
+        "operationId": "Prescription_Get",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            },
+            "x-position": 1
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PrescriptionModel"
+                }
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "Prescription"
+        ],
+        "operationId": "Prescription_Put",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            },
+            "x-position": 1
+          }
+        ],
+        "requestBody": {
+          "x-name": "requestModel",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/PrescriptionModel"
+              }
+            }
+          },
+          "required": true,
+          "x-position": 2
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/octet-stream": {
+                "schema": {
+                  "type": "string",
+                  "format": "binary"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "Prescription"
+        ],
+        "operationId": "Prescription_Delete",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            },
+            "x-position": 1
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/octet-stream": {
+                "schema": {
+                  "type": "string",
+                  "format": "binary"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/User": {
       "get": {
         "tags": [
@@ -1294,6 +1532,34 @@
           }
         }
       },
+      "UpdateAppointmentModel": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "status": {
+            "$ref": "#/components/schemas/AppointmentStatus"
+          }
+        }
+      },
+      "AppointmentStatus": {
+        "type": "integer",
+        "description": "",
+        "x-enumNames": [
+          "Upcoming",
+          "Completed",
+          "Canceled"
+        ],
+        "x-enum-descriptions": [
+          "Upcoming",
+          null,
+          null
+        ],
+        "enum": [
+          0,
+          1,
+          2
+        ]
+      },
       "AppointmentModel": {
         "allOf": [
           {
@@ -1341,25 +1607,6 @@
           }
         ]
       },
-      "AppointmentStatus": {
-        "type": "integer",
-        "description": "",
-        "x-enumNames": [
-          "Upcoming",
-          "Completed",
-          "Canceled"
-        ],
-        "x-enum-descriptions": [
-          "Upcoming",
-          null,
-          null
-        ],
-        "enum": [
-          0,
-          1,
-          2
-        ]
-      },
       "PatientModel": {
         "allOf": [
           {
@@ -1384,6 +1631,64 @@
               "fullName": {
                 "type": "string",
                 "nullable": true
+              },
+              "prescriptions": {
+                "type": "array",
+                "nullable": true,
+                "items": {
+                  "$ref": "#/components/schemas/PrescriptionModel"
+                }
+              }
+            }
+          }
+        ]
+      },
+      "PrescriptionModel": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/EntityModel"
+          },
+          {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "name"
+            ],
+            "properties": {
+              "name": {
+                "type": "string",
+                "minLength": 1
+              },
+              "dose": {
+                "type": "string",
+                "nullable": true
+              },
+              "patientId": {
+                "type": "integer",
+                "format": "int32"
+              },
+              "appointmentId": {
+                "type": "integer",
+                "format": "int32"
+              },
+              "startDate": {
+                "type": "string",
+                "format": "date-time"
+              },
+              "durationInDays": {
+                "type": "integer",
+                "format": "int32"
+              },
+              "times": {
+                "type": "array",
+                "nullable": true,
+                "items": {
+                  "type": "string",
+                  "format": "date-time"
+                }
+              },
+              "isActive": {
+                "type": "boolean"
               }
             }
           }

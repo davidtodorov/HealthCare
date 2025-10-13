@@ -5,10 +5,11 @@ import { filter } from 'rxjs/operators';
 import { Observable } from 'rxjs';
 import { CommonModule } from '@angular/common';
 import { AuthService } from './auth/auth.service';
+import { LoadingSpinnerComponent } from './common/loading-spinner/loading-spinner.component';
 
 @Component({
     selector: 'app-root',
-    imports: [RouterOutlet, CommonModule],
+    imports: [RouterOutlet, CommonModule, LoadingSpinnerComponent],
     templateUrl: './app.component.html',
     styleUrl: './app.component.scss'
 })

@@ -61,9 +61,9 @@
                     <select [(ngModel)]="statusFilter" (change)="renderSchedule()"
                         class="w-full sm:w-auto border border-slate-200 rounded-xl px-3 py-2 focus:ring-2 focus:ring-indigo-300">
                         <option value="all">All statuses</option>
-                        <option [ngValue]="AppointmentStatus.Upcoming">Upcoming</option>
-                        <option [ngValue]="AppointmentStatus.Completed">Completed</option>
-                        <option [ngValue]="AppointmentStatus.Canceled">Canceled</option>
+                        <option value="upcoming">Upcoming</option>
+                        <option value="completed">Completed</option>
+                        <option value="canceled">Canceled</option>
                     </select>
                 </div>
                 <div class="text-lg font-bold text-slate-900 mb-2">{{ dateHeading }}</div>
@@ -108,5 +108,216 @@
 
         </div> <!-- End of ROW 1 container -->
 
+        <!-- ROW 2: Appointment details -->
+        <section class="bg-white border border-slate-200 rounded-2xl shadow-xl p-4 md:p-6">
+            <h2 class="text-xl font-bold mb-4 text-slate-800">Appointment Details</h2>
+
+            <div *ngIf="!selectedAppt" class="text-slate-600 p-4 bg-slate-50 rounded-xl text-sm">
+                Select an appointment from the list above to view patient info, notes, prescriptions, and previous
+                visits.
+            </div>
+
+            <div *ngIf="selectedAppt && currentPatient" class="grid gap-6">
+
+                <!-- Patient Info -->
+                <div
+                    class="flex flex-col sm:flex-row items-start gap-4 border border-slate-200 rounded-xl p-4 bg-indigo-50/50">
+                    <img [src]=""
+                        class="w-16 h-16 rounded-full object-cover ring-2 ring-indigo-300 shrink-0" alt="Patient Avatar"
+                        onerror="this.onerror=null; this.src='https://placehold.co/64x64/E2E8F0/94A3B8?text=P'" />
+                    <div class="grid gap-1 flex-1">
+                        <div class="font-bold text-lg text-indigo-800">{{ currentPatient.fullName }}</div>
+                        <div class="text-sm text-slate-600">{{ patientMeta }}</div>
+                    </div>
+                </div>
+
+                <div class="grid lg:grid-cols-2 gap-6">
+                    <!-- LEFT COLUMN: Visit, Notes, Prescriptions -->
+                    <div class="grid gap-6">
+
+                        <!-- Current Appointment -->
+                        <div class="grid gap-2 p-4 border border-slate-100 rounded-xl bg-slate-50">
+                            <div class="font-semibold text-base text-slate-800 border-b border-slate-200 pb-2">Current
+                                Visit</div>
+                            <div class="flex items-start justify-between gap-4 flex-wrap">
+                                <div class="grid gap-1 text-sm">
+                                    <div><span class="text-slate-600">Date:</span> <span class="font-medium">{{
+                                            selectedAppt.dateTime | date: 'shortDate' }}</span></div>
+                                    <div><span class="text-slate-600">Time:</span> <span class="font-medium">{{
+                                            selectedAppt.dateTime | date: 'HH:mm' }}</span></div>
+                                    <div><span class="text-slate-600">Reason:</span> <span class="font-medium">{{
+                                            selectedAppt.reason }}</span></div>
+                                    <div><span class="text-slate-600">Status:</span> <span
+                                            class="text-xs px-2 py-0.5 rounded-full border font-medium capitalize"
+                                            [ngClass]="getApptStatusClasses(selectedAppt.status)">{{ selectedAppt.status | enumText: AppointmentStatus }}</span></div>
+                                </div>
+                                <div class="flex gap-2 flex-wrap">
+                                    <button
+                                        class="px-3 py-2 rounded-xl bg-green-600 text-white hover:bg-green-700 transition disabled:opacity-50 text-sm font-medium"
+                                        (click)="updateStatus(AppointmentStatus.Completed)"
+                                        [disabled]="selectedAppt.status === AppointmentStatus.Completed || selectedAppt.status === AppointmentStatus.Canceled">
+                                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none"
+                                            stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                            stroke-linejoin="round" class="inline align-middle mr-1">
+                                            <path d="M20 6 9 17l-5-5" />
+                                        </svg>
+                                        Complete</button>
+                                    <button
+                                        class="px-3 py-2 rounded-xl border border-red-400 text-red-600 hover:bg-red-50 transition disabled:opacity-50 text-sm font-medium"
+                                        (click)="updateStatus(AppointmentStatus.Canceled)"
+                                        [disabled]="selectedAppt.status === AppointmentStatus.Canceled || selectedAppt.status === AppointmentStatus.Completed">
+                                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none"
+                                            stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                            stroke-linejoin="round" class="inline align-middle mr-1">
+                                            <path d="M18 6 6 18" />
+                                            <path d="m6 6 12 12" />
+                                        </svg>
+                                        Cancel</button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Notes -->
+                        <div class="grid gap-2">
+                            <div class="font-semibold text-base text-slate-800 border-b border-slate-200 pb-2">Notes
+                            </div>
+                            <div class="grid gap-2 max-h-[150px] overflow-y-auto pr-2">
+                                <!-- <ng-container *ngIf="currentPatient.notes.length > 0; else noNotes">
+                                    <div *ngFor="let note of currentPatient.notes"
+                                        class="border border-slate-200 rounded-xl px-3 py-2 bg-slate-50 text-sm">
+                                        {{ note }}
+                                    </div>
+                                </ng-container> -->
+                                <ng-template #noNotes>
+                                    <div class="text-slate-600 italic text-sm p-2 bg-slate-50 rounded-xl">No patient
+                                        notes yet.</div>
+                                </ng-template>
+                            </div>
+                            <div class="flex gap-2 pt-1">
+                                <input type="text" [(ngModel)]="newNoteText" (keyup.enter)="addNote()"
+                                    class="w-full border border-slate-200 rounded-xl px-3 py-2 outline-none focus:ring-2 focus:ring-indigo-300 text-sm"
+                                    placeholder="Add a quick note…" />
+                                <button
+                                    class="px-4 py-2 rounded-xl bg-slate-900 text-white hover:bg-slate-700 transition text-sm font-medium"
+                                    (click)="addNote()">Add</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- RIGHT COLUMN: Prescriptions & Previous Visits -->
+                    <div class="grid gap-6">
+                        <!-- Prescriptions -->
+                        <div class="grid gap-3">
+                            <div class="font-semibold text-base text-slate-800 border-b border-slate-200 pb-2">Active
+                                Prescriptions</div>
+                            <div class="grid gap-2 max-h-[150px] overflow-y-auto pr-2">
+                                <!-- FIX: Updated trackBy to use the component method trackByRxId -->
+                                <ng-container *ngIf="activePrescriptions.length > 0; else noRx">
+                                    <div *ngFor="let rx of activePrescriptions; trackBy: trackByRxId"
+                                        class="border border-indigo-200 rounded-xl p-3 bg-indigo-50 grid gap-1 shadow-sm">
+                                        <div class="flex items-center justify-between gap-2">
+                                            <div><strong class="text-indigo-900 text-sm">{{ rx.name }}</strong> —
+                                                <span class="text-xs font-medium text-slate-700">{{ rx.dose }}</span>
+                                            </div>
+                                            <button
+                                                class="text-xs px-2 py-0.5 rounded-xl border border-red-300 text-red-600 hover:bg-red-50 transition shrink-0"
+                                                (click)="stopPrescription(rx.id)">Stop Rx</button>
+                                        </div>
+                                        <div class="text-slate-600 text-xs">
+                                            <span
+                                                class="px-2 py-0.5 rounded-full bg-indigo-200 text-indigo-800 font-medium mr-1">{{
+                                                rx.durationInDays }} days</span>
+                                            ({{ rx.startDate }} to {{ computeEndDate(rx.startDate, rx.durationInDays) }})
+                                        </div>
+                                        <div class="flex flex-wrap gap-2 pt-1 border-t border-indigo-100 mt-1">
+                                            <span *ngFor="let t of rx.times"
+                                                class='px-2 py-0.5 rounded-full bg-white border border-indigo-100 text-xs text-indigo-700 font-mono'>{{
+                                                t }}</span>
+                                        </div>
+                                    </div>
+                                </ng-container>
+                                <ng-template #noRx>
+                                    <div class="text-slate-600 italic text-sm p-2 bg-slate-50 rounded-xl">No active
+                                        prescriptions.</div>
+                                </ng-template>
+                            </div>
+
+                            <div class="border border-slate-200 rounded-xl p-3 grid gap-3 bg-slate-50">
+                                <h3 class="font-medium text-sm text-slate-700">Add New Prescription</h3>
+                                <div class="grid grid-cols-2 gap-2">
+                                    <input type="text" [(ngModel)]="rxNameInput"
+                                        class="border border-slate-200 rounded-xl px-3 py-2 text-sm"
+                                        placeholder="Medication name" />
+                                    <input type="text" [(ngModel)]="rxDoseInput"
+                                        class="border border-slate-200 rounded-xl px-3 py-2 text-sm"
+                                        placeholder="Dose (e.g., 50 mg)" />
+                                    <input type="number" [(ngModel)]="rxDaysInput"
+                                        class="border border-slate-200 rounded-xl px-3 py-2 text-sm" min="1"
+                                        placeholder="Days" />
+                                    <select [(ngModel)]="rxTimesPerDayInput"
+                                        (change)="buildTimeInputs(+rxTimesPerDayInput)"
+                                        class="border border-slate-200 rounded-xl px-3 py-2 text-sm">
+                                        <option value="1">1× per day</option>
+                                        <option value="2">2× per day</option>
+                                        <option value="3">3× per day</option>
+                                        <option value="4">4× per day</option>
+                                    </select>
+                                </div>
+                                <div class="flex flex-wrap gap-2 border-t pt-3 mt-1 border-slate-100">
+                                    <input *ngFor="let time of rxTimeInputs; let i = index" type="time" [ngModel]="time"
+                                        (ngModelChange)="setRxTime(i, $event)"
+                                        class="border border-slate-200 rounded-xl px-3 py-2 text-sm w-[110px] focus:ring-2 focus:ring-indigo-300" />
+                                </div>
+                                <button
+                                    class="px-4 py-2 rounded-xl bg-indigo-600 text-white hover:bg-indigo-700 transition text-sm font-medium"
+                                    (click)="addPrescription()">
+                                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                        stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                                        class="inline align-middle mr-1">
+                                        <path d="M5 12h14" />
+                                        <path d="M12 5v14" />
+                                    </svg>
+                                    Add Prescription
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Previous Visits -->
+                        <div class="grid gap-2">
+                            <div class="font-semibold text-base text-slate-800 border-b border-slate-200 pb-2">Previous
+                                Visits</div>
+                            <div class="max-h-[200px] overflow-y-auto pr-2">
+                                <table class="w-full text-sm border-collapse">
+                                    <thead>
+                                        <tr class="text-left text-slate-600">
+                                            <th class="py-2 border-b border-slate-200 font-medium">Date</th>
+                                            <th class="py-2 border-b border-slate-200 font-medium">Reason</th>
+                                            <th class="py-2 border-b border-slate-200 font-medium">Outcome</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <ng-container *ngIf="previousVisits.length > 0; else noPrevVisits">
+                                            <tr *ngFor="let visit of previousVisits"
+                                                class="hover:bg-slate-50 transition">
+                                                <td class='py-2 border-b border-slate-200'>{{ visit.dateTime | date: 'short' }}</td>
+                                                <td class='py-2 border-b border-slate-200 text-slate-700'>{{
+                                                    visit.reason }}</td>
+                                                <td class='py-2 border-b border-slate-200 capitalize text-slate-700'>{{ visit.status | enumText: AppointmentStatus }}</td>
+                                            </tr>
+                                        </ng-container>
+                                        <ng-template #noPrevVisits>
+                                            <tr>
+                                                <td colspan="3" class="text-slate-600 py-2 italic text-center">No
+                                                    previous completed visits found.</td>
+                                            </tr>
+                                        </ng-template>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
     </div>
 </div>

@@ -3,9 +3,11 @@ import { provideRouter } from '@angular/router';
 
 import { routes } from './app.routes';
 import { provideServiceWorker } from '@angular/service-worker';
-import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
+import { HTTP_INTERCEPTORS, provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
 import { ApiConfiguration } from './api/api-configuration';
 import { environment } from '../environments/environment'
+import { LoadingInterceptor } from './common/loading.interceptor';
+
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -15,8 +17,9 @@ export const appConfig: ApplicationConfig = {
       registrationStrategy: 'registerWhenStable:30000'
     }),
     provideHttpClient(
-      withInterceptorsFromDi() // optional, if you use DI-based interceptors
+      withInterceptorsFromDi(), // optional, if you use DI-based interceptors
     ),
+    { provide: HTTP_INTERCEPTORS, useClass: LoadingInterceptor, multi: true },
     { provide: ApiConfiguration, useValue: { rootUrl: environment.apiUrl } }
   ]
 };

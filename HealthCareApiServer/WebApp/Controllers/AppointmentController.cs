@@ -38,5 +38,14 @@ namespace WebApp.Controllers
 
             return Ok();
         }
+
+        [HttpPut(nameof(UpdateStatus))]
+        public ActionResult UpdateStatus(int id, UpdateAppointmentModel requestModel)
+        {
+            var entity = this.unitOfWork.AppointmentRepository.GetById(id);
+            mapper.Map(requestModel, entity);
+            unitOfWork.SaveChanges();
+            return Ok();
+        }
     }
 }

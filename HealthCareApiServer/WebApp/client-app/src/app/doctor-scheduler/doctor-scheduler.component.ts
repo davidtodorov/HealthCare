@@ -3,8 +3,8 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { CalendarComponent } from '../common/calendar/calendar.component';
 import moment from 'moment';
-import { DoctorService } from '../api/services';
-import { AppointmentModel, AppointmentStatus, User } from '../api/models';
+import { AppointmentService, DoctorService, PrescriptionService } from '../api/services';
+import { AppointmentModel, AppointmentStatus, PatientModel, Prescription, PrescriptionModel, User } from '../api/models';
 import { A } from '@fullcalendar/core/internal-common';
 import { EnumTextPipe } from '../common/enumPipe';
 
@@ -16,7 +16,7 @@ import { EnumTextPipe } from '../common/enumPipe';
   styleUrls: ['./doctor-scheduler.component.scss']
 })
 export class DoctorSchedulerComponent implements OnInit {
-  constructor(private doctorService: DoctorService) {
+  constructor(private doctorService: DoctorService, private prescriptionService: PrescriptionService, private appointmentService: AppointmentService) {
 
   }
   AppointmentStatus = AppointmentStatus;
@@ -40,7 +40,7 @@ export class DoctorSchedulerComponent implements OnInit {
   groupedAppointments: { date: string, appts: AppointmentModel[] }[] = [];
 
   // Detail View properties
-  currentPatient: User | undefined;
+  currentPatient: PatientModel | undefined;
   newNoteText: string = '';
   rxNameInput: string = '';
   rxDoseInput: string = '';
@@ -55,7 +55,6 @@ export class DoctorSchedulerComponent implements OnInit {
       this.dates = appointments.map(x => moment(x.dateTime!).format('YYYY-MM-DD'));
       this.appointments = appointments;
     });
-
   }
 
   getPatient(id?: number): any {
@@ -75,15 +74,16 @@ export class DoctorSchedulerComponent implements OnInit {
   }
 
   // Getter to provide actively filtered prescriptions for the template, fixing the compilation error
-  // get activePrescriptions(): Prescription[] {
-  //   if (!this.currentPatient) return [];
-  //   return []; //TODO: this.currentPatient.prescriptions.filter(r => r.active);
-  // }
+  get activePrescriptions(): PrescriptionModel[] {
+    if (!this.currentPatient) return [];
+    
+    return this.currentPatient.prescriptions?.filter(x => x.isActive) || [];
+  }
 
   // TrackBy function for *ngFor on prescriptions to prevent re-rendering and fix the error
-  // trackByRxId(index: number, rx: Prescription): string {
-  //   return rx.id;
-  // }
+  trackByRxId(index: number, rx: PrescriptionModel): number | undefined {
+    return rx.id;
+  }
 
   goToday(selectDay: boolean = true): void {
     if (selectDay) {
@@ -260,6 +260,9 @@ export class DoctorSchedulerComponent implements OnInit {
   // --- Detail Panel Logic ---
   openDetail(appt: AppointmentModel): void {
     this.selectedAppt = appt;
+    this.prescriptionService.prescriptionGetPrescriptionsByAppointmentId({ appId: appt.id! }).subscribe(res => { 
+
+     });
     this.currentPatient = this.getPatient(appt.patientId);
 
     if (!this.currentPatient) return;
@@ -275,16 +278,21 @@ export class DoctorSchedulerComponent implements OnInit {
 
   updateStatus(next: AppointmentStatus.Completed | AppointmentStatus.Canceled): void {
     if (!this.selectedAppt) return;
-    this.selectedAppt.status = next;
-    // Re-open detail and re-render schedule to reflect changes
-    this.openDetail(this.selectedAppt);
-    this.renderSchedule();
+    this.appointmentService
+      .appointmentUpdateStatus({ id: this.selectedAppt.id!, body: { status: next } }).subscribe(() => {
+        this.selectedAppt!.status = next;
+        // Re-open detail and re-render schedule to reflect changes
+        this.openDetail(this.selectedAppt!);
+        this.renderSchedule();
+
+      });
+    
   }
 
   get patientMeta(): string {
     if (!this.currentPatient) return '';
     //TODO: return `${this.currentPatient.age} yrs • ${this.currentPatient.phone} • ${this.currentPatient.email}`;
-    return `${this.currentPatient.email}`;
+    return `METADATA HERE`;
   }
 
   // --- Notes ---
@@ -355,7 +363,7 @@ export class DoctorSchedulerComponent implements OnInit {
     this.buildTimeInputs(2);
   }
 
-  stopPrescription(id: string): void {
+  stopPrescription(id?: number): void {
     if (!this.currentPatient) return;
     //TODO: const item = this.currentPatient.prescriptions.find(r => r.id === id);
     //TODO: if (item) { item.active = false; }

@@ -38,7 +38,7 @@ namespace WebApp.Controllers
             return Ok();
         }
 
-        [HttpPost(nameof(GetAppointmentsForDoctor))]
+        [HttpGet(nameof(GetAppointmentsForDoctor))]
         public async Task<ActionResult<IEnumerable<AppointmentModel>>> GetAppointmentsForDoctor(int doctorId, int month)
         {
             var appointents = (await this.unitOfWork.AppointmentRepository.GetAllAsync(a => a.DateTime.Month == month)).ToList();

@@ -7,6 +7,7 @@ export { DoctorService } from './services/doctor.service';
 export { HomeService } from './services/home.service';
 export { HospitalService } from './services/hospital.service';
 export { IdentityService } from './services/identity.service';
+export { PrescriptionService } from './services/prescription.service';
 export { UserService } from './services/user.service';
 export { ValuesService } from './services/values.service';
 export { WeatherForecastService } from './services/weather-forecast.service';

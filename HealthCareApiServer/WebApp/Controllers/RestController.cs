@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Threading.Tasks;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
@@ -24,10 +25,17 @@ namespace WebApp.Controllers
             this.mapper = mapper;
         }
 
-        [HttpGet]
-        public async Task<IEnumerable<TModel>> Get()
+        private Expression<Func<TEntity, bool>> filterFunc = null;
+
+        protected void SetFilterFunc(Expression<Func<TEntity, bool>> filter)
         {
-            var entities = await repository.GetAllAsync();
+            filterFunc = filter;
+        }
+
+        [HttpGet]
+        public virtual async Task<IEnumerable<TModel>> Get()
+        {
+            var entities = await repository.GetAllAsync(filterFunc);
             var result = mapper.Map<IEnumerable<TEntity>, IEnumerable<TModel>>(entities);
             return result.ToList();
         }
