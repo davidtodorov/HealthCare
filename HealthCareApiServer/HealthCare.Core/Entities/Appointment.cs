@@ -14,7 +14,7 @@ namespace HealthCare.Core.Entities
         public string Reason { get; set; }
 
         public AppointmentStatus Status { get; set; }
-        public List<string> Notes { get; set; }
+        public string Notes { get; set; }
 
 
         [ForeignKey(nameof(Patient))]

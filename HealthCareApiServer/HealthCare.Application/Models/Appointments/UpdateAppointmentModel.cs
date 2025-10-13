@@ -1,4 +1,5 @@
-﻿using HealthCare.Core.Entities;
+﻿using HealthCare.Application.Models.Prescriptions;
+using HealthCare.Core.Entities;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -12,6 +13,8 @@ namespace HealthCare.Application.Models.Appointments
     public class UpdateAppointmentModel
     {
         public AppointmentStatus Status { get; set; }
+        public string Notes { get; set; }
+        public List<PrescriptionModel> Prescriptions{ get; set; }
 
     }
 }

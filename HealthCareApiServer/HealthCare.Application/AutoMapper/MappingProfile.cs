@@ -37,10 +37,14 @@ namespace HealthCare.Application.AutoMapper
                 .ForMember(am => am.Reason, opts => opts.MapFrom(a => a.Reason))
                 .ForMember(am => am.Status, opts => opts.MapFrom(a => a.Status))
                 .ForMember(am => am.PatientId, opts => opts.MapFrom(a => a.PatientId))
+                .ForMember(am => am.Notes, opts => opts.MapFrom(a => a.Notes))
                 .ForMember(am => am.DoctorId, opts => opts.MapFrom(a => a.DoctorId));
 
             CreateMap<UpdateAppointmentModel, Appointment>()
-                .ForMember(am => am.Status, opts => opts.MapFrom(a => a.Status));
+                .ForMember(am => am.Status, opts => opts.MapFrom(a => a.Status))
+                .ForMember(am => am.Notes, opts => opts.MapFrom(a => a.Notes))
+                .ForMember(am => am.Prescriptions, opts => opts.MapFrom(a => a.Prescriptions))
+                ;
 
 
             CreateMap<Appointment, CreateAppointmentModel>().ReverseMap();
@@ -50,7 +54,9 @@ namespace HealthCare.Application.AutoMapper
             CreateMap<Patient, PatientModel>()
                 .ForMember(am => am.Id, opts => opts.MapFrom(a => a.Id))
                 .ForMember(am => am.FirstName, opts => opts.MapFrom(a => a.User.FirstName))
-                .ForMember(am => am.LastName, opts => opts.MapFrom(a => a.User.LastName));
+                .ForMember(am => am.LastName, opts => opts.MapFrom(a => a.User.LastName))
+                .ForMember(am => am.Email, opts => opts.MapFrom(a => a.User.Email));
+;
         }
     }
 }

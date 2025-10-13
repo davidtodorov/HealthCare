@@ -1,4 +1,5 @@
 ﻿using HealthCare.Application.Models.Patients;
+using HealthCare.Application.Models.Prescriptions;
 using HealthCare.Core.Entities;
 using System;
 using System.Collections.Generic;
@@ -24,6 +25,10 @@ namespace HealthCare.Application.Models.Appointments
 
         [Required]
         public int DoctorId { get; set; }
+
+        public string Notes { get; set; }
+
+        public virtual List<PrescriptionModel> Prescriptions { get; set; } = new List<PrescriptionModel>();
 
     }
 }
