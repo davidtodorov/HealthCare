@@ -9,7 +9,6 @@ import { A } from '@fullcalendar/core/internal-common';
 import { EnumTextPipe } from '../common/enumPipe';
 import { AuthService } from '../auth/auth.service';
 
-// --- Component Definition ---
 @Component({
   selector: 'app-doctor-scheduler',
   imports: [CommonModule, FormsModule, CalendarComponent, EnumTextPipe],
@@ -61,21 +60,22 @@ export class DoctorSchedulerComponent implements OnInit {
     });
   }
 
-  getPatient(id?: number): any {
-    const appointment = this.appointments.find(p => p.patientId === id);
-    if (appointment) {
-      let user = {
-        id: appointment?.patientId,
-        fullName: appointment?.patient?.fullName,
-      } as any as User;
-      return user;
-      //TODO: add prescriptions and notes to the mock data
-      // Ensure properties exist for template safety
-      //p.notes = ;p.notes || [];
-      //p.prescriptions = p.prescriptions || [];
-    }
-    return;
-  }
+  // getPatient(id?: number): any {
+  //   const appointment = this.appointments.find(p => p.patientId === id);
+  //   if (appointment) {
+  //     let patient = {
+  //       id: appointment?.patientId,
+  //       fullName: appointment?.patient?.fullName,
+  //       prescriptions: appointment?.prescriptions || [],
+  //     } as any as PatientModel;
+  //     return patient;
+  //     //TODO: add prescriptions and notes to the mock data
+  //     // Ensure properties exist for template safety
+  //     //p.notes = ;p.notes || [];
+  //     //p.prescriptions = p.prescriptions || [];
+  //   }
+  //   return;
+  // }
 
   // Getter to provide actively filtered prescriptions for the template, fixing the compilation error
   get activePrescriptions(): PrescriptionModel[] {
@@ -265,7 +265,7 @@ export class DoctorSchedulerComponent implements OnInit {
     this.prescriptionService.prescriptionGetPrescriptionsByAppointmentId({ appId: appt.id! }).subscribe(res => { 
 
      });
-    this.currentPatient = this.getPatient(appt.patientId);
+    this.currentPatient = appt.patient || undefined;
 
     if (!this.currentPatient) return;
 
@@ -280,6 +280,7 @@ export class DoctorSchedulerComponent implements OnInit {
 
   updateStatus(next: AppointmentStatus.Completed | AppointmentStatus.Canceled): void {
     if (!this.selectedAppt) return;
+    
     this.appointmentService
       .appointmentUpdateStatus({ id: this.selectedAppt.id!, body: { status: next } }).subscribe(() => {
         this.selectedAppt!.status = next;
@@ -293,8 +294,7 @@ export class DoctorSchedulerComponent implements OnInit {
 
   get patientMeta(): string {
     if (!this.currentPatient) return '';
-    //TODO: return `${this.currentPatient.age} yrs • ${this.currentPatient.phone} • ${this.currentPatient.email}`;
-    return `METADATA HERE`;
+    return `${this.currentPatient.email}`;
   }
 
   // --- Notes ---
@@ -309,8 +309,10 @@ export class DoctorSchedulerComponent implements OnInit {
   get previousVisits(): AppointmentModel[] {
     if (!this.currentPatient) return [];
     return this.appointments
-      .filter(a => a.patientId === this.currentPatient!.id && a.doctorId === this.doctorId && a.id !== (this.selectedAppt?.id || '')
-        && (a.status === AppointmentStatus.Completed || a.status === AppointmentStatus.Canceled))
+      .filter(x => x.patient?.userId === this.currentPatient?.userId 
+        && x.id !== this.selectedAppt?.id 
+        && moment(x.dateTime).isBefore(moment(this.selectedAppt?.dateTime))
+        && (x.status === AppointmentStatus.Completed || x.status === AppointmentStatus.Canceled))
       .sort((a, b) => b.dateTime.localeCompare(a.dateTime));
   }
 
@@ -346,16 +348,16 @@ export class DoctorSchedulerComponent implements OnInit {
     if (!medication || !dose || !times.length) return;
 
     //todo: prescription
-    // this.currentPatient.prescriptions.push({
-    //   id: 'rx_' + Math.random().toString(36).slice(2, 9),
-    //   doctorId: this.doctorId,
-    //   medication,
-    //   dose,
-    //   durationDays,
-    //   times,
-    //   startDate: this.selectedAppt.date,
-    //   active: true,
-    // });
+    let prescription: PrescriptionModel = {
+      name: medication,
+      dose: dose,
+      durationInDays: durationDays,
+      times: times,
+      startDate: this.selectedAppt.dateTime,
+      isActive: true,
+    };
+    this.currentPatient.prescriptions = this.currentPatient.prescriptions || [];
+    this.currentPatient.prescriptions.push(prescription);
 
     // Clear inputs
     this.rxNameInput = '';
@@ -367,8 +369,8 @@ export class DoctorSchedulerComponent implements OnInit {
 
   stopPrescription(id?: number): void {
     if (!this.currentPatient) return;
-    //TODO: const item = this.currentPatient.prescriptions.find(r => r.id === id);
-    //TODO: if (item) { item.active = false; }
+    const item = this.currentPatient.prescriptions?.find(r => r.id === id);
+    if (item) { item.isActive = false; }
   }
 
   computeEndDate(startYmd: string | undefined, days: number | undefined): string {

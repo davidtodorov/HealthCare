@@ -8,5 +8,6 @@ export type PatientModel = EntityModel & {
 'firstName'?: string | null;
 'lastName'?: string | null;
 'fullName'?: string | null;
+'email'?: string | null;
 'prescriptions'?: Array<PrescriptionModel> | null;
 };

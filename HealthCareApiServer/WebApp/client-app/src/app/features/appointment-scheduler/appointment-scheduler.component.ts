@@ -62,7 +62,7 @@ export class AppointmentSchedulerComponent {
   get dateLabel(): string {
     const d = this.selectedDate;
     if (!d) return 'Select a date to view hours.';
-    return d.toLocaleString();
+    return moment(d).format('ddd - Do MMMM, YYYY');
   }
 
   get slotsForSelected(): string[] {
@@ -77,11 +77,11 @@ export class AppointmentSchedulerComponent {
     const d = this.selectedDate;
     const t = this.selectedTime;
     if (doctor && d && t) {
-      return `${doctor.firstName} • ${doctor.departmentName} — ${d.toLocaleString()} at ${t}`;
+      return `${doctor.firstName} • ${doctor.departmentName} — ${moment(d).format('ddd - Do MMMM, YYYY')} at ${t}`;
     } else if (doctor && d) {
-      return `${doctor.firstName} — ${d.toLocaleString()} • Select a time.`;
+      return `${doctor.firstName} • ${doctor.departmentName} — ${moment(d).format('ddd - Do MMMM, YYYY')} • Select a time.`;
     } else if (doctor) {
-      return `${doctor.firstName} — Select a date.`;
+      return `${doctor.firstName} • ${doctor.departmentName} — Select a date.`;
     }
     return '—';
   }

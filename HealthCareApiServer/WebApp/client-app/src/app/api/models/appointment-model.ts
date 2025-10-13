@@ -4,6 +4,7 @@
 import { AppointmentStatus } from '../models/appointment-status';
 import { EntityModel } from '../models/entity-model';
 import { PatientModel } from '../models/patient-model';
+import { PrescriptionModel } from '../models/prescription-model';
 export type AppointmentModel = EntityModel & {
 'dateTime': string;
 'reason'?: string | null;
@@ -11,4 +12,6 @@ export type AppointmentModel = EntityModel & {
 'patientId': number;
 'patient'?: PatientModel | null;
 'doctorId': number;
+'notes'?: string | null;
+'prescriptions'?: Array<PrescriptionModel> | null;
 };

@@ -10,7 +10,7 @@ export type Appointment = Entity & {
 'dateTime'?: string;
 'reason'?: string | null;
 'status'?: AppointmentStatus;
-'notes'?: Array<string> | null;
+'notes'?: string | null;
 'patientId'?: number;
 'patient'?: Patient | null;
 'doctorId'?: number;
