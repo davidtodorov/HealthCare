@@ -298,12 +298,11 @@ export class DoctorSchedulerComponent implements OnInit {
     return `${this.currentPatient.email}`;
   }
 
-  // --- Notes ---
   addNote(): void {
     // TODO:
-    // if (!this.currentPatient || !this.newNoteText.trim()) return;
-    // this.currentPatient.notes.push(this.newNoteText.trim());
-    // this.newNoteText = '';
+    if (!this.selectedAppt || !this.newNoteText.trim()) return;
+    this.selectedAppt.notes = this.newNoteText.trim();
+    this.newNoteText = '';
   }
 
   // --- Previous Visits ---
@@ -380,9 +379,8 @@ export class DoctorSchedulerComponent implements OnInit {
 
   computeEndDate(startYmd: string | undefined, days: number | undefined): string {
     if (!startYmd || !days) return '—';
-    const start = new Date(startYmd + 'T00:00:00'); // Use T00:00:00 to avoid timezone issues
-    const end = new Date(start.getTime());
-    end.setDate(start.getDate() + (days - 1));
-    return moment(end).format('YYYY-MM-DD');
+    const start = moment.utc(startYmd);
+    const end = start.add(days - 1, 'days');
+    return moment.utc(end).format('YYYY-MM-DD');
   }
 }
