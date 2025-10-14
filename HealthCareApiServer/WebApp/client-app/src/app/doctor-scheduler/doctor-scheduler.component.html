@@ -233,8 +233,7 @@
                                         </div>
                                         <div class="flex flex-wrap gap-2 pt-1 border-t border-indigo-100 mt-1">
                                             <span *ngFor="let t of rx.times"
-                                                class='px-2 py-0.5 rounded-full bg-white border border-indigo-100 text-xs text-indigo-700 font-mono'>{{
-                                                t }}</span>
+                                                class='px-2 py-0.5 rounded-full bg-white border border-indigo-100 text-xs text-indigo-700 font-mono'>{{ t | date: 'HH:mm':'UTC' }}</span>
                                         </div>
                                     </div>
                                 </ng-container>

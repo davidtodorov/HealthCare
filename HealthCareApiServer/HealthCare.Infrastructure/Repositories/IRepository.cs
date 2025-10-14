@@ -24,5 +24,9 @@ namespace HealthCare.Infrastructure.Repositories
         void Remove(TEntity entityToDelete);
         void RemoveRange(IEnumerable<TEntity> entities);
 
+        void Update(TEntity entityToUpdate);
+
+        void UpdateRange(IEnumerable<TEntity> entities);
+
     }
 }

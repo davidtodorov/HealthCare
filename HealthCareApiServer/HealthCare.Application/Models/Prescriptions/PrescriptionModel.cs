@@ -14,6 +14,7 @@ namespace HealthCare.Application.Models.Prescriptions
         [Required]
         public string Name { get; set; }
         public string Dose { get; set; }
+        [Required]
         public int PatientId { get; set; }
         public int AppointmentId { get; set; }
         public DateTime StartDate { get; set; }

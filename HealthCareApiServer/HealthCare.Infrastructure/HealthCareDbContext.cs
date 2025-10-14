@@ -36,9 +36,21 @@ namespace HealthCare.Infrastructure
         {
             base.OnModelCreating(builder);
 
+            // Configure cascade delete for Appointment -> Prescription
+            builder.Entity<Prescription>()
+                .HasOne(p => p.Appointment)
+                .WithMany(a => a.Prescriptions)
+                .HasForeignKey(p => p.AppointmentId)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            // Optionally, keep other relationships restrictive
             foreach (var relationship in builder.Model.GetEntityTypes().SelectMany(e => e.GetForeignKeys()))
             {
-                relationship.DeleteBehavior = DeleteBehavior.Restrict;
+                if (relationship.PrincipalEntityType.ClrType != typeof(Appointment) ||
+                    relationship.DeclaringEntityType.ClrType != typeof(Prescription))
+                {
+                    relationship.DeleteBehavior = DeleteBehavior.Restrict;
+                }
             }
 
 

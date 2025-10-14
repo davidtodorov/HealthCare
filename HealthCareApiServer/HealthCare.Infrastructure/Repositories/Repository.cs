@@ -89,10 +89,19 @@ namespace HealthCare.Infrastructure.Repositories
             dbSet.RemoveRange(entities);
         }
 
-        //public virtual void Update(TEntity entityToUpdate)
-        //{
-        //    dbSet.Attach(entityToUpdate);
-        //    context.Entry(entityToUpdate).State = EntityState.Modified;
-        //}
+        public virtual void Update(TEntity entityToUpdate)
+        {
+            dbSet.Attach(entityToUpdate);
+            context.Entry(entityToUpdate).State = EntityState.Modified;
+        }
+
+        public virtual void UpdateRange(IEnumerable<TEntity> entities)
+        {
+            foreach (var entity in entities)
+            {
+                dbSet.Attach(entity);
+                context.Entry(entity).State = EntityState.Modified;
+            }
+        }
     }
 }

@@ -44,6 +44,7 @@ namespace WebApp.Controllers
         {
             var entity = this.unitOfWork.AppointmentRepository.GetById(id);
             mapper.Map(requestModel, entity);
+            unitOfWork.AppointmentRepository.Update(entity);
             unitOfWork.SaveChanges();
             return Ok();
         }

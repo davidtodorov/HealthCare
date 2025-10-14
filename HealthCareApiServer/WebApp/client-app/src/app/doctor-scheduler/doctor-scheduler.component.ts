@@ -262,9 +262,9 @@ export class DoctorSchedulerComponent implements OnInit {
   // --- Detail Panel Logic ---
   openDetail(appt: AppointmentModel): void {
     this.selectedAppt = appt;
-    this.prescriptionService.prescriptionGetPrescriptionsByAppointmentId({ appId: appt.id! }).subscribe(res => { 
+    // this.prescriptionService.prescriptionGetPrescriptionsByAppointmentId({ appId: appt.id! }).subscribe(res => { 
 
-     });
+    //  });
     this.currentPatient = appt.patient || undefined;
 
     if (!this.currentPatient) return;
@@ -282,7 +282,8 @@ export class DoctorSchedulerComponent implements OnInit {
     if (!this.selectedAppt) return;
     
     this.appointmentService
-      .appointmentUpdateStatus({ id: this.selectedAppt.id!, body: { status: next } }).subscribe(() => {
+      //TODO: 
+      .appointmentUpdateStatus({ id: this.selectedAppt.id!, body: { status: next, notes: this.selectedAppt.notes, prescriptions: this.currentPatient?.prescriptions } }).subscribe(() => {
         this.selectedAppt!.status = next;
         // Re-open detail and re-render schedule to reflect changes
         this.openDetail(this.selectedAppt!);
@@ -343,7 +344,9 @@ export class DoctorSchedulerComponent implements OnInit {
     const medication = this.rxNameInput.trim();
     const dose = this.rxDoseInput.trim();
     const durationDays = Math.max(1, this.rxDaysInput);
-    const times = this.rxTimeInputs.filter(t => t && t.trim()); // Only include non-empty times
+
+    //TODO: rxTimesInput is format "HH:mm" map to datetime objects, use moment co to parse and validate
+    const times = this.rxTimeInputs.filter(t => t && t.trim()).map(t => moment.utc(t, 'HH:mm').format()); // Only include non-empty times
 
     if (!medication || !dose || !times.length) return;
 
@@ -355,6 +358,8 @@ export class DoctorSchedulerComponent implements OnInit {
       times: times,
       startDate: this.selectedAppt.dateTime,
       isActive: true,
+      patientId: this.currentPatient.id,
+      appointmentId: this.selectedAppt.id,
     };
     this.currentPatient.prescriptions = this.currentPatient.prescriptions || [];
     this.currentPatient.prescriptions.push(prescription);
