@@ -471,6 +471,42 @@ namespace HealthCare.Infrastructure.Migrations
                     b.ToTable("Prescriptions");
                 });
 
+            modelBuilder.Entity("HealthCare.Core.Entities.PrescriptionIntake", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("CreatedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("CreatedOn")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("ModifiedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("ModifiedOn")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("PrescriptionId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("ScheduledFor")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime?>("TakenAt")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("PrescriptionId");
+
+                    b.ToTable("PrescriptionIntakes");
+                });
+
             modelBuilder.Entity("HealthCare.Core.Entities.User", b =>
                 {
                     b.Property<int>("Id")
@@ -770,6 +806,17 @@ namespace HealthCare.Infrastructure.Migrations
                     b.Navigation("Patient");
                 });
 
+            modelBuilder.Entity("HealthCare.Core.Entities.PrescriptionIntake", b =>
+                {
+                    b.HasOne("HealthCare.Core.Entities.Prescription", "Prescription")
+                        .WithMany("Intakes")
+                        .HasForeignKey("PrescriptionId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Prescription");
+                });
+
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<int>", b =>
                 {
                     b.HasOne("Microsoft.AspNetCore.Identity.IdentityRole<int>", null)
@@ -841,6 +888,11 @@ namespace HealthCare.Infrastructure.Migrations
                     b.Navigation("Appointments");
 
                     b.Navigation("Prescriptions");
+                });
+
+            modelBuilder.Entity("HealthCare.Core.Entities.Prescription", b =>
+                {
+                    b.Navigation("Intakes");
                 });
 #pragma warning restore 612, 618
         }

@@ -13,6 +13,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
+using WebApp.Extensions;
 
 namespace WebApp.Controllers
 {
@@ -23,6 +24,32 @@ namespace WebApp.Controllers
         public PrescriptionController(IUnitOfWork unitOfWork, IMapper mapper, IDoctorCreator doctorCreator) : base(unitOfWork, mapper)
         {
             this.mapper = mapper; // Assign to the new private field
+        }
+
+        [HttpGet("Mine")]
+        public async Task<IEnumerable<PrescriptionModel>> GetForCurrentPatient()
+        {
+            if (!int.TryParse(User.GetId(), out var userId))
+            {
+                return Enumerable.Empty<PrescriptionModel>();
+            }
+
+            var patient = (await this.unitOfWork.PatientRepository
+                .GetAllAsync(x => x.UserId == userId))
+                .FirstOrDefault();
+
+            if (patient == null)
+            {
+                return Enumerable.Empty<PrescriptionModel>();
+            }
+
+            SetFilterFunc(x => x.PatientId == patient.Id);
+            var prescriptions = await this.Get();
+            SetFilterFunc(null);
+
+            return prescriptions
+                .OrderByDescending(p => p.IsActive)
+                .ThenByDescending(p => p.StartDate);
         }
 
         [HttpGet(nameof(GetPrescriptionsByAppointmentId))]

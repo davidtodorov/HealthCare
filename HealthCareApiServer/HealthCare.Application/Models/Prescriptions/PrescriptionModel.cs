@@ -21,5 +21,7 @@ namespace HealthCare.Application.Models.Prescriptions
         public int DurationInDays { get; set; }
         public List<DateTime> Times { get; set; } = new List<DateTime>();
         public bool IsActive { get; set; }
+
+        public List<PrescriptionIntakeModel> Intakes { get; set; } = new List<PrescriptionIntakeModel>();
     }
 }

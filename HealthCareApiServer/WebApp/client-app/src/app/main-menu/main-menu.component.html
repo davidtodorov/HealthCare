@@ -37,6 +37,20 @@
                     →</span>
             </button>
 
+            <button *ngIf="isPatientRole$ | async" (click)="goToPrescriptions()"
+                class="w-full text-left p-8 bg-white border border-slate-200 rounded-3xl shadow-xl hover:shadow-2xl hover:border-sky-400 transition transform duration-300 hover:-translate-y-1 group focus:outline-none focus:ring-4 focus:ring-sky-300">
+                <div class="text-sky-600 mb-4 group-hover:text-sky-700 transition duration-300">
+                    <svg class="w-12 h-12" fill="none" stroke="currentColor" viewBox="0 0 24 24"
+                        xmlns="http://www.w3.org/2000/svg">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M9 12h6m-3-3v6m9 3V6a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2h14a2 2 0 002-2z"></path>
+                    </svg>
+                </div>
+                <h3 class="text-2xl font-semibold text-slate-900 mb-2">View Prescriptions</h3>
+                <p class="text-slate-600">See active medications, review history, and track every scheduled dose.</p>
+                <span class="mt-4 inline-block text-sky-500 font-medium group-hover:text-sky-600">Go to history →</span>
+            </button>
+
             <button *ngIf="isAdminRole$ | async" (click)="goToDoctorRegister()"
                 class="w-full text-left p-8 bg-white border border-slate-200 rounded-3xl shadow-xl hover:shadow-2xl hover:border-rose-400 transition transform duration-300 hover:-translate-y-1 group focus:outline-none focus:ring-4 focus:ring-rose-300">
                 <div class="text-purple-600 mb-4 group-hover:text-purple-700 transition duration-300">

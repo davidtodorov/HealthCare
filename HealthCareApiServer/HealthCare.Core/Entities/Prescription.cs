@@ -32,5 +32,7 @@ namespace HealthCare.Core.Entities
 
         public bool IsActive { get; set; }
 
+        public virtual ICollection<PrescriptionIntake> Intakes { get; set; } = new List<PrescriptionIntake>();
+
     }
 }

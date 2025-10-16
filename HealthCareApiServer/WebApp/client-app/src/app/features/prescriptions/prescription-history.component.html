@@ -1,0 +1,146 @@
+<div class="max-w-6xl mx-auto space-y-10">
+  <section class="bg-white shadow-sm rounded-3xl p-8 border border-slate-100">
+    <h1 class="text-3xl font-bold text-slate-900 mb-2">Prescription history</h1>
+    <p class="text-slate-600">Review every medication that has been prescribed to you. Select an active prescription to
+      track and record each dose as you take it.</p>
+  </section>
+
+  <section *ngIf="errorMessage" class="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-2xl">
+    {{ errorMessage }}
+  </section>
+
+  <section *ngIf="isLoading" class="flex items-center justify-center">
+    <div class="flex items-center space-x-3 text-indigo-600">
+      <span class="w-4 h-4 border-2 border-indigo-300 border-t-indigo-600 rounded-full animate-spin"></span>
+      <span class="font-medium">Loading prescriptions…</span>
+    </div>
+  </section>
+
+  <section class="grid gap-8 md:grid-cols-2" *ngIf="!isLoading">
+    <div class="bg-white rounded-3xl border border-slate-100 shadow-sm p-6 space-y-5">
+      <header class="flex items-center justify-between">
+        <h2 class="text-2xl font-semibold text-slate-900">Active prescriptions</h2>
+        <span class="text-sm text-slate-500">{{ activePrescriptions.length }} active</span>
+      </header>
+      <ng-container *ngIf="activePrescriptions.length; else noActive">
+        <div class="space-y-4">
+          <button type="button" *ngFor="let prescription of activePrescriptions; trackBy: trackByPrescription"
+            (click)="selectPrescription(prescription)"
+            class="w-full text-left p-5 rounded-2xl border transition shadow-sm hover:shadow-md focus:outline-none focus:ring-2 focus:ring-indigo-300"
+            [ngClass]="{
+              'border-indigo-400 bg-indigo-50/70': selectedPrescription?.id === prescription.id,
+              'border-slate-200 bg-white hover:border-indigo-200': selectedPrescription?.id !== prescription.id
+            }">
+            <div class="flex items-start justify-between">
+              <div>
+                <h3 class="text-lg font-semibold text-slate-900">{{ prescription.name }}</h3>
+                <p class="text-sm text-slate-500">{{ prescription.dose || 'Dose not specified' }}</p>
+              </div>
+              <span class="inline-flex items-center px-3 py-1 text-xs font-medium rounded-full bg-emerald-50 text-emerald-600">
+                Active
+              </span>
+            </div>
+            <div class="mt-4 grid gap-2 text-sm text-slate-600 sm:grid-cols-2">
+              <div>
+                <span class="font-medium text-slate-700">Started:</span>
+                <span class="ml-1">{{ prescription.startDate | date:'MMM d, y' }}</span>
+              </div>
+              <div>
+                <span class="font-medium text-slate-700">Schedule:</span>
+                <span class="ml-1">
+                  <ng-container *ngFor="let time of prescription.times; let last = last">
+                    {{ time | date:'h:mm a' }}<span *ngIf="!last"> · </span>
+                  </ng-container>
+                </span>
+              </div>
+            </div>
+          </button>
+        </div>
+      </ng-container>
+      <ng-template #noActive>
+        <p class="text-sm text-slate-500">You do not have any active prescriptions at the moment.</p>
+      </ng-template>
+    </div>
+
+    <div class="bg-white rounded-3xl border border-slate-100 shadow-sm p-6 space-y-5">
+      <header class="flex items-center justify-between">
+        <h2 class="text-2xl font-semibold text-slate-900">Previous prescriptions</h2>
+        <span class="text-sm text-slate-500">{{ historicalPrescriptions.length }} total</span>
+      </header>
+      <ng-container *ngIf="historicalPrescriptions.length; else noHistory">
+        <div class="space-y-4">
+          <div *ngFor="let prescription of historicalPrescriptions; trackBy: trackByPrescription"
+            class="p-5 rounded-2xl border border-slate-200 bg-slate-50">
+            <div class="flex items-start justify-between">
+              <div>
+                <h3 class="text-lg font-semibold text-slate-900">{{ prescription.name }}</h3>
+                <p class="text-sm text-slate-500">{{ prescription.dose || 'Dose not specified' }}</p>
+              </div>
+              <span class="inline-flex items-center px-3 py-1 text-xs font-medium rounded-full bg-slate-200 text-slate-600">
+                Completed
+              </span>
+            </div>
+            <dl class="mt-4 grid gap-2 text-sm text-slate-600 sm:grid-cols-2">
+              <div>
+                <dt class="font-medium text-slate-700">Started</dt>
+                <dd>{{ prescription.startDate | date:'MMM d, y' }}</dd>
+              </div>
+              <div>
+                <dt class="font-medium text-slate-700">Ended</dt>
+                <dd>{{ getEndDate(prescription) | date:'MMM d, y' }}</dd>
+              </div>
+            </dl>
+          </div>
+        </div>
+      </ng-container>
+      <ng-template #noHistory>
+        <p class="text-sm text-slate-500">You have not completed any prescriptions yet.</p>
+      </ng-template>
+    </div>
+  </section>
+
+  <section *ngIf="selectedPrescription" class="bg-white rounded-3xl border border-slate-100 shadow-sm p-6">
+    <header class="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
+      <div>
+        <h2 class="text-2xl font-semibold text-slate-900">Intake tracker</h2>
+        <p class="text-sm text-slate-500">{{ selectedPrescription?.name }} ·
+          {{ selectedPrescription?.dose || 'Dose not specified' }}</p>
+      </div>
+      <div class="text-sm text-slate-500 space-y-1 sm:text-right">
+        <div>Started: <span class="font-medium text-slate-700">{{ selectedPrescription?.startDate | date:'MMM d, y' }}</span>
+        </div>
+        <div>Duration: <span class="font-medium text-slate-700">{{ selectedPrescription?.durationInDays }} days</span></div>
+      </div>
+    </header>
+
+    <div class="mt-6" *ngIf="selectedHasSchedule; else noSchedule">
+      <div class="overflow-hidden rounded-2xl border border-slate-200">
+        <ul class="divide-y divide-slate-200">
+          <li *ngFor="let slot of scheduleSlots; trackBy: trackBySlot" class="flex flex-col gap-4 p-4 sm:flex-row sm:items-center sm:justify-between">
+            <div>
+              <p class="text-base font-medium text-slate-900">{{ slot.scheduledFor | date:'EEE, MMM d · h:mm a' }}</p>
+              <p *ngIf="slot.takenAt" class="text-sm text-slate-500">Taken {{ slot.takenAt | date:'MMM d, y · h:mm a' }}</p>
+            </div>
+            <div class="flex items-center gap-3">
+              <span *ngIf="slot.isTaken" class="inline-flex items-center px-3 py-1 text-sm font-medium rounded-full bg-emerald-100 text-emerald-700">
+                <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                </svg>
+                Taken
+              </span>
+              <button *ngIf="!slot.isTaken" type="button" (click)="markSlotAsTaken(slot)"
+                class="inline-flex items-center px-4 py-2 text-sm font-semibold rounded-full text-white bg-indigo-600 hover:bg-indigo-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-400 disabled:opacity-60 disabled:cursor-not-allowed"
+                [disabled]="slot.isSaving">
+                <span *ngIf="slot.isSaving" class="w-4 h-4 mr-2 border-2 border-white/60 border-t-white rounded-full animate-spin"></span>
+                Mark as taken
+              </button>
+            </div>
+          </li>
+        </ul>
+      </div>
+    </div>
+    <ng-template #noSchedule>
+      <p class="mt-4 text-sm text-slate-500">No schedule was recorded for this prescription.</p>
+    </ng-template>
+  </section>
+</div>

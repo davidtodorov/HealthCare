@@ -16,6 +16,7 @@ namespace HealthCare.Infrastructure
         IRepository<User> UserRepository { get; set; }
         IRepository<Patient> PatientRepository { get; set; }
         IRepository<Prescription> PrescriptionRepository { get; set; }
+        IRepository<PrescriptionIntake> PrescriptionIntakeRepository { get; set; }
         void SaveChanges();
         Task SaveChangesAsync();
         Task<IDbContextTransaction> BeginTransactionAsync(IsolationLevel isolationLevel = IsolationLevel.Unspecified, CancellationToken cancellationToken = default);

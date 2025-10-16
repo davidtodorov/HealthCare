@@ -47,4 +47,8 @@ export class MainMenuComponent {
     });
   }
 
+  goToPrescriptions() {
+    this.router.navigate(['/prescriptions']);
+  }
+
 }

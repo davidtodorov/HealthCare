@@ -6,6 +6,7 @@ import { RegisterComponent } from './auth/register/register.component';
 import { roleGuard } from './auth/role.guard';
 import { MainMenuComponent } from './main-menu/main-menu.component';
 import { ForbiddenComponent } from './errors/forbidden/forbidden.component';
+import { PrescriptionHistoryComponent } from './features/prescriptions/prescription-history.component';
 
 export const routes: Routes = [
   {
@@ -30,6 +31,12 @@ export const routes: Routes = [
   {
     path: 'appointments',
     component: AppointmentSchedulerComponent,
+    canMatch: [roleGuard],
+    data: { roles: ['Patient'] }
+  },
+  {
+    path: 'prescriptions',
+    component: PrescriptionHistoryComponent,
     canMatch: [roleGuard],
     data: { roles: ['Patient'] }
   },

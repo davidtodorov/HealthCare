@@ -31,6 +31,8 @@ namespace HealthCare.Infrastructure
         public DbSet<Appointment> Appointments { get; set; }
 
         public DbSet<Prescription> Prescriptions { get; set; }
+
+        public DbSet<PrescriptionIntake> PrescriptionIntakes { get; set; }
     
         protected override void OnModelCreating(ModelBuilder builder)
         {
@@ -43,11 +45,20 @@ namespace HealthCare.Infrastructure
                 .HasForeignKey(p => p.AppointmentId)
                 .OnDelete(DeleteBehavior.Cascade);
 
+            builder.Entity<PrescriptionIntake>()
+                .HasOne(i => i.Prescription)
+                .WithMany(p => p.Intakes)
+                .HasForeignKey(i => i.PrescriptionId)
+                .OnDelete(DeleteBehavior.Cascade);
+
             // Optionally, keep other relationships restrictive
             foreach (var relationship in builder.Model.GetEntityTypes().SelectMany(e => e.GetForeignKeys()))
             {
-                if (relationship.PrincipalEntityType.ClrType != typeof(Appointment) ||
-                    relationship.DeclaringEntityType.ClrType != typeof(Prescription))
+                var allowsCascade =
+                    (relationship.PrincipalEntityType.ClrType == typeof(Appointment) && relationship.DeclaringEntityType.ClrType == typeof(Prescription)) ||
+                    (relationship.PrincipalEntityType.ClrType == typeof(Prescription) && relationship.DeclaringEntityType.ClrType == typeof(PrescriptionIntake));
+
+                if (!allowsCascade)
                 {
                     relationship.DeleteBehavior = DeleteBehavior.Restrict;
                 }
