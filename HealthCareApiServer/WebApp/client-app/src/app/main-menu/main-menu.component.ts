@@ -47,4 +47,8 @@ export class MainMenuComponent {
     });
   }
 
+  goToCareNavigator() {
+    this.router.navigate(['/care-navigator']);
+  }
+
 }
