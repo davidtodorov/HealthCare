@@ -1,6 +1,8 @@
 import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
-import { PrescriptionTrackingService, PrescriptionWithIntakes, PrescriptionIntakeModel } from './prescription-tracking.service';
+import { PrescriptionIntake, PrescriptionIntakeModel, PrescriptionModel } from '../../api/models';
+import { PrescriptionIntakeService, PrescriptionService } from '../../api/services';
+import moment from 'moment';
 
 interface ScheduleSlot {
   scheduledFor: string;
@@ -19,21 +21,21 @@ interface ScheduleSlot {
 export class PrescriptionHistoryComponent implements OnInit {
   isLoading = false;
   errorMessage: string | null = null;
-  prescriptions: PrescriptionWithIntakes[] = [];
-  selectedPrescription: PrescriptionWithIntakes | null = null;
+  prescriptions: PrescriptionModel[] = [];
+  selectedPrescription: PrescriptionModel | null = null;
   scheduleSlots: ScheduleSlot[] = [];
 
-  constructor(private readonly trackingService: PrescriptionTrackingService) { }
+  constructor(private readonly prescriptionService: PrescriptionService, private readonly intakeService: PrescriptionIntakeService) { }
 
   ngOnInit(): void {
     this.loadPrescriptions();
   }
 
-  get activePrescriptions(): PrescriptionWithIntakes[] {
+  get activePrescriptions(): PrescriptionModel[] {
     return this.prescriptions.filter(p => p.isActive);
   }
 
-  get historicalPrescriptions(): PrescriptionWithIntakes[] {
+  get historicalPrescriptions(): PrescriptionModel[] {
     return this.prescriptions.filter(p => !p.isActive);
   }
 
@@ -41,7 +43,7 @@ export class PrescriptionHistoryComponent implements OnInit {
     return this.scheduleSlots.length > 0;
   }
 
-  getEndDate(prescription: PrescriptionWithIntakes): Date | null {
+  getEndDate(prescription: PrescriptionModel): Date | null {
     if (!prescription.startDate || !prescription.durationInDays) {
       return null;
     }
@@ -54,7 +56,8 @@ export class PrescriptionHistoryComponent implements OnInit {
   loadPrescriptions(): void {
     this.isLoading = true;
     this.errorMessage = null;
-    this.trackingService.getMyPrescriptions().subscribe({
+
+    this.prescriptionService.prescriptionGetAll().subscribe({
       next: data => {
         this.prescriptions = (data || []).map(p => ({
           ...p,
@@ -76,7 +79,7 @@ export class PrescriptionHistoryComponent implements OnInit {
     });
   }
 
-  selectPrescription(prescription: PrescriptionWithIntakes): void {
+  selectPrescription(prescription: PrescriptionModel): void {
     this.selectedPrescription = prescription;
     this.scheduleSlots = this.buildSchedule(prescription);
   }
@@ -95,9 +98,9 @@ export class PrescriptionHistoryComponent implements OnInit {
       prescriptionId,
       scheduledFor: slot.scheduledFor,
       takenAt: new Date().toISOString()
-    };
+    } as PrescriptionIntakeModel;
 
-    this.trackingService.markIntake(request).subscribe({
+    this.intakeService.prescriptionIntakeMark({ body: request }).subscribe({
       next: (intake: PrescriptionIntakeModel) => {
         slot.isSaving = false;
         slot.isTaken = true;
@@ -105,8 +108,11 @@ export class PrescriptionHistoryComponent implements OnInit {
         const currentIntakes = this.selectedPrescription?.intakes ?? [];
         this.selectedPrescription = {
           ...this.selectedPrescription!,
-          intakes: [...currentIntakes, intake]
+          intakes: [...currentIntakes, intake],
+          isActive: this.selectedPrescription?.isActive
         };
+
+        this.prescriptions.find(x => x.id === this.selectedPrescription?.id)!.isActive = this.selectedPrescription?.isActive;
       },
       error: () => {
         slot.isSaving = false;
@@ -115,11 +121,11 @@ export class PrescriptionHistoryComponent implements OnInit {
     });
   }
 
-  trackByPrescription = (_: number, prescription: PrescriptionWithIntakes) => prescription.id ?? prescription.name;
+  trackByPrescription = (_: number, prescription: PrescriptionModel) => prescription.id ?? prescription.name;
 
   trackBySlot = (_: number, slot: ScheduleSlot) => slot.scheduledFor;
 
-  private buildSchedule(prescription: PrescriptionWithIntakes): ScheduleSlot[] {
+  private buildSchedule(prescription: PrescriptionModel): ScheduleSlot[] {
     if (!prescription.startDate || !prescription.durationInDays || !prescription.times?.length) {
       return [];
     }
@@ -152,7 +158,7 @@ export class PrescriptionHistoryComponent implements OnInit {
         ));
 
         const scheduledIso = slotDate.toISOString();
-        const matchingIntake = intakes.find(x => this.normalisedIso(x.scheduledFor) === this.normalisedIso(scheduledIso));
+        const matchingIntake = intakes.find(x => moment.utc(x.scheduledFor).isSame(moment.utc(slotDate)));
 
         slots.push({
           scheduledFor: scheduledIso,
@@ -176,9 +182,4 @@ export class PrescriptionHistoryComponent implements OnInit {
     return { hour: date.getUTCHours(), minute: date.getUTCMinutes() };
   }
 
-  private normalisedIso(value: string): string {
-    const date = new Date(value);
-    date.setUTCSeconds(0, 0);
-    return date.toISOString();
-  }
 }

@@ -357,7 +357,7 @@ export class DoctorSchedulerComponent implements OnInit {
       times: times,
       startDate: this.selectedAppt.dateTime,
       isActive: true,
-      patientId: this.currentPatient.id,
+      patientId: this.currentPatient.id!,
       appointmentId: this.selectedAppt.id,
     };
     this.currentPatient.prescriptions = this.currentPatient.prescriptions || [];

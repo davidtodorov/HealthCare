@@ -4,6 +4,7 @@
 import { Appointment } from '../models/appointment';
 import { Entity } from '../models/entity';
 import { Patient } from '../models/patient';
+import { PrescriptionIntake } from '../models/prescription-intake';
 export type Prescription = Entity & {
 'name': string;
 'dose'?: string | null;
@@ -15,4 +16,5 @@ export type Prescription = Entity & {
 'durationInDays'?: number;
 'times'?: Array<string> | null;
 'isActive'?: boolean;
+'intakes'?: Array<PrescriptionIntake> | null;
 };

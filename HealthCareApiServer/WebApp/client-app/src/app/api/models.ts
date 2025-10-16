@@ -19,6 +19,8 @@ export type { LoginRequestModel } from './models/login-request-model';
 export type { Patient } from './models/patient';
 export type { PatientModel } from './models/patient-model';
 export type { Prescription } from './models/prescription';
+export type { PrescriptionIntake } from './models/prescription-intake';
+export type { PrescriptionIntakeModel } from './models/prescription-intake-model';
 export type { PrescriptionModel } from './models/prescription-model';
 export type { RegisterUserRequestModel } from './models/register-user-request-model';
 export type { UpdateAppointmentModel } from './models/update-appointment-model';

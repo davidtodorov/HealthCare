@@ -50,7 +50,18 @@ namespace HealthCare.Application.AutoMapper
             CreateMap<Appointment, CreateAppointmentModel>().ReverseMap();
 
             CreateMap<Department, DepartmentModel>().ReverseMap();
-            CreateMap<PrescriptionIntake, PrescriptionIntakeModel>().ReverseMap();
+
+            CreateMap<PrescriptionIntake, PrescriptionIntakeModel>()
+                .ForMember(am => am.Id, opts => opts.MapFrom(a => a.Id))
+                .ForMember(am => am.ScheduledFor, opts => opts.MapFrom(a => a.ScheduledFor))
+                .ForMember(am => am.TakenAt, opts => opts.MapFrom(a => a.TakenAt))
+                .ForMember(am => am.PrescriptionIsActive, opts => opts.MapFrom(a => a.Prescription.IsActive));
+
+            CreateMap<PrescriptionIntakeModel, PrescriptionIntake>()
+            .ForMember(am => am.Id, opts => opts.MapFrom(a => a.Id))
+            .ForMember(am => am.ScheduledFor, opts => opts.MapFrom(a => a.ScheduledFor))
+            .ForMember(am => am.TakenAt, opts => opts.MapFrom(a => a.TakenAt))
+            .ForMember(am => am.PrescriptionId, opts => opts.MapFrom(a => a.PrescriptionId));
 
             CreateMap<Prescription, PrescriptionModel>().ReverseMap();
             CreateMap<Patient, PatientModel>()

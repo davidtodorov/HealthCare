@@ -986,6 +986,29 @@
         ]
       }
     },
+    "/api/Prescription/Mine": {
+      "get": {
+        "tags": [
+          "Prescription"
+        ],
+        "operationId": "Prescription_GetForCurrentPatient",
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/PrescriptionModel"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/Prescription/GetPrescriptionsByAppointmentId": {
       "get": {
         "tags": [
@@ -1153,6 +1176,233 @@
           "Prescription"
         ],
         "operationId": "Prescription_Delete",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            },
+            "x-position": 1
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/octet-stream": {
+                "schema": {
+                  "type": "string",
+                  "format": "binary"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/PrescriptionIntake/ByPrescription/{prescriptionId}": {
+      "get": {
+        "tags": [
+          "PrescriptionIntake"
+        ],
+        "operationId": "PrescriptionIntake_GetByPrescription",
+        "parameters": [
+          {
+            "name": "prescriptionId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            },
+            "x-position": 1
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/PrescriptionIntakeModel"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/PrescriptionIntake/Mark": {
+      "post": {
+        "tags": [
+          "PrescriptionIntake"
+        ],
+        "operationId": "PrescriptionIntake_Mark",
+        "requestBody": {
+          "x-name": "model",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/PrescriptionIntakeModel"
+              }
+            }
+          },
+          "required": true,
+          "x-position": 1
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PrescriptionIntakeModel"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/PrescriptionIntake": {
+      "get": {
+        "tags": [
+          "PrescriptionIntake"
+        ],
+        "operationId": "PrescriptionIntake_GetAll",
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/PrescriptionIntakeModel"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "PrescriptionIntake"
+        ],
+        "operationId": "PrescriptionIntake_Post",
+        "requestBody": {
+          "x-name": "requestModel",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/PrescriptionIntakeModel"
+              }
+            }
+          },
+          "required": true,
+          "x-position": 1
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/octet-stream": {
+                "schema": {
+                  "type": "string",
+                  "format": "binary"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/PrescriptionIntake/{id}": {
+      "get": {
+        "tags": [
+          "PrescriptionIntake"
+        ],
+        "operationId": "PrescriptionIntake_Get",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            },
+            "x-position": 1
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PrescriptionIntakeModel"
+                }
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "PrescriptionIntake"
+        ],
+        "operationId": "PrescriptionIntake_Put",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            },
+            "x-position": 1
+          }
+        ],
+        "requestBody": {
+          "x-name": "requestModel",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/PrescriptionIntakeModel"
+              }
+            }
+          },
+          "required": true,
+          "x-position": 2
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/octet-stream": {
+                "schema": {
+                  "type": "string",
+                  "format": "binary"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "PrescriptionIntake"
+        ],
+        "operationId": "PrescriptionIntake_Delete",
         "parameters": [
           {
             "name": "id",
@@ -1559,8 +1809,14 @@
         ],
         "x-enum-descriptions": [
           "Upcoming",
-          null, null],
-        "enum": [0, 1, 2]
+          null,
+          null
+        ],
+        "enum": [
+          0,
+          1,
+          2
+        ]
       },
       "PrescriptionModel": {
         "allOf": [
@@ -1571,7 +1827,8 @@
             "type": "object",
             "additionalProperties": false,
             "required": [
-              "name"
+              "name",
+              "patientId"
             ],
             "properties": {
               "name": {
@@ -1607,6 +1864,45 @@
                 }
               },
               "isActive": {
+                "type": "boolean"
+              },
+              "intakes": {
+                "type": "array",
+                "nullable": true,
+                "items": {
+                  "$ref": "#/components/schemas/PrescriptionIntakeModel"
+                }
+              }
+            }
+          }
+        ]
+      },
+      "PrescriptionIntakeModel": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/EntityModel"
+          },
+          {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "prescriptionId"
+            ],
+            "properties": {
+              "prescriptionId": {
+                "type": "integer",
+                "format": "int32"
+              },
+              "scheduledFor": {
+                "type": "string",
+                "format": "date-time"
+              },
+              "takenAt": {
+                "type": "string",
+                "format": "date-time",
+                "nullable": true
+              },
+              "prescriptionIsActive": {
                 "type": "boolean"
               }
             }
@@ -2348,6 +2644,47 @@
               },
               "isActive": {
                 "type": "boolean"
+              },
+              "intakes": {
+                "type": "array",
+                "nullable": true,
+                "items": {
+                  "$ref": "#/components/schemas/PrescriptionIntake"
+                }
+              }
+            }
+          }
+        ]
+      },
+      "PrescriptionIntake": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/Entity"
+          },
+          {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "prescriptionId": {
+                "type": "integer",
+                "format": "int32"
+              },
+              "prescription": {
+                "nullable": true,
+                "oneOf": [
+                  {
+                    "$ref": "#/components/schemas/Prescription"
+                  }
+                ]
+              },
+              "scheduledFor": {
+                "type": "string",
+                "format": "date-time"
+              },
+              "takenAt": {
+                "type": "string",
+                "format": "date-time",
+                "nullable": true
               }
             }
           }

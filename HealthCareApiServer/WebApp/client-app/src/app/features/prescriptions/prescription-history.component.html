@@ -103,13 +103,13 @@
     <header class="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
       <div>
         <h2 class="text-2xl font-semibold text-slate-900">Intake tracker</h2>
-        <p class="text-sm text-slate-500">{{ selectedPrescription?.name }} ·
-          {{ selectedPrescription?.dose || 'Dose not specified' }}</p>
+        <p class="text-sm text-slate-500">{{ selectedPrescription.name }} ·
+          {{ selectedPrescription.dose || 'Dose not specified' }}</p>
       </div>
       <div class="text-sm text-slate-500 space-y-1 sm:text-right">
-        <div>Started: <span class="font-medium text-slate-700">{{ selectedPrescription?.startDate | date:'MMM d, y' }}</span>
+        <div>Started: <span class="font-medium text-slate-700">{{ selectedPrescription.startDate | date:'MMM d, y' }}</span>
         </div>
-        <div>Duration: <span class="font-medium text-slate-700">{{ selectedPrescription?.durationInDays }} days</span></div>
+        <div>Duration: <span class="font-medium text-slate-700">{{ selectedPrescription.durationInDays }} days</span></div>
       </div>
     </header>
 

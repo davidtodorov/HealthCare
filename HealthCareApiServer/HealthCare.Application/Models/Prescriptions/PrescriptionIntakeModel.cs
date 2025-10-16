@@ -12,5 +12,7 @@ namespace HealthCare.Application.Models.Prescriptions
         public DateTime ScheduledFor { get; set; }
 
         public DateTime? TakenAt { get; set; }
+
+        public bool PrescriptionIsActive { get; set; }
     }
 }

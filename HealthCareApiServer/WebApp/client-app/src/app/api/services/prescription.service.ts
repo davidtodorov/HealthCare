@@ -16,6 +16,8 @@ import { prescriptionGet } from '../fn/prescription/prescription-get';
 import { PrescriptionGet$Params } from '../fn/prescription/prescription-get';
 import { prescriptionGetAll } from '../fn/prescription/prescription-get-all';
 import { PrescriptionGetAll$Params } from '../fn/prescription/prescription-get-all';
+import { prescriptionGetForCurrentPatient } from '../fn/prescription/prescription-get-for-current-patient';
+import { PrescriptionGetForCurrentPatient$Params } from '../fn/prescription/prescription-get-for-current-patient';
 import { prescriptionGetPrescriptionsByAppointmentId } from '../fn/prescription/prescription-get-prescriptions-by-appointment-id';
 import { PrescriptionGetPrescriptionsByAppointmentId$Params } from '../fn/prescription/prescription-get-prescriptions-by-appointment-id';
 import { PrescriptionModel } from '../models/prescription-model';
@@ -28,6 +30,33 @@ import { PrescriptionPut$Params } from '../fn/prescription/prescription-put';
 export class PrescriptionService extends BaseService {
   constructor(config: ApiConfiguration, http: HttpClient) {
     super(config, http);
+  }
+
+  /** Path part for operation `prescriptionGetForCurrentPatient()` */
+  static readonly PrescriptionGetForCurrentPatientPath = '/api/Prescription/Mine';
+
+  /**
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `prescriptionGetForCurrentPatient()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  prescriptionGetForCurrentPatient$Response(params?: PrescriptionGetForCurrentPatient$Params, context?: HttpContext): Observable<StrictHttpResponse<Array<PrescriptionModel>>> {
+    const obs = prescriptionGetForCurrentPatient(this.http, this.rootUrl, params, context);
+    return obs;
+  }
+
+  /**
+   * This method provides access only to the response body.
+   * To access the full response (for headers, for example), `prescriptionGetForCurrentPatient$Response()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  prescriptionGetForCurrentPatient(params?: PrescriptionGetForCurrentPatient$Params, context?: HttpContext): Observable<Array<PrescriptionModel>> {
+    const resp = this.prescriptionGetForCurrentPatient$Response(params, context);
+    return resp.pipe(
+      map((r: StrictHttpResponse<Array<PrescriptionModel>>): Array<PrescriptionModel> => r.body)
+    );
   }
 
   /** Path part for operation `prescriptionGetPrescriptionsByAppointmentId()` */

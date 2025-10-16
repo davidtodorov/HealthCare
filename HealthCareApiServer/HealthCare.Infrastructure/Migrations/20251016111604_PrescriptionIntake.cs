@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace HealthCare.Infrastructure.Migrations
 {
     /// <inheritdoc />
-    public partial class AddPrescriptionIntakes : Migration
+    public partial class PrescriptionIntake : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
