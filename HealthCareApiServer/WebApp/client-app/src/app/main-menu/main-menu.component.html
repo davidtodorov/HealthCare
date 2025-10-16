@@ -37,6 +37,20 @@
                     →</span>
             </button>
 
+            <button *ngIf="isPatientRole$ | async" (click)="goToCareNavigator()"
+                class="w-full text-left p-8 bg-white border border-slate-200 rounded-3xl shadow-xl hover:shadow-2xl hover:border-sky-400 transition transform duration-300 hover:-translate-y-1 group focus:outline-none focus:ring-4 focus:ring-sky-300">
+                <div class="text-sky-500 mb-4 group-hover:text-sky-600 transition duration-300">
+                    <svg class="w-12 h-12" fill="none" stroke="currentColor" viewBox="0 0 24 24"
+                        xmlns="http://www.w3.org/2000/svg">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M12 4v4m0 0a4 4 0 014 4h4m-4 0a4 4 0 01-4 4m0 0v4m0-4a4 4 0 01-4-4H4m4 0a4 4 0 014-4" />
+                    </svg>
+                </div>
+                <h3 class="text-2xl font-semibold text-slate-900 mb-2">Care Navigator</h3>
+                <p class="text-slate-600">Chat with our AI assistant to match symptoms to departments and open slots.</p>
+                <span class="mt-4 inline-block text-sky-500 font-medium group-hover:text-sky-600">Open Care Navigator →</span>
+            </button>
+
             <button *ngIf="isAdminRole$ | async" (click)="goToDoctorRegister()"
                 class="w-full text-left p-8 bg-white border border-slate-200 rounded-3xl shadow-xl hover:shadow-2xl hover:border-rose-400 transition transform duration-300 hover:-translate-y-1 group focus:outline-none focus:ring-4 focus:ring-rose-300">
                 <div class="text-purple-600 mb-4 group-hover:text-purple-700 transition duration-300">

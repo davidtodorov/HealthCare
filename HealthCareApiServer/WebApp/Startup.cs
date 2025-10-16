@@ -9,6 +9,8 @@ using NSwag;
 using NSwag.Generation.Processors.Security;
 using System.Linq;
 using WebApp.Extensions;
+using WebApp.Options;
+using WebApp.Services;
 
 namespace WebApp
 {
@@ -40,6 +42,10 @@ namespace WebApp
                 .AddMapperConfig()
                 .AddApplicationServices()
                 .AddControllers();
+
+            services.Configure<OpenAiOptions>(this.Configuration.GetSection(OpenAiOptions.SectionName));
+            services.AddHttpClient<OpenAiClient>();
+            services.AddScoped<ClinicChatService>();
 
             services.AddEndpointsApiExplorer();
             services.AddOpenApiDocument(config =>
