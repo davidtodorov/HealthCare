@@ -99,7 +99,7 @@ export class CalendarComponent implements OnInit, OnChanges {
     }
 
     for (let d = 1; d <= days; d++) {
-      const date = moment({ year: y, month: m, date: d });
+      const date = moment({ year: y, month: m, date: d }).utc(true);
       const ymd = date.format('YYYY-MM-DD');
 
       let hasAppts = this.dates.indexOf(ymd) !== -1 ? true : false; 

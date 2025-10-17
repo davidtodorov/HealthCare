@@ -26,6 +26,8 @@ namespace HealthCare.Application.Models.Appointments
         [Required]
         public int DoctorId { get; set; }
 
+        public string DoctorName { get; set; }
+
         public string Notes { get; set; }
 
         public virtual List<PrescriptionModel> Prescriptions { get; set; } = new List<PrescriptionModel>();

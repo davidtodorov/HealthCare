@@ -25,6 +25,31 @@ namespace WebApp.Controllers
             this.mapper = mapper;
         }
 
+        [HttpGet(nameof(GetCurrentPatientAppointments))]
+        public async Task<IEnumerable<AppointmentModel>> GetCurrentPatientAppointments()
+        {
+            if (int.TryParse(User.GetId(), out var userId))
+            {
+                var patient = (await this.unitOfWork.PatientRepository
+                    .GetAllAsync(x => x.UserId == userId))
+                    .FirstOrDefault();
+
+                if (patient != null)
+                {
+                    SetFilterFunc(x => x.PatientId == patient.Id);
+                }
+            }
+
+            try
+            {
+                return await base.Get();
+            }
+            finally
+            {
+                SetFilterFunc(null);
+            }
+        }
+
         [HttpPost(nameof(Book))]
         public async Task<ActionResult> Book(CreateAppointmentModel requestModel)
         {

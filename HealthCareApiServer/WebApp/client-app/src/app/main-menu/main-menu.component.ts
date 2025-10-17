@@ -37,6 +37,10 @@ export class MainMenuComponent {
     this.router.navigate(['/appointments']);
   }
 
+  goToAppointmentHistory() {
+    this.router.navigate(['/appointments/history']);
+  }
+
   goToDoctorSchedule() {
     this.router.navigate(['/doctor-scheduler']);
   }

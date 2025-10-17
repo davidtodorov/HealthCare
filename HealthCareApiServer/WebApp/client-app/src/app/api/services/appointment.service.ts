@@ -18,6 +18,8 @@ import { appointmentGet } from '../fn/appointment/appointment-get';
 import { AppointmentGet$Params } from '../fn/appointment/appointment-get';
 import { appointmentGetAll } from '../fn/appointment/appointment-get-all';
 import { AppointmentGetAll$Params } from '../fn/appointment/appointment-get-all';
+import { appointmentGetCurrentPatientAppointments } from '../fn/appointment/appointment-get-current-patient-appointments';
+import { AppointmentGetCurrentPatientAppointments$Params } from '../fn/appointment/appointment-get-current-patient-appointments';
 import { AppointmentModel } from '../models/appointment-model';
 import { appointmentPost } from '../fn/appointment/appointment-post';
 import { AppointmentPost$Params } from '../fn/appointment/appointment-post';
@@ -30,6 +32,33 @@ import { AppointmentUpdateStatus$Params } from '../fn/appointment/appointment-up
 export class AppointmentService extends BaseService {
   constructor(config: ApiConfiguration, http: HttpClient) {
     super(config, http);
+  }
+
+  /** Path part for operation `appointmentGetCurrentPatientAppointments()` */
+  static readonly AppointmentGetCurrentPatientAppointmentsPath = '/api/Appointment/GetCurrentPatientAppointments';
+
+  /**
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `appointmentGetCurrentPatientAppointments()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  appointmentGetCurrentPatientAppointments$Response(params?: AppointmentGetCurrentPatientAppointments$Params, context?: HttpContext): Observable<StrictHttpResponse<Array<AppointmentModel>>> {
+    const obs = appointmentGetCurrentPatientAppointments(this.http, this.rootUrl, params, context);
+    return obs;
+  }
+
+  /**
+   * This method provides access only to the response body.
+   * To access the full response (for headers, for example), `appointmentGetCurrentPatientAppointments$Response()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  appointmentGetCurrentPatientAppointments(params?: AppointmentGetCurrentPatientAppointments$Params, context?: HttpContext): Observable<Array<AppointmentModel>> {
+    const resp = this.appointmentGetCurrentPatientAppointments$Response(params, context);
+    return resp.pipe(
+      map((r: StrictHttpResponse<Array<AppointmentModel>>): Array<AppointmentModel> => r.body)
+    );
   }
 
   /** Path part for operation `appointmentBook()` */

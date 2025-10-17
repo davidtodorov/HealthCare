@@ -7,6 +7,7 @@ import { roleGuard } from './auth/role.guard';
 import { MainMenuComponent } from './main-menu/main-menu.component';
 import { ForbiddenComponent } from './errors/forbidden/forbidden.component';
 import { PrescriptionHistoryComponent } from './features/prescriptions/prescription-history.component';
+import { AppointmentHistoryComponent } from './features/appointment-history/appointment-history.component';
 
 export const routes: Routes = [
   {
@@ -27,6 +28,12 @@ export const routes: Routes = [
     component: RegisterComponent,
     canMatch: [roleGuard],
     data: { roles: ['Admin'] }
+  },
+  {
+    path: 'appointments/history',
+    component: AppointmentHistoryComponent,
+    canMatch: [roleGuard],
+    data: { roles: ['Patient'] }
   },
   {
     path: 'appointments',

@@ -12,6 +12,7 @@ export type AppointmentModel = EntityModel & {
 'patientId': number;
 'patient'?: PatientModel | null;
 'doctorId': number;
+'doctorName'?: string | null;
 'notes'?: string | null;
 'prescriptions'?: Array<PrescriptionModel> | null;
 };

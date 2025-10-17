@@ -38,7 +38,8 @@ namespace HealthCare.Application.AutoMapper
                 .ForMember(am => am.Status, opts => opts.MapFrom(a => a.Status))
                 .ForMember(am => am.PatientId, opts => opts.MapFrom(a => a.PatientId))
                 .ForMember(am => am.Notes, opts => opts.MapFrom(a => a.Notes))
-                .ForMember(am => am.DoctorId, opts => opts.MapFrom(a => a.DoctorId));
+                .ForMember(am => am.DoctorId, opts => opts.MapFrom(a => a.DoctorId))
+                .ForMember(am => am.DoctorName, opts => opts.MapFrom(a => a.Doctor.User.FirstName + " " + a.Doctor.User.LastName));
 
             CreateMap<UpdateAppointmentModel, Appointment>()
                 .ForMember(am => am.Status, opts => opts.MapFrom(a => a.Status))
