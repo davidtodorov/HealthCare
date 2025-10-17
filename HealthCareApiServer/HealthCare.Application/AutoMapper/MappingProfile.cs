@@ -67,6 +67,7 @@ namespace HealthCare.Application.AutoMapper
             CreateMap<Prescription, PrescriptionModel>().ReverseMap();
             CreateMap<Patient, PatientModel>()
                 .ForMember(am => am.Id, opts => opts.MapFrom(a => a.Id))
+                .ForMember(am => am.UserId, opts => opts.MapFrom(a => a.UserId))
                 .ForMember(am => am.FirstName, opts => opts.MapFrom(a => a.User.FirstName))
                 .ForMember(am => am.LastName, opts => opts.MapFrom(a => a.User.LastName))
                 .ForMember(am => am.Email, opts => opts.MapFrom(a => a.User.Email));

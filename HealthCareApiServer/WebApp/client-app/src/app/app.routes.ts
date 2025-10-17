@@ -8,6 +8,7 @@ import { MainMenuComponent } from './main-menu/main-menu.component';
 import { ForbiddenComponent } from './errors/forbidden/forbidden.component';
 import { PrescriptionHistoryComponent } from './features/prescriptions/prescription-history.component';
 import { AppointmentHistoryComponent } from './features/appointment-history/appointment-history.component';
+import { ROLE_ADMIN, ROLE_DOCTOR, ROLE_PATIENT } from './common/roles';
 
 export const routes: Routes = [
   {
@@ -27,31 +28,31 @@ export const routes: Routes = [
     path: 'doctor-register',
     component: RegisterComponent,
     canMatch: [roleGuard],
-    data: { roles: ['Admin'] }
+    data: { roles: [ROLE_ADMIN] }
   },
   {
     path: 'appointments/history',
     component: AppointmentHistoryComponent,
     canMatch: [roleGuard],
-    data: { roles: ['Patient'] }
+    data: { roles: [ROLE_PATIENT] }
   },
   {
     path: 'appointments',
     component: AppointmentSchedulerComponent,
     canMatch: [roleGuard],
-    data: { roles: ['Patient'] }
+    data: { roles: [ROLE_PATIENT, ROLE_DOCTOR] }
   },
   {
     path: 'prescriptions',
     component: PrescriptionHistoryComponent,
     canMatch: [roleGuard],
-    data: { roles: ['Patient'] }
+    data: { roles: [ROLE_PATIENT] }
   },
   {
     path: 'doctor-scheduler',
     component: DoctorSchedulerComponent,
     canMatch: [roleGuard],
-    data: { roles: ['Doctor'] }
+    data: { roles: [ROLE_DOCTOR] }
   },
   { path: 'forbidden', component: ForbiddenComponent },
   {

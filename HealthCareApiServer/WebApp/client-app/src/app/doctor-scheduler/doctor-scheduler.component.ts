@@ -91,7 +91,7 @@ export class DoctorSchedulerComponent implements OnInit {
 
   goToday(selectDay: boolean = true): void {
     if (selectDay) {
-      this.selectedDate = moment().utc();
+      this.selectedDate = moment().utc(true);
       this.setView('day'); // setView calls buildMonth and renderSchedule
     } else {
       this.renderSchedule();

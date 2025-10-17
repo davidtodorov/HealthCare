@@ -53,9 +53,48 @@ namespace WebApp.Controllers
         [HttpPost(nameof(Book))]
         public async Task<ActionResult> Book(CreateAppointmentModel requestModel)
         {
-            requestModel.PatientId = (await this.unitOfWork.PatientRepository
-                .GetAllAsync(x => x.UserId == Int32.Parse(User.GetId())))
-                .FirstOrDefault().Id;
+            var userId = Int32.Parse(User.GetId());
+
+            if (User.IsInRole(RoleConstants.DOCTOR_ROLE))
+            {
+                if (requestModel.PatientId <= 0)
+                {
+                    return BadRequest("PatientId is required when scheduling on behalf of a patient.");
+                }
+
+                var doctor = (await this.unitOfWork.DoctorRepository
+                    .GetAllAsync(d => d.UserId == userId))
+                    .FirstOrDefault();
+
+                if (doctor == null)
+                {
+                    return Forbid();
+                }
+
+                // Ensure the selected patient exists before proceeding
+                var patient = this.unitOfWork.PatientRepository.GetById(requestModel.PatientId);
+
+                if (patient == null)
+                {
+                    return BadRequest("The specified patient could not be found.");
+                }
+
+                requestModel.DoctorId = doctor.Id;
+            }
+            else
+            {
+                var patient = (await this.unitOfWork.PatientRepository
+                    .GetAllAsync(x => x.UserId == userId))
+                    .FirstOrDefault();
+
+                if (patient == null)
+                {
+                    return BadRequest("Patient profile not found for the current user.");
+                }
+
+                requestModel.PatientId = patient.Id;
+            }
+
             var entity = new Appointment();
             this.mapper.Map(requestModel, entity);
             this.unitOfWork.AppointmentRepository.Insert(entity);

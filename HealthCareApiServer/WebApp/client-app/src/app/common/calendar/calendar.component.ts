@@ -99,7 +99,7 @@ export class CalendarComponent implements OnInit, OnChanges {
     }
 
     for (let d = 1; d <= days; d++) {
-      const date = moment({ year: y, month: m, date: d }).utc(true);
+      const date = moment({ year: y, month: m, date: d });
       const ymd = date.format('YYYY-MM-DD');
 
       let hasAppts = this.dates.indexOf(ymd) !== -1 ? true : false; 
@@ -125,7 +125,8 @@ export class CalendarComponent implements OnInit, OnChanges {
     this.calendarDays.forEach(day => {
       if (!day.ymd) return; // Skip placeholder days
 
-      const date = moment(day.date);
+      const date = day.date;
+
       let classes = 'bg-white hover:bg-slate-100 text-slate-900';
       let isWeekHighlighted = false;
 
@@ -175,8 +176,8 @@ export class CalendarComponent implements OnInit, OnChanges {
 
   selectDate(date: Date | moment.Moment): void {
     this.selectedDate = moment(date); 
-    this.dateSelected.emit(this.selectedDate);
     this.buildMonth(this.viewYear, this.viewMonth);
+    this.dateSelected.emit(this.selectedDate);
   }
 
 }
