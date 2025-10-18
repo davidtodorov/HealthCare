@@ -1001,12 +1001,7 @@
               }
             }
           }
-        },
-        "security": [
-          {
-            "JWT": []
-          }
-        ]
+        }
       }
     },
     "/api/Patient": {
@@ -1613,39 +1608,105 @@
         }
       }
     },
-    "/api/User": {
+    "/api/PushNotifications/public-key": {
       "get": {
         "tags": [
-          "User"
+          "PushNotifications"
         ],
-        "operationId": "User_GetAll",
+        "operationId": "PushNotifications_GetPublicKey",
         "responses": {
           "200": {
             "description": "",
             "content": {
-              "application/json": {
+              "application/octet-stream": {
                 "schema": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/UserModel"
-                  }
+                  "type": "string",
+                  "format": "binary"
                 }
               }
             }
           }
         }
-      },
+      }
+    },
+    "/api/PushNotifications/subscribe": {
       "post": {
         "tags": [
-          "User"
+          "PushNotifications"
         ],
-        "operationId": "User_Post",
+        "operationId": "PushNotifications_Subscribe",
         "requestBody": {
-          "x-name": "requestModel",
+          "x-name": "model",
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/UserModel"
+                "$ref": "#/components/schemas/PushSubscriptionModel"
+              }
+            }
+          },
+          "required": true,
+          "x-position": 1
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/octet-stream": {
+                "schema": {
+                  "type": "string",
+                  "format": "binary"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/PushNotifications/unsubscribe": {
+      "post": {
+        "tags": [
+          "PushNotifications"
+        ],
+        "operationId": "PushNotifications_Unsubscribe",
+        "requestBody": {
+          "x-name": "model",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/PushSubscriptionModel"
+              }
+            }
+          },
+          "required": true,
+          "x-position": 1
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/octet-stream": {
+                "schema": {
+                  "type": "string",
+                  "format": "binary"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/PushNotifications/test": {
+      "post": {
+        "tags": [
+          "PushNotifications"
+        ],
+        "operationId": "PushNotifications_SendTestNotification",
+        "requestBody": {
+          "x-name": "request",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/PushNotificationTestRequest"
               }
             }
           },
@@ -1668,36 +1729,6 @@
       }
     },
     "/api/User/{id}": {
-      "get": {
-        "tags": [
-          "User"
-        ],
-        "operationId": "User_Get",
-        "parameters": [
-          {
-            "name": "id",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "integer",
-              "format": "int32"
-            },
-            "x-position": 1
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/UserModel"
-                }
-              }
-            }
-          }
-        }
-      },
       "put": {
         "tags": [
           "User"
@@ -1739,7 +1770,51 @@
               }
             }
           }
-        }
+        },
+        "security": [
+          {
+            "JWT": [
+              "Admin"
+            ]
+          }
+        ]
+      },
+      "get": {
+        "tags": [
+          "User"
+        ],
+        "operationId": "User_Get",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            },
+            "x-position": 1
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UserModel"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "JWT": [
+              "Admin"
+            ]
+          }
+        ]
       },
       "delete": {
         "tags": [
@@ -1770,91 +1845,22 @@
               }
             }
           }
-        }
-      }
-    },
-    "/Values": {
-      "get": {
-        "tags": [
-          "Values"
-        ],
-        "operationId": "Values_GetAll",
-        "responses": {
-          "200": {
-            "description": "",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "array",
-                  "items": {
-                    "type": "string"
-                  }
-                }
-              }
-            }
-          }
-        }
-      },
-      "post": {
-        "tags": [
-          "Values"
-        ],
-        "operationId": "Values_Post",
-        "requestBody": {
-          "x-name": "value",
-          "content": {
-            "application/json": {
-              "schema": {
-                "type": "string"
-              }
-            }
-          },
-          "required": true,
-          "x-position": 1
         },
-        "responses": {
-          "200": {
-            "description": ""
+        "security": [
+          {
+            "JWT": [
+              "Admin"
+            ]
           }
-        }
+        ]
       }
     },
-    "/Values/{id}": {
-      "get": {
-        "tags": [
-          "Values"
-        ],
-        "operationId": "Values_Get",
-        "parameters": [
-          {
-            "name": "id",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "integer",
-              "format": "int32"
-            },
-            "x-position": 1
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "string"
-                }
-              }
-            }
-          }
-        }
-      },
+    "/api/User/{id}/password": {
       "put": {
         "tags": [
-          "Values"
+          "User"
         ],
-        "operationId": "Values_Put",
+        "operationId": "User_ChangePassword",
         "parameters": [
           {
             "name": "id",
@@ -1868,11 +1874,11 @@
           }
         ],
         "requestBody": {
-          "x-name": "value",
+          "x-name": "requestModel",
           "content": {
             "application/json": {
               "schema": {
-                "type": "string"
+                "$ref": "#/components/schemas/ChangeUserPasswordRequestModel"
               }
             }
           },
@@ -1881,40 +1887,32 @@
         },
         "responses": {
           "200": {
-            "description": ""
+            "description": "",
+            "content": {
+              "application/octet-stream": {
+                "schema": {
+                  "type": "string",
+                  "format": "binary"
+                }
+              }
+            }
           }
-        }
-      },
-      "delete": {
-        "tags": [
-          "Values"
-        ],
-        "operationId": "Values_Delete",
-        "parameters": [
+        },
+        "security": [
           {
-            "name": "id",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "integer",
-              "format": "int32"
-            },
-            "x-position": 1
+            "JWT": [
+              "Admin"
+            ]
           }
-        ],
-        "responses": {
-          "200": {
-            "description": ""
-          }
-        }
+        ]
       }
     },
-    "/WeatherForecast": {
+    "/api/User": {
       "get": {
         "tags": [
-          "WeatherForecast"
+          "User"
         ],
-        "operationId": "WeatherForecast_Get",
+        "operationId": "User_GetAll",
         "responses": {
           "200": {
             "description": "",
@@ -1923,13 +1921,58 @@
                 "schema": {
                   "type": "array",
                   "items": {
-                    "$ref": "#/components/schemas/Doctor"
+                    "$ref": "#/components/schemas/UserModel"
                   }
                 }
               }
             }
           }
-        }
+        },
+        "security": [
+          {
+            "JWT": [
+              "Admin"
+            ]
+          }
+        ]
+      },
+      "post": {
+        "tags": [
+          "User"
+        ],
+        "operationId": "User_Post",
+        "requestBody": {
+          "x-name": "requestModel",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UserModel"
+              }
+            }
+          },
+          "required": true,
+          "x-position": 1
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/octet-stream": {
+                "schema": {
+                  "type": "string",
+                  "format": "binary"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "JWT": [
+              "Admin"
+            ]
+          }
+        ]
       }
     }
   },
@@ -2004,11 +2047,6 @@
           "Upcoming",
           "Completed",
           "Canceled"
-        ],
-        "x-enum-descriptions": [
-          "Upcoming",
-          null,
-          null
         ],
         "enum": [
           0,
@@ -2394,6 +2432,67 @@
           }
         }
       },
+      "PushSubscriptionModel": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/EntityModel"
+          },
+          {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "userId",
+              "endpoint",
+              "p256dh",
+              "auth"
+            ],
+            "properties": {
+              "userId": {
+                "type": "integer",
+                "format": "int32"
+              },
+              "endpoint": {
+                "type": "string",
+                "minLength": 1
+              },
+              "p256dh": {
+                "type": "string",
+                "minLength": 1
+              },
+              "auth": {
+                "type": "string",
+                "minLength": 1
+              }
+            }
+          }
+        ]
+      },
+      "PushNotificationTestRequest": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "userId": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "title": {
+            "type": "string",
+            "maxLength": 120,
+            "nullable": true
+          },
+          "body": {
+            "type": "string",
+            "maxLength": 512,
+            "nullable": true
+          },
+          "url": {
+            "type": "string",
+            "maxLength": 256,
+            "nullable": true
+          }
+        }
+      },
       "UserModel": {
         "allOf": [
           {
@@ -2410,472 +2509,27 @@
               "lastName": {
                 "type": "string",
                 "nullable": true
+              },
+              "username": {
+                "type": "string",
+                "nullable": true
               }
             }
           }
         ]
       },
-      "Doctor": {
-        "allOf": [
-          {
-            "$ref": "#/components/schemas/Entity"
-          },
-          {
-            "type": "object",
-            "additionalProperties": false,
-            "required": [
-              "userId",
-              "hospitalId",
-              "departmentId"
-            ],
-            "properties": {
-              "userId": {
-                "type": "integer",
-                "format": "int32"
-              },
-              "user": {
-                "nullable": true,
-                "oneOf": [
-                  {
-                    "$ref": "#/components/schemas/User"
-                  }
-                ]
-              },
-              "hospitalId": {
-                "type": "integer",
-                "format": "int32"
-              },
-              "hospital": {
-                "nullable": true,
-                "oneOf": [
-                  {
-                    "$ref": "#/components/schemas/Hospital"
-                  }
-                ]
-              },
-              "departmentId": {
-                "type": "integer",
-                "format": "int32"
-              },
-              "department": {
-                "nullable": true,
-                "oneOf": [
-                  {
-                    "$ref": "#/components/schemas/Department"
-                  }
-                ]
-              },
-              "appointments": {
-                "type": "array",
-                "nullable": true,
-                "items": {
-                  "$ref": "#/components/schemas/Appointment"
-                }
-              }
-            }
-          }
-        ]
-      },
-      "User": {
-        "allOf": [
-          {
-            "$ref": "#/components/schemas/IdentityUserOfInteger"
-          },
-          {
-            "type": "object",
-            "additionalProperties": false,
-            "required": [
-              "firstName",
-              "lastName",
-              "createdBy",
-              "modifiedBy"
-            ],
-            "properties": {
-              "firstName": {
-                "type": "string",
-                "minLength": 1
-              },
-              "lastName": {
-                "type": "string",
-                "minLength": 1
-              },
-              "createdBy": {
-                "type": "string",
-                "minLength": 1
-              },
-              "createdOn": {
-                "type": "string",
-                "format": "date-time"
-              },
-              "modifiedBy": {
-                "type": "string",
-                "minLength": 1
-              },
-              "modifiedOn": {
-                "type": "string",
-                "format": "date-time"
-              }
-            }
-          }
-        ]
-      },
-      "IdentityUserOfInteger": {
-        "type": "object",
-        "description": "Represents a user in the identity system",
-        "additionalProperties": false,
-        "properties": {
-          "id": {
-            "type": "integer",
-            "description": "Gets or sets the primary key for this user.",
-            "format": "int32"
-          },
-          "userName": {
-            "type": "string",
-            "description": "Gets or sets the user name for this user.",
-            "nullable": true
-          },
-          "normalizedUserName": {
-            "type": "string",
-            "description": "Gets or sets the normalized user name for this user.",
-            "nullable": true
-          },
-          "email": {
-            "type": "string",
-            "description": "Gets or sets the email address for this user.",
-            "nullable": true
-          },
-          "normalizedEmail": {
-            "type": "string",
-            "description": "Gets or sets the normalized email address for this user.",
-            "nullable": true
-          },
-          "emailConfirmed": {
-            "type": "boolean",
-            "description": "Gets or sets a flag indicating if a user has confirmed their email address."
-          },
-          "passwordHash": {
-            "type": "string",
-            "description": "Gets or sets a salted and hashed representation of the password for this user.",
-            "nullable": true
-          },
-          "securityStamp": {
-            "type": "string",
-            "description": "A random value that must change whenever a users credentials change (password changed, login removed)",
-            "nullable": true
-          },
-          "concurrencyStamp": {
-            "type": "string",
-            "description": "A random value that must change whenever a user is persisted to the store",
-            "nullable": true
-          },
-          "phoneNumber": {
-            "type": "string",
-            "description": "Gets or sets a telephone number for the user.",
-            "nullable": true
-          },
-          "phoneNumberConfirmed": {
-            "type": "boolean",
-            "description": "Gets or sets a flag indicating if a user has confirmed their telephone address."
-          },
-          "twoFactorEnabled": {
-            "type": "boolean",
-            "description": "Gets or sets a flag indicating if two factor authentication is enabled for this user."
-          },
-          "lockoutEnd": {
-            "type": "string",
-            "description": "Gets or sets the date and time, in UTC, when any user lockout ends.",
-            "format": "date-time",
-            "nullable": true
-          },
-          "lockoutEnabled": {
-            "type": "boolean",
-            "description": "Gets or sets a flag indicating if the user could be locked out."
-          },
-          "accessFailedCount": {
-            "type": "integer",
-            "description": "Gets or sets the number of failed login attempts for the current user.",
-            "format": "int32"
-          }
-        }
-      },
-      "Hospital": {
-        "allOf": [
-          {
-            "$ref": "#/components/schemas/Entity"
-          },
-          {
-            "type": "object",
-            "additionalProperties": false,
-            "required": [
-              "name"
-            ],
-            "properties": {
-              "name": {
-                "type": "string",
-                "minLength": 1
-              },
-              "doctors": {
-                "type": "array",
-                "nullable": true,
-                "items": {
-                  "$ref": "#/components/schemas/Doctor"
-                }
-              }
-            }
-          }
-        ]
-      },
-      "Entity": {
+      "ChangeUserPasswordRequestModel": {
         "type": "object",
         "additionalProperties": false,
+        "required": [
+          "password"
+        ],
         "properties": {
-          "id": {
-            "type": "integer",
-            "format": "int32"
-          },
-          "createdBy": {
+          "password": {
             "type": "string",
-            "nullable": true
-          },
-          "createdOn": {
-            "type": "string",
-            "format": "date-time"
-          },
-          "modifiedBy": {
-            "type": "string",
-            "nullable": true
-          },
-          "modifiedOn": {
-            "type": "string",
-            "format": "date-time"
+            "minLength": 3
           }
         }
-      },
-      "Department": {
-        "allOf": [
-          {
-            "$ref": "#/components/schemas/Entity"
-          },
-          {
-            "type": "object",
-            "additionalProperties": false,
-            "properties": {
-              "name": {
-                "type": "string",
-                "nullable": true
-              }
-            }
-          }
-        ]
-      },
-      "Appointment": {
-        "allOf": [
-          {
-            "$ref": "#/components/schemas/Entity"
-          },
-          {
-            "type": "object",
-            "additionalProperties": false,
-            "properties": {
-              "dateTime": {
-                "type": "string",
-                "format": "date-time"
-              },
-              "reason": {
-                "type": "string",
-                "nullable": true
-              },
-              "status": {
-                "$ref": "#/components/schemas/AppointmentStatus"
-              },
-              "notes": {
-                "type": "string",
-                "nullable": true
-              },
-              "patientId": {
-                "type": "integer",
-                "format": "int32"
-              },
-              "patient": {
-                "nullable": true,
-                "oneOf": [
-                  {
-                    "$ref": "#/components/schemas/Patient"
-                  }
-                ]
-              },
-              "doctorId": {
-                "type": "integer",
-                "format": "int32"
-              },
-              "doctor": {
-                "nullable": true,
-                "oneOf": [
-                  {
-                    "$ref": "#/components/schemas/Doctor"
-                  }
-                ]
-              },
-              "prescriptions": {
-                "type": "array",
-                "nullable": true,
-                "items": {
-                  "$ref": "#/components/schemas/Prescription"
-                }
-              }
-            }
-          }
-        ]
-      },
-      "Patient": {
-        "allOf": [
-          {
-            "$ref": "#/components/schemas/Entity"
-          },
-          {
-            "type": "object",
-            "additionalProperties": false,
-            "required": [
-              "userId"
-            ],
-            "properties": {
-              "userId": {
-                "type": "integer",
-                "format": "int32"
-              },
-              "user": {
-                "nullable": true,
-                "oneOf": [
-                  {
-                    "$ref": "#/components/schemas/User"
-                  }
-                ]
-              },
-              "appointments": {
-                "type": "array",
-                "nullable": true,
-                "items": {
-                  "$ref": "#/components/schemas/Appointment"
-                }
-              },
-              "prescriptions": {
-                "type": "array",
-                "nullable": true,
-                "items": {
-                  "$ref": "#/components/schemas/Prescription"
-                }
-              }
-            }
-          }
-        ]
-      },
-      "Prescription": {
-        "allOf": [
-          {
-            "$ref": "#/components/schemas/Entity"
-          },
-          {
-            "type": "object",
-            "additionalProperties": false,
-            "required": [
-              "name"
-            ],
-            "properties": {
-              "name": {
-                "type": "string",
-                "minLength": 1
-              },
-              "dose": {
-                "type": "string",
-                "nullable": true
-              },
-              "patientId": {
-                "type": "integer",
-                "format": "int32"
-              },
-              "patient": {
-                "nullable": true,
-                "oneOf": [
-                  {
-                    "$ref": "#/components/schemas/Patient"
-                  }
-                ]
-              },
-              "appointmentId": {
-                "type": "integer",
-                "format": "int32"
-              },
-              "appointment": {
-                "nullable": true,
-                "oneOf": [
-                  {
-                    "$ref": "#/components/schemas/Appointment"
-                  }
-                ]
-              },
-              "startDate": {
-                "type": "string",
-                "format": "date-time"
-              },
-              "durationInDays": {
-                "type": "integer",
-                "format": "int32"
-              },
-              "times": {
-                "type": "array",
-                "nullable": true,
-                "items": {
-                  "type": "string",
-                  "format": "date-time"
-                }
-              },
-              "isActive": {
-                "type": "boolean"
-              },
-              "intakes": {
-                "type": "array",
-                "nullable": true,
-                "items": {
-                  "$ref": "#/components/schemas/PrescriptionIntake"
-                }
-              }
-            }
-          }
-        ]
-      },
-      "PrescriptionIntake": {
-        "allOf": [
-          {
-            "$ref": "#/components/schemas/Entity"
-          },
-          {
-            "type": "object",
-            "additionalProperties": false,
-            "properties": {
-              "prescriptionId": {
-                "type": "integer",
-                "format": "int32"
-              },
-              "prescription": {
-                "nullable": true,
-                "oneOf": [
-                  {
-                    "$ref": "#/components/schemas/Prescription"
-                  }
-                ]
-              },
-              "scheduledFor": {
-                "type": "string",
-                "format": "date-time"
-              },
-              "takenAt": {
-                "type": "string",
-                "format": "date-time",
-                "nullable": true
-              }
-            }
-          }
-        ]
       }
     },
     "securitySchemes": {
