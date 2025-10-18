@@ -118,8 +118,8 @@
         <ul class="divide-y divide-slate-200">
           <li *ngFor="let slot of scheduleSlots; trackBy: trackBySlot" class="flex flex-col gap-4 p-4 sm:flex-row sm:items-center sm:justify-between">
             <div>
-              <p class="text-base font-medium text-slate-900">{{ slot.scheduledFor | date:'EEE, MMM d · h:mm a' }}</p>
-              <p *ngIf="slot.takenAt" class="text-sm text-slate-500">Taken {{ slot.takenAt | date:'MMM d, y · h:mm a' }}</p>
+              <p class="text-base font-medium text-slate-900">{{ slot.scheduledFor | date:'EEE, MMM d · HH:mm':'UTC' }}</p>
+              <p *ngIf="slot.takenAt" class="text-sm text-slate-500">Taken {{ slot.takenAt | date:'MMM d, y · HH:mm' }}</p>
             </div>
             <div class="flex items-center gap-3">
               <span *ngIf="slot.isTaken" class="inline-flex items-center px-3 py-1 text-sm font-medium rounded-full bg-emerald-100 text-emerald-700">

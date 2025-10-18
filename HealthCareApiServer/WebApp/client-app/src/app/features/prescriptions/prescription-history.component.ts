@@ -97,7 +97,7 @@ export class PrescriptionHistoryComponent implements OnInit {
     const request = {
       prescriptionId,
       scheduledFor: slot.scheduledFor,
-      takenAt: new Date().toISOString()
+      takenAt: moment().format()
     } as PrescriptionIntakeModel;
 
     this.intakeService.prescriptionIntakeMark({ body: request }).subscribe({
@@ -147,17 +147,9 @@ export class PrescriptionHistoryComponent implements OnInit {
       day.setUTCDate(day.getUTCDate() + dayOffset);
 
       times.forEach(({ hour, minute }) => {
-        const slotDate = new Date(Date.UTC(
-          day.getUTCFullYear(),
-          day.getUTCMonth(),
-          day.getUTCDate(),
-          hour,
-          minute,
-          0,
-          0
-        ));
+        const slotDate = moment(day).utc().hour(hour).minutes(minute);
 
-        const scheduledIso = slotDate.toISOString();
+        const scheduledIso = slotDate.format();
         const matchingIntake = intakes.find(x => moment.utc(x.scheduledFor).isSame(moment.utc(slotDate)));
 
         slots.push({
@@ -175,11 +167,8 @@ export class PrescriptionHistoryComponent implements OnInit {
     if (!value) {
       return null;
     }
-    const date = new Date(value);
-    if (Number.isNaN(date.getTime())) {
-      return null;
-    }
-    return { hour: date.getUTCHours(), minute: date.getUTCMinutes() };
+    const date = moment(value).utc();
+    return { hour: date.hour(), minute: date.minute() };
   }
 
 }
