@@ -33,6 +33,10 @@ namespace HealthCare.Infrastructure
         public DbSet<Prescription> Prescriptions { get; set; }
 
         public DbSet<PrescriptionIntake> PrescriptionIntakes { get; set; }
+
+        public DbSet<PushSubscription> PushSubscriptions { get; set; }
+
+        public DbSet<PrescriptionNotificationLog> PrescriptionNotificationLogs { get; set; }
     
         protected override void OnModelCreating(ModelBuilder builder)
         {
@@ -50,6 +54,26 @@ namespace HealthCare.Infrastructure
                 .WithMany(p => p.Intakes)
                 .HasForeignKey(i => i.PrescriptionId)
                 .OnDelete(DeleteBehavior.Cascade);
+
+            builder.Entity<PushSubscription>()
+                .HasOne(s => s.User)
+                .WithMany()
+                .HasForeignKey(s => s.UserId)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            builder.Entity<PushSubscription>()
+                .HasIndex(s => new { s.UserId, s.Endpoint })
+                .IsUnique();
+
+            builder.Entity<PrescriptionNotificationLog>()
+                .HasOne(l => l.Prescription)
+                .WithMany(p => p.NotificationLogs)
+                .HasForeignKey(l => l.PrescriptionId)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            builder.Entity<PrescriptionNotificationLog>()
+                .HasIndex(l => new { l.PrescriptionId, l.ScheduledFor })
+                .IsUnique();
 
             // Optionally, keep other relationships restrictive
             foreach (var relationship in builder.Model.GetEntityTypes().SelectMany(e => e.GetForeignKeys()))
