@@ -62,15 +62,7 @@ export class LoginComponent implements OnInit {
       next: () => {
         this.auth.clear();
         this.auth.getRoles().pipe(take(1)).subscribe(roles => {
-          if (roles.includes(ROLE_DOCTOR)) {
-            this.router.navigateByUrl('/doctor-scheduler');
-          } else if (roles.includes(ROLE_PATIENT)) {
-            this.router.navigateByUrl('/appointments');
-          } else if (roles.includes(ROLE_ADMIN)) {
-            this.router.navigateByUrl('/');
-          } else {
-            this.router.navigateByUrl('/');
-          }
+          this.router.navigateByUrl('/');
         });
       },
       error: (err) => {

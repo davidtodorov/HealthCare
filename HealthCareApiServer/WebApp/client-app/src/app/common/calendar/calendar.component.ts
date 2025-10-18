@@ -11,11 +11,12 @@ export interface AppointmentStub {
 }
 
 interface CalendarDay {
-  date: moment.Moment, 
-  ymd: string, 
-  d: number, 
-  classes: string, 
-  hasAppts: boolean 
+  date: moment.Moment,
+  ymd: string,
+  d: number,
+  classes: string,
+  hasAppts: boolean,
+  isDisabled: boolean,
 }
 
 @Component({
@@ -29,16 +30,18 @@ export class CalendarComponent implements OnInit, OnChanges {
   @Input() dates: string[] = []; // Array of date strings in "YYYY-MM-DD" format
   @Input() selectedDate: moment.Moment | null = null;
   @Input() currentView: 'day' | 'week' | 'month' = 'day';
+  @Input() availabilitySlots: Record<string, string[]> | null = null;
+  @Input() disablePastAndUnavailable: boolean = false;
 
   @Output() dateSelected = new EventEmitter<moment.Moment>();
   @Output() viewChanged = new EventEmitter<void>();
 
   months: string[] = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
-  
+
   viewYear!: number;
   viewMonth!: number; // 0-based month
   monthLabel: string = '—';
-  
+
   calendarDays: CalendarDay[] = [];
   monthOptions: { value: number, text: string }[] = [];
   yearOptions: { value: number, text: string }[] = [];
@@ -95,15 +98,22 @@ export class CalendarComponent implements OnInit, OnChanges {
 
     // Leading blanks
     for (let i = 0; i < leading; i++) {
-      this.calendarDays.push({ date: moment(), ymd: '', d: 0, classes: 'h-10', hasAppts: false }); // Placeholder
+      this.calendarDays.push({ date: moment(), ymd: '', d: 0, classes: 'h-10', hasAppts: false, isDisabled: true });
     }
 
     for (let d = 1; d <= days; d++) {
       const date = moment({ year: y, month: m, date: d });
       const ymd = date.format('YYYY-MM-DD');
 
-      let hasAppts = this.dates.indexOf(ymd) !== -1 ? true : false; 
-      this.calendarDays.push({ date: date, ymd, d, classes: '', hasAppts });
+      const hasAppts = this.hasAvailableSlots(ymd, date);
+      const isDisabled = this.isDateDisabled(date, hasAppts);
+
+      let classes = 'bg-white hover:bg-slate-100 text-slate-900';
+      if (isDisabled) {
+        classes = 'bg-slate-100 text-slate-400 cursor-not-allowed';
+      }
+
+      this.calendarDays.push({ date: date, ymd, d, classes, hasAppts, isDisabled });
     }
 
     this.highlightCalendarDays();
@@ -124,6 +134,11 @@ export class CalendarComponent implements OnInit, OnChanges {
 
     this.calendarDays.forEach(day => {
       if (!day.ymd) return; // Skip placeholder days
+
+      if (day.isDisabled) {
+        day.classes = 'bg-slate-100 text-slate-400';
+        return;
+      }
 
       const date = day.date;
 
@@ -175,9 +190,68 @@ export class CalendarComponent implements OnInit, OnChanges {
   }
 
   selectDate(date: Date | moment.Moment): void {
-    this.selectedDate = moment(date); 
+    this.selectedDate = moment(date);
     this.buildMonth(this.viewYear, this.viewMonth);
     this.dateSelected.emit(this.selectedDate);
+  }
+
+  private hasAvailableSlots(ymd: string, date: moment.Moment): boolean {
+    if (this.availabilitySlots && Object.keys(this.availabilitySlots).length > 0) {
+      const slots = this.availabilitySlots[ymd] || [];
+      if (!slots.length) {
+        return false;
+      }
+
+      if (!this.disablePastAndUnavailable) {
+        return true;
+      }
+
+      if (!date.isSame(moment(), 'day')) {
+        return true;
+      }
+
+      const now = moment();
+      return slots.some(slot => this.isSlotAfter(date, slot, now));
+    }
+
+    return this.dates.indexOf(ymd) !== -1;
+  }
+
+  private isDateDisabled(date: moment.Moment, hasSlots: boolean): boolean {
+    if (!this.disablePastAndUnavailable) {
+      return false;
+    }
+
+    const today = moment().startOf('day');
+    if (date.isBefore(today, 'day')) {
+      return true;
+    }
+
+    if (!hasSlots) {
+      return true;
+    }
+
+    if (date.isSame(today, 'day') && this.availabilitySlots) {
+      const slots = this.availabilitySlots[date.format('YYYY-MM-DD')] || [];
+      if (!slots.length) {
+        return true;
+      }
+
+      const now = moment();
+      return !slots.some(slot => this.isSlotAfter(date, slot, now));
+    }
+
+    return false;
+  }
+
+  private isSlotAfter(date: moment.Moment, slot: string, compare: moment.Moment): boolean {
+    const [hours, minutes] = slot.split(':').map(Number);
+    const slotMoment = moment(date)
+      .hour(hours)
+      .minute(minutes)
+      .second(0)
+      .millisecond(0);
+    return slotMoment.isAfter(compare);
   }
 
 }

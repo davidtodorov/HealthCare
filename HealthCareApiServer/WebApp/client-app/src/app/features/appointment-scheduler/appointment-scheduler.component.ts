@@ -145,7 +145,28 @@ export class AppointmentSchedulerComponent implements OnInit {
     const d = this.selectedDate;
     if (!doctor || !d) return [];
     if (this.isDoctor && !this.selectedPatient) return [];
-    return this.availabilitySlots[moment(d).format('YYYY-MM-DD')] || [];
+    const key = moment(d).format('YYYY-MM-DD');
+    const slots = this.availabilitySlots[key] || [];
+    const dayMoment = moment(key, 'YYYY-MM-DD');
+
+    if (!slots.length) {
+      return [];
+    }
+
+    if (!dayMoment.isSame(moment(), 'day')) {
+      return slots;
+    }
+
+    const now = moment();
+    return slots.filter(slot => {
+      const [hours, minutes] = slot.split(':').map(Number);
+      const slotMoment = moment(dayMoment)
+        .hour(hours)
+        .minute(minutes)
+        .second(0)
+        .millisecond(0);
+      return slotMoment.isAfter(now);
+    });
   }
 
   get summary(): string {
@@ -344,7 +365,7 @@ export class AppointmentSchedulerComponent implements OnInit {
     const patientId = this.isDoctor ? this.selectedPatient?.id ?? null : null;
     const patientUserId = this.isDoctor ? this.selectedPatient?.userId ?? null : this.currentUserId;
 
-    this.availabilitySlots = this.findFreeSlotsForDoctor(
+    const rawSlots = this.findFreeSlotsForDoctor(
       this.scheduledAppointments,
       doctorId,
       '08:00',
@@ -353,6 +374,34 @@ export class AppointmentSchedulerComponent implements OnInit {
       { patientId, patientUserId }
     );
 
-    this.dates = this.availabilitySlots ? Object.keys(this.availabilitySlots) : [];
+    const today = moment().startOf('day');
+    const now = moment();
+    const filteredSlots: Record<string, string[]> = {};
+
+    Object.entries(rawSlots).forEach(([dateKey, slots]) => {
+      const dayMoment = moment(dateKey, 'YYYY-MM-DD');
+      if (dayMoment.isBefore(today)) {
+        return;
+      }
+
+      const upcomingSlots = dayMoment.isSame(today, 'day')
+        ? slots.filter(slot => {
+          const [hours, minutes] = slot.split(':').map(Number);
+          const slotMoment = moment(dayMoment)
+            .hour(hours)
+            .minute(minutes)
+            .second(0)
+            .millisecond(0);
+          return slotMoment.isAfter(now);
+        })
+        : slots;
+
+      if (upcomingSlots.length > 0) {
+        filteredSlots[dateKey] = upcomingSlots;
+      }
+    });
+
+    this.availabilitySlots = filteredSlots;
+    this.dates = Object.keys(filteredSlots);
   }
 }

@@ -30,9 +30,10 @@
 <div class="grid grid-cols-7 gap-1" id="calendar">
     <ng-container *ngFor="let day of calendarDays">
         <div *ngIf="day.d === 0" class="h-10"></div>
-        <button *ngIf="day.d > 0" 
+        <button *ngIf="day.d > 0"
                 class="h-10 relative rounded-xl flex items-center justify-center font-medium text-sm transition"
                 [ngClass]="day.classes"
+                [disabled]="day.isDisabled"
                 (click)="selectDate(day.date)">
             {{ day.d }}
             <span *ngIf="day.hasAppts" class="absolute bottom-1 w-1.5 h-1.5 rounded-full bg-indigo-500"></span>

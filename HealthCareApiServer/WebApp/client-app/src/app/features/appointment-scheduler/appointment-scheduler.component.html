@@ -81,6 +81,8 @@
         <div class="md:w-[360px]">
           <app-calendar [doctorId]="selectedDoctor?.id || 0"
                         [dates]="dates"
+                        [availabilitySlots]="availabilitySlots"
+                        [disablePastAndUnavailable]="true"
                         (dateSelected)="onDateSelect($event)"
                         (viewChanged)="onViewChange()"></app-calendar>
         </div>
