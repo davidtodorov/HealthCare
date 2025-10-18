@@ -2,8 +2,8 @@
   "name": "client-app",
   "short_name": "client-app",
   "display": "standalone",
-  "scope": "./",
-  "start_url": "./",
+  "scope": "/",
+  "start_url": "/",
   "icons": [
     {
       "src": "icons/icon-72x72.png",
