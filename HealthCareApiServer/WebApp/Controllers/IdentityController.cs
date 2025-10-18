@@ -134,7 +134,6 @@ namespace WebApp.Controllers
         }
 
         [HttpGet]
-        [Authorize]
         [Route(nameof(Roles))]
         public async Task<UserAndRoles> Roles()
         {

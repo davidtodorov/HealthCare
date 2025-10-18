@@ -34,5 +34,7 @@ namespace HealthCare.Core.Entities
 
         public virtual ICollection<PrescriptionIntake> Intakes { get; set; } = new List<PrescriptionIntake>();
 
+        public virtual ICollection<PrescriptionNotificationLog> NotificationLogs { get; set; } = new List<PrescriptionNotificationLog>();
+
     }
 }

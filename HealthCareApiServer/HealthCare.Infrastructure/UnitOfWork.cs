@@ -17,6 +17,8 @@ namespace HealthCare.Infrastructure
         public IRepository<Patient> PatientRepository { get; set; }
         public IRepository<Prescription> PrescriptionRepository { get; set; }
         public IRepository<PrescriptionIntake> PrescriptionIntakeRepository { get; set; }
+        public IRepository<PushSubscription> PushSubscriptionRepository { get; set; }
+        public IRepository<PrescriptionNotificationLog> PrescriptionNotificationLogRepository { get; set; }
 
         public UnitOfWork(HealthCareDbContext context)
         {
@@ -29,6 +31,8 @@ namespace HealthCare.Infrastructure
             this.PatientRepository = new Repository<Patient>(context);
             this.PrescriptionRepository = new Repository<Prescription>(context);
             this.PrescriptionIntakeRepository = new Repository<PrescriptionIntake>(context);
+            this.PushSubscriptionRepository = new Repository<PushSubscription>(context);
+            this.PrescriptionNotificationLogRepository = new Repository<PrescriptionNotificationLog>(context);
         }
 
         public void SaveChanges()

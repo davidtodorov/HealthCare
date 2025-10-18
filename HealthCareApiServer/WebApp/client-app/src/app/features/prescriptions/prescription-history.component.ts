@@ -1,8 +1,10 @@
 import { CommonModule } from '@angular/common';
-import { Component, OnInit } from '@angular/core';
-import { PrescriptionIntake, PrescriptionIntakeModel, PrescriptionModel } from '../../api/models';
+import { Component, OnDestroy, OnInit } from '@angular/core';
+import { PrescriptionIntakeModel, PrescriptionModel } from '../../api/models';
 import { PrescriptionIntakeService, PrescriptionService } from '../../api/services';
+import { PushNotificationService } from '../../common/push-notification.service';
 import moment from 'moment';
+import { Subscription } from 'rxjs';
 
 interface ScheduleSlot {
   scheduledFor: string;
@@ -18,21 +20,77 @@ interface ScheduleSlot {
   templateUrl: './prescription-history.component.html',
   styleUrl: './prescription-history.component.scss'
 })
-export class PrescriptionHistoryComponent implements OnInit {
+export class PrescriptionHistoryComponent implements OnInit, OnDestroy {
   isLoading = false;
   errorMessage: string | null = null;
   prescriptions: PrescriptionModel[] = [];
   selectedPrescription: PrescriptionModel | null = null;
   scheduleSlots: ScheduleSlot[] = [];
+  notificationsSupported = false;
+  isNotificationsEnabled = false;
+  isNotificationLoading = false;
+  notificationError: string | null = null;
+  private subscription?: Subscription;
 
-  constructor(private readonly prescriptionService: PrescriptionService, private readonly intakeService: PrescriptionIntakeService) { }
+  constructor(
+    private readonly prescriptionService: PrescriptionService,
+    private readonly intakeService: PrescriptionIntakeService,
+    private readonly pushNotificationService: PushNotificationService
+  ) { }
 
   ngOnInit(): void {
     this.loadPrescriptions();
+    this.notificationsSupported = this.pushNotificationService.isSupported;
+    if (this.notificationsSupported) {
+      this.subscription = this.pushNotificationService.getSubscriptionState().subscribe(isEnabled => {
+        this.isNotificationsEnabled = isEnabled;
+      });
+    }
+  }
+
+  ngOnDestroy(): void {
+    this.subscription?.unsubscribe();
   }
 
   get activePrescriptions(): PrescriptionModel[] {
     return this.prescriptions.filter(p => p.isActive);
+  }
+
+  async enableNotifications(): Promise<void> {
+    if (!this.notificationsSupported || this.isNotificationLoading) {
+      return;
+    }
+
+    this.isNotificationLoading = true;
+    this.notificationError = null;
+    try {
+      const success = await this.pushNotificationService.subscribe();
+      this.isNotificationsEnabled = success;
+      if (!success) {
+        this.notificationError = 'We could not enable reminders. Please allow notifications and try again.';
+      }
+    } catch (error) {
+      this.notificationError = 'We ran into a problem while enabling reminders. Please try again later.';
+    } finally {
+      this.isNotificationLoading = false;
+    }
+  }
+
+  async disableNotifications(): Promise<void> {
+    if (!this.notificationsSupported || this.isNotificationLoading) {
+      return;
+    }
+
+    this.isNotificationLoading = true;
+    this.notificationError = null;
+    try {
+      await this.pushNotificationService.unsubscribe();
+      this.isNotificationsEnabled = false;
+    } catch (error) {
+      this.notificationError = 'We could not disable reminders right now. Please try again later.';
+    } finally {
+      this.isNotificationLoading = false;
+    }
   }
 
   get historicalPrescriptions(): PrescriptionModel[] {

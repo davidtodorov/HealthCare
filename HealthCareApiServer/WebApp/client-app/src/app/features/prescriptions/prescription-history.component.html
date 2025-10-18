@@ -5,6 +5,29 @@
       track and record each dose as you take it.</p>
   </section>
 
+  <section *ngIf="notificationsSupported" class="bg-indigo-50 border border-indigo-100 rounded-3xl p-6 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+    <div>
+      <h2 class="text-xl font-semibold text-indigo-900">Stay on track with reminders</h2>
+      <p class="text-sm text-indigo-700 max-w-2xl">
+        Enable push notifications to receive reminders for each scheduled intake even when the app is closed.
+      </p>
+    </div>
+    <div class="flex flex-col items-stretch sm:items-end gap-2">
+      <button type="button"
+        class="inline-flex items-center px-4 py-2 text-sm font-semibold rounded-full text-white bg-indigo-600 hover:bg-indigo-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-400 disabled:opacity-60 disabled:cursor-not-allowed"
+        (click)="isNotificationsEnabled ? disableNotifications() : enableNotifications()"
+        [disabled]="isNotificationLoading">
+        <span *ngIf="isNotificationLoading"
+          class="w-4 h-4 mr-2 border-2 border-white/60 border-t-white rounded-full animate-spin"></span>
+        {{ isNotificationsEnabled ? 'Disable reminders' : 'Enable reminders' }}
+      </button>
+      <p *ngIf="notificationError" class="text-xs text-red-600 max-w-sm text-right">{{ notificationError }}</p>
+      <p *ngIf="!notificationError && isNotificationsEnabled" class="text-xs text-indigo-700 text-right">
+        Reminders are active on this device.
+      </p>
+    </div>
+  </section>
+
   <section *ngIf="errorMessage" class="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-2xl">
     {{ errorMessage }}
   </section>
