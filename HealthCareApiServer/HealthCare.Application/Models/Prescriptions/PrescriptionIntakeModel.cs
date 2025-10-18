@@ -1,4 +1,3 @@
-using HealthCare.Application.Models;
 using System;
 using System.ComponentModel.DataAnnotations;
 

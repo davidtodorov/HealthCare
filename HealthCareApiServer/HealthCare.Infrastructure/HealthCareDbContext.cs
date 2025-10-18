@@ -42,7 +42,6 @@ namespace HealthCare.Infrastructure
         {
             base.OnModelCreating(builder);
 
-            // Configure cascade delete for Appointment -> Prescription
             builder.Entity<Prescription>()
                 .HasOne(p => p.Appointment)
                 .WithMany(a => a.Prescriptions)
@@ -75,7 +74,6 @@ namespace HealthCare.Infrastructure
                 .HasIndex(l => new { l.PrescriptionId, l.ScheduledFor })
                 .IsUnique();
 
-            // Optionally, keep other relationships restrictive
             foreach (var relationship in builder.Model.GetEntityTypes().SelectMany(e => e.GetForeignKeys()))
             {
                 var allowsCascade =
@@ -89,7 +87,6 @@ namespace HealthCare.Infrastructure
             }
 
 
-            // Use static DateTime values instead of DateTime.UtcNow
             var staticDate = new DateTime(2025, 10, 1, 0, 0, 0, DateTimeKind.Utc);
             var staticModifiedOn = new DateTime(2025, 10, 1, 0, 0, 0, DateTimeKind.Utc);
 

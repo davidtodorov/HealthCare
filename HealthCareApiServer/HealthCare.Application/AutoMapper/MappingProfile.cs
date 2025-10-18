@@ -1,5 +1,4 @@
 ﻿using AutoMapper;
-using HealthCare.Application.Models;
 using HealthCare.Application.Models.Appointments;
 using HealthCare.Application.Models.Doctor;
 using HealthCare.Application.Models.Hospital;
@@ -8,9 +7,7 @@ using HealthCare.Application.Models.Notifications;
 using HealthCare.Application.Models.Prescriptions;
 using HealthCare.Application.Models.Users;
 using HealthCare.Core.Entities;
-using System;
-using System.Collections.Generic;
-using System.Text;
+using HealthCare.Application.Models.Departments;
 
 namespace HealthCare.Application.AutoMapper
 {
@@ -18,7 +15,7 @@ namespace HealthCare.Application.AutoMapper
     {
         public MappingProfile()
         {
-            CreateMap<Hospital, HospitalModel>().ReverseMap(); //.ForMember(hm => hm.DoctorModels, opts => opts.MapFrom(h => h.Doctors)).ReverseMap();
+            CreateMap<Hospital, HospitalModel>().ReverseMap();
             CreateMap<User, UserModel>().ReverseMap();
 
             CreateMap<DoctorModel, Doctor>();

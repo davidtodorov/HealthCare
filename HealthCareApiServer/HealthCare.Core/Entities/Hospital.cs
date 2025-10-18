@@ -1,8 +1,6 @@
 ﻿using HealthCare.Core.Base;
-using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.Text;
 
 namespace HealthCare.Core.Entities
 {
@@ -18,7 +16,6 @@ namespace HealthCare.Core.Entities
         }
         [Required]
         public virtual string Name { get; set; }
-        //public virtual string PhoneNumber { get; set; }
         public virtual List<Doctor> Doctors { get; set; }
     }
 }

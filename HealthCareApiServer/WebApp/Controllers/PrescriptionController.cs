@@ -19,11 +19,8 @@ namespace WebApp.Controllers
 {
     public class PrescriptionController : RestController<Prescription, PrescriptionModel, PrescriptionModel>
     {
-        private readonly IMapper mapper; // Add this field to store the injected mapper
-
         public PrescriptionController(IUnitOfWork unitOfWork, IMapper mapper, IDoctorCreator doctorCreator) : base(unitOfWork, mapper)
         {
-            this.mapper = mapper; // Assign to the new private field
         }
 
         [HttpGet("Mine")]

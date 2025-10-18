@@ -1,5 +1,5 @@
 ﻿using AutoMapper;
-using HealthCare.Application.Models;
+using HealthCare.Application.Models.Departments;
 using HealthCare.Core.Entities;
 using HealthCare.Infrastructure;
 

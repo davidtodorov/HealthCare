@@ -11,14 +11,20 @@ export const roleGuard: CanMatchFn = (route, segments) => {
 
   return auth.getRoles().pipe(
     map(roles => {
+      if (roles && roles.length === 0) {
+        return router.createUrlTree(['/login']);
+      }
+
       if (required.length === 0
         || roles.includes(ROLE_ADMIN)
         || required.some(r => roles.includes(r))) {
         return true;
       }
-      if(auth.isLoggedIn()) {
+
+      if (auth.isLoggedIn()) {
         return router.createUrlTree(['/forbidden']);
       }
+      
       return router.createUrlTree(['/login']);
     }),
     catchError(() => of(router.createUrlTree(['/login'])))

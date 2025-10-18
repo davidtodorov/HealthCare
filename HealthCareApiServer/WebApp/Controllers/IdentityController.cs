@@ -1,20 +1,11 @@
 ﻿using HealthCare.Application.Interfaces.Patients;
 using HealthCare.Application.Models.Users;
-using HealthCare.Core;
 using HealthCare.Core.Entities;
 using Microsoft.AspNetCore.Authentication.Cookies;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
-using Microsoft.IdentityModel.Tokens;
-using System;
 using System.Collections.Generic;
-using System.IdentityModel.Tokens.Jwt;
-using System.Linq;
-using System.Security.Claims;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace WebApp.Controllers
@@ -137,6 +128,10 @@ namespace WebApp.Controllers
         [Route(nameof(Roles))]
         public async Task<UserAndRoles> Roles()
         {
+            if(User == null)
+            {
+                return null;
+            }
             var user = await userManager.GetUserAsync(User);
             var roles = await userManager.GetRolesAsync(user);
             var userAndRoles = new UserAndRoles(user.FirstName, user.LastName, user.Id, roles);

@@ -1,12 +1,9 @@
 ﻿using AutoMapper;
 using HealthCare.Application.Interfaces.Doctors;
 using HealthCare.Application.Models.Appointments;
-using HealthCare.Application.Models.Doctor;
 using HealthCare.Core;
 using HealthCare.Core.Entities;
 using HealthCare.Infrastructure;
-using HealthCare.Infrastructure.Repositories;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;

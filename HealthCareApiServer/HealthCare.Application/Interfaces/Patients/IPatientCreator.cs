@@ -1,9 +1,4 @@
-﻿using HealthCare.Application.Models.Doctor;
-using HealthCare.Application.Models.Users;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using HealthCare.Application.Models.Users;
 using System.Threading.Tasks;
 
 namespace HealthCare.Application.Interfaces.Patients

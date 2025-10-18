@@ -22,7 +22,6 @@ namespace WebApp
 
         public IConfiguration Configuration { get; }
 
-        // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
 
@@ -65,14 +64,12 @@ namespace WebApp
                 config.OperationProcessors.Add(new AspNetCoreOperationSecurityScopeProcessor("JWT"));
             });
 
-            // In production, the Vue files will be served from this directory
             services.AddSpaStaticFiles(configuration =>
             {
                 configuration.RootPath = "client-app/dist/client-app/browser";
             });
         }
 
-        // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
             if (env.IsDevelopment())
@@ -110,10 +107,10 @@ namespace WebApp
             {
                 spa.Options.SourcePath = "client-app";
 
-                //if (env.IsDevelopment())
-                //{
-                //    spa.UseProxyToSpaDevelopmentServer("http://localhost:4200");
-                //}
+                if (env.IsDevelopment())
+                {
+                    spa.UseProxyToSpaDevelopmentServer("http://localhost:4200");
+                }
             });
 
             app.ApplyMigrations();

@@ -2,10 +2,8 @@
 using HealthCare.Application.Interfaces.Doctors;
 using HealthCare.Application.Models.Appointments;
 using HealthCare.Application.Models.Doctor;
-using HealthCare.Core;
 using HealthCare.Core.Entities;
 using HealthCare.Infrastructure;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
@@ -18,12 +16,12 @@ namespace WebApp.Controllers
     public class DoctorController : RestController<Doctor, DoctorModel, DoctorModel>
     {
         private IDoctorCreator doctorCreator;
-        private readonly IMapper mapper; // Add this field to store the injected mapper
+        private readonly IMapper mapper;
 
         public DoctorController(IUnitOfWork unitOfWork, IMapper mapper, IDoctorCreator doctorCreator) : base(unitOfWork, mapper)
         {
             this.doctorCreator = doctorCreator;
-            this.mapper = mapper; // Assign to the new private field
+            this.mapper = mapper;
         }
 
         [HttpPost(nameof(Create))]
