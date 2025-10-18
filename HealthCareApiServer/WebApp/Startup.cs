@@ -9,6 +9,7 @@ using NSwag;
 using NSwag.Generation.Processors.Security;
 using System.Linq;
 using WebApp.Extensions;
+using WebApp.Services.Notifications;
 
 namespace WebApp
 {
@@ -26,6 +27,7 @@ namespace WebApp
         {
 
             services
+                .AddHttpContextAccessor()
                 .AddDbContext<HealthCareDbContext>(options => options.UseSqlServer(this.Configuration.GetDefaultConnectionString()))
                 .AddIdentity()
                 //.AddJwtAuthentication(services.GetApplicationSettings(this.Configuration))  //USE FOR JWT AUTHENTICATION
@@ -40,6 +42,10 @@ namespace WebApp
                 .AddMapperConfig()
                 .AddApplicationServices()
                 .AddControllers();
+
+            services.Configure<WebPushOptions>(Configuration.GetSection("WebPush"));
+            services.AddSingleton<IPushNotificationSender, WebPushNotificationSender>();
+            services.AddHostedService<PrescriptionReminderHostedService>();
 
             services.AddEndpointsApiExplorer();
             services.AddOpenApiDocument(config =>
@@ -104,10 +110,10 @@ namespace WebApp
             {
                 spa.Options.SourcePath = "client-app";
 
-                if (env.IsDevelopment())
-                {
-                    spa.UseProxyToSpaDevelopmentServer("http://localhost:4200");
-                }
+                //if (env.IsDevelopment())
+                //{
+                //    spa.UseProxyToSpaDevelopmentServer("http://localhost:4200");
+                //}
             });
 
             app.ApplyMigrations();

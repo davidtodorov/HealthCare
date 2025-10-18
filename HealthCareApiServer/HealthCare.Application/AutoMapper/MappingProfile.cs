@@ -4,6 +4,7 @@ using HealthCare.Application.Models.Appointments;
 using HealthCare.Application.Models.Doctor;
 using HealthCare.Application.Models.Hospital;
 using HealthCare.Application.Models.Patients;
+using HealthCare.Application.Models.Notifications;
 using HealthCare.Application.Models.Prescriptions;
 using HealthCare.Application.Models.Users;
 using HealthCare.Core.Entities;
@@ -71,6 +72,7 @@ namespace HealthCare.Application.AutoMapper
                 .ForMember(am => am.FirstName, opts => opts.MapFrom(a => a.User.FirstName))
                 .ForMember(am => am.LastName, opts => opts.MapFrom(a => a.User.LastName))
                 .ForMember(am => am.Email, opts => opts.MapFrom(a => a.User.Email));
+            CreateMap<PushSubscription, PushSubscriptionModel>().ReverseMap();
 ;
         }
     }
