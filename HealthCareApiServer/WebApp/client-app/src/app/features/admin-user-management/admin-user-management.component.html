@@ -1,0 +1,94 @@
+<div class="admin-user-container">
+  <h2 class="page-title">User Management</h2>
+  <p class="page-subtitle">Select a user to update their profile details, reset passwords, or manage doctor assignments.</p>
+
+  <div *ngIf="loading" class="state-message">Loading users…</div>
+  <div *ngIf="loadError" class="state-message error">{{ loadError }}</div>
+
+  <div class="management-grid" *ngIf="!loading && !loadError">
+    <section class="user-list">
+      <h3>Users</h3>
+      <div *ngIf="users.length === 0" class="state-message">No users found.</div>
+      <ul>
+        <li *ngFor="let user of users; trackBy: trackByUser"
+            [class.selected]="user.id === selectedUser?.id"
+            (click)="selectUser(user)">
+          <div class="user-name">{{ getUserDisplayName(user) }}</div>
+          <div class="user-meta">
+            <span *ngIf="isDoctor(user)" class="badge badge-doctor">Doctor</span>
+          </div>
+        </li>
+      </ul>
+    </section>
+
+    <section class="user-details" *ngIf="selectedUser; else selectPrompt">
+      <div class="card">
+        <h3>Profile details</h3>
+        <form [formGroup]="nameForm" (ngSubmit)="saveUser()">
+          <div class="form-grid">
+            <label class="form-field">
+              <span>First name</span>
+              <input formControlName="firstName" type="text" placeholder="First name" />
+              <small *ngIf="nameForm.get('firstName')?.invalid && nameForm.get('firstName')?.touched">First name is required.</small>
+            </label>
+            <label class="form-field">
+              <span>Last name</span>
+              <input formControlName="lastName" type="text" placeholder="Last name" />
+              <small *ngIf="nameForm.get('lastName')?.invalid && nameForm.get('lastName')?.touched">Last name is required.</small>
+            </label>
+          </div>
+
+          <label class="form-field" *ngIf="selectedDoctor">
+            <span>Assigned department</span>
+            <select formControlName="departmentId">
+              <option *ngFor="let department of departments" [ngValue]="department.id">{{ department.name }}</option>
+            </select>
+          </label>
+
+          <div class="actions">
+            <button type="submit" [disabled]="saving">Save changes</button>
+            <span *ngIf="saving" class="progress">Saving…</span>
+          </div>
+        </form>
+        <div *ngIf="saveMessage" class="state-message success">{{ saveMessage }}</div>
+        <div *ngIf="saveError" class="state-message error">{{ saveError }}</div>
+      </div>
+
+      <div class="card">
+        <h3>Reset password</h3>
+        <form [formGroup]="passwordForm" (ngSubmit)="changePassword()">
+          <div class="form-grid">
+            <label class="form-field">
+              <span>New password</span>
+              <input formControlName="password" type="password" placeholder="Enter a new password" />
+              <small *ngIf="passwordForm.get('password')?.invalid && passwordForm.get('password')?.touched">
+                Password must be at least 3 characters.
+              </small>
+            </label>
+            <label class="form-field">
+              <span>Confirm password</span>
+              <input formControlName="confirmPassword" type="password" placeholder="Confirm the password" />
+              <small *ngIf="passwordForm.get('confirmPassword')?.invalid && passwordForm.get('confirmPassword')?.touched">
+                Confirmation is required.
+              </small>
+            </label>
+          </div>
+          <div *ngIf="passwordMismatch && passwordForm.touched" class="state-message error">Passwords do not match.</div>
+          <div class="actions">
+            <button type="submit" [disabled]="passwordSaving">Update password</button>
+            <span *ngIf="passwordSaving" class="progress">Updating…</span>
+          </div>
+        </form>
+        <div *ngIf="passwordMessage" class="state-message success">{{ passwordMessage }}</div>
+        <div *ngIf="passwordError" class="state-message error">{{ passwordError }}</div>
+      </div>
+    </section>
+
+    <ng-template #selectPrompt>
+      <div class="card placeholder">
+        <h3>Select a user</h3>
+        <p>Choose a user from the list to manage their details.</p>
+      </div>
+    </ng-template>
+  </div>
+</div>

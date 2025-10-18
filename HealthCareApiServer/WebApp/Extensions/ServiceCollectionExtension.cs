@@ -30,7 +30,8 @@ namespace WebApp.Extensions
                     options.Password.RequireUppercase = false;
                     options.Password.RequireNonAlphanumeric = false;
                 })
-                .AddEntityFrameworkStores<HealthCareDbContext>();
+                .AddEntityFrameworkStores<HealthCareDbContext>()
+                .AddDefaultTokenProviders();
 
             return services;
         }

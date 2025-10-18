@@ -55,4 +55,12 @@ export class MainMenuComponent {
     this.router.navigate(['/prescriptions']);
   }
 
+  goToAdminUsers() {
+    this.router.navigate(['/admin/users']);
+  }
+
+  goToAdminAppointments() {
+    this.router.navigate(['/admin/appointments']);
+  }
+
 }

@@ -95,6 +95,38 @@
                 <span class="mt-4 inline-block text-rose-500 font-medium group-hover:text-rose-600">Register Doctor
                     →</span>
             </button>
+
+            <button *ngIf="isAdminRole$ | async" (click)="goToAdminUsers()"
+                class="w-full text-left p-8 bg-white border border-slate-200 rounded-3xl shadow-xl hover:shadow-2xl hover:border-blue-400 transition transform duration-300 hover:-translate-y-1 group focus:outline-none focus:ring-4 focus:ring-blue-300">
+                <div class="text-blue-600 mb-4 group-hover:text-blue-700 transition duration-300">
+                    <svg class="w-12 h-12" fill="none" stroke="currentColor" viewBox="0 0 24 24"
+                        xmlns="http://www.w3.org/2000/svg">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M17 20h5v-1a4 4 0 00-3-3.87M9 11a4 4 0 100-8 4 4 0 000 8zm6 9a4 4 0 00-8 0v1h8v-1zm7-11a4 4 0 11-8 0 4 4 0 018 0z">
+                        </path>
+                    </svg>
+                </div>
+                <h3 class="text-2xl font-semibold text-slate-900 mb-2">Manage users</h3>
+                <p class="text-slate-600">Edit user names, reset passwords, and adjust doctor assignments.</p>
+                <span class="mt-4 inline-block text-blue-500 font-medium group-hover:text-blue-600">Open user management
+                    →</span>
+            </button>
+
+            <button *ngIf="isAdminRole$ | async" (click)="goToAdminAppointments()"
+                class="w-full text-left p-8 bg-white border border-slate-200 rounded-3xl shadow-xl hover:shadow-2xl hover:border-emerald-400 transition transform duration-300 hover:-translate-y-1 group focus:outline-none focus:ring-4 focus:ring-emerald-300">
+                <div class="text-emerald-600 mb-4 group-hover:text-emerald-700 transition duration-300">
+                    <svg class="w-12 h-12" fill="none" stroke="currentColor" viewBox="0 0 24 24"
+                        xmlns="http://www.w3.org/2000/svg">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M8 7V3m8 4V3m-9 8h10m-9 4h6m-9 4h12a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z">
+                        </path>
+                    </svg>
+                </div>
+                <h3 class="text-2xl font-semibold text-slate-900 mb-2">Review appointments</h3>
+                <p class="text-slate-600">Monitor doctor and patient appointments and edit statuses in one place.</p>
+                <span class="mt-4 inline-block text-emerald-500 font-medium group-hover:text-emerald-600">View appointments
+                    →</span>
+            </button>
         </div>
     </div>
 </div>

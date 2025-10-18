@@ -1,0 +1,103 @@
+<div class="admin-appointments">
+  <div class="header">
+    <h2>Appointment Oversight</h2>
+    <p>Review every appointment scheduled across the organization, apply quick filters, and adjust status or notes when needed.</p>
+  </div>
+
+  <div *ngIf="loading()" class="state-message">Loading appointments…</div>
+  <div *ngIf="loadError()" class="state-message error">{{ loadError() }}</div>
+
+  <div class="content" *ngIf="!loading() && !loadError()">
+    <section class="filters" [formGroup]="filtersForm">
+      <div class="filter-field">
+        <label for="doctor">Doctor</label>
+        <select id="doctor" formControlName="doctor">
+          <option value="all">All doctors</option>
+          <option *ngFor="let name of doctorNames()" [value]="name">{{ name }}</option>
+        </select>
+      </div>
+      <div class="filter-field">
+        <label for="patient">Patient</label>
+        <select id="patient" formControlName="patient">
+          <option value="all">All patients</option>
+          <option *ngFor="let name of patientNames()" [value]="name">{{ name }}</option>
+        </select>
+      </div>
+      <div class="filter-field">
+        <label for="status">Status</label>
+        <select id="status" formControlName="status">
+          <option value="all">All statuses</option>
+          <option *ngFor="let status of statusOptions()" [value]="status">{{ statusLabel(status) }}</option>
+        </select>
+      </div>
+    </section>
+
+    <div class="layout">
+      <section class="appointments-list">
+        <div *ngIf="filteredAppointments().length === 0" class="state-message">No appointments match the selected filters.</div>
+        <ul>
+          <li *ngFor="let appointment of filteredAppointments(); trackBy: trackByAppointment"
+              (click)="selectAppointment(appointment)"
+              [class.selected]="appointment.id === selectedAppointment()?.id">
+            <div class="appointment-primary">
+              <span class="doctor">{{ appointment.doctorName || 'Unassigned doctor' }}</span>
+              <span class="time">{{ appointment.dateTime | date:'medium' }}</span>
+            </div>
+            <div class="appointment-meta">
+              <span class="patient">{{ getPatientName(appointment) }}</span>
+              <span class="status" [class]="statusLabel(appointment.status).toLowerCase()">{{ statusLabel(appointment.status) }}</span>
+            </div>
+          </li>
+        </ul>
+      </section>
+
+      <section class="appointment-details" *ngIf="selectedAppointment(); else noSelection">
+        <div class="card">
+          <header>
+            <h3>Appointment details</h3>
+            <p>Adjust the appointment status or update the notes shared with the care team.</p>
+          </header>
+          <dl class="details">
+            <div>
+              <dt>Doctor</dt>
+              <dd>{{ selectedAppointment()?.doctorName || 'Unassigned' }}</dd>
+            </div>
+            <div>
+              <dt>Patient</dt>
+              <dd>{{ selectedAppointment() ? getPatientName(selectedAppointment()!) : '' }}</dd>
+            </div>
+            <div>
+              <dt>Scheduled for</dt>
+              <dd>{{ selectedAppointment()?.dateTime | date:'fullDate' }} at {{ selectedAppointment()?.dateTime | date:'shortTime' }}</dd>
+            </div>
+          </dl>
+
+          <form [formGroup]="editForm" (ngSubmit)="saveChanges()">
+            <label class="form-field">
+              <span>Status</span>
+              <select formControlName="status">
+                <option *ngFor="let status of statusOptions(); trackBy: trackByStatus" [value]="status">{{ statusLabel(status) }}</option>
+              </select>
+            </label>
+            <label class="form-field">
+              <span>Notes</span>
+              <textarea formControlName="notes" rows="4" placeholder="Add or update notes for this appointment"></textarea>
+            </label>
+            <div class="actions">
+              <button type="submit" [disabled]="saving()">Save updates</button>
+              <span *ngIf="saving()" class="progress">Saving…</span>
+            </div>
+          </form>
+          <div *ngIf="saveSuccess()" class="state-message success">{{ saveSuccess() }}</div>
+          <div *ngIf="saveError()" class="state-message error">{{ saveError() }}</div>
+        </div>
+      </section>
+      <ng-template #noSelection>
+        <div class="card placeholder">
+          <h3>Select an appointment</h3>
+          <p>Choose a record from the list to see full details and make updates.</p>
+        </div>
+      </ng-template>
+    </div>
+  </div>
+</div>

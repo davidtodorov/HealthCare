@@ -9,6 +9,8 @@ import { ForbiddenComponent } from './errors/forbidden/forbidden.component';
 import { PrescriptionHistoryComponent } from './features/prescriptions/prescription-history.component';
 import { AppointmentHistoryComponent } from './features/appointment-history/appointment-history.component';
 import { ROLE_ADMIN, ROLE_DOCTOR, ROLE_PATIENT } from './common/roles';
+import { AdminUserManagementComponent } from './features/admin-user-management/admin-user-management.component';
+import { AdminAppointmentsComponent } from './features/admin-appointments/admin-appointments.component';
 
 export const routes: Routes = [
   {
@@ -53,6 +55,18 @@ export const routes: Routes = [
     component: DoctorSchedulerComponent,
     canMatch: [roleGuard],
     data: { roles: [ROLE_DOCTOR] }
+  },
+  {
+    path: 'admin/users',
+    component: AdminUserManagementComponent,
+    canMatch: [roleGuard],
+    data: { roles: [ROLE_ADMIN] }
+  },
+  {
+    path: 'admin/appointments',
+    component: AdminAppointmentsComponent,
+    canMatch: [roleGuard],
+    data: { roles: [ROLE_ADMIN] }
   },
   { path: 'forbidden', component: ForbiddenComponent },
   {
