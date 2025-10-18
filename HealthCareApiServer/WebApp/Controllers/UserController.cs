@@ -33,6 +33,7 @@ namespace WebApp.Controllers
 
             user.FirstName = requestModel.FirstName;
             user.LastName = requestModel.LastName;
+            user.UserName = requestModel.Username;
 
             this.unitOfWork.UserRepository.Update(user);
             this.unitOfWork.SaveChanges();

@@ -10,6 +10,5 @@ export { IdentityService } from './services/identity.service';
 export { PatientService } from './services/patient.service';
 export { PrescriptionService } from './services/prescription.service';
 export { PrescriptionIntakeService } from './services/prescription-intake.service';
+export { PushNotificationsService } from './services/push-notifications.service';
 export { UserService } from './services/user.service';
-export { ValuesService } from './services/values.service';
-export { WeatherForecastService } from './services/weather-forecast.service';

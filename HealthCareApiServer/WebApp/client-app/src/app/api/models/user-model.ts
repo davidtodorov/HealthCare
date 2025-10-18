@@ -5,4 +5,5 @@ import { EntityModel } from '../models/entity-model';
 export type UserModel = EntityModel & {
 'firstName'?: string | null;
 'lastName'?: string | null;
+'username'?: string | null;
 };

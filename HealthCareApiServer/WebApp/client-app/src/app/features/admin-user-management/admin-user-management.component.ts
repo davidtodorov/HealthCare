@@ -32,6 +32,7 @@ export class AdminUserManagementComponent implements OnInit {
   selectedDoctor?: DoctorModel;
 
   readonly nameForm = this.fb.group({
+    username: ['', Validators.required],
     firstName: ['', Validators.required],
     lastName: ['', Validators.required],
     departmentId: this.fb.control<number | null>(null)
@@ -112,6 +113,7 @@ export class AdminUserManagementComponent implements OnInit {
     this.selectedDoctor = doctor;
 
     this.nameForm.patchValue({
+      username: user.username ?? '',
       firstName: user.firstName ?? '',
       lastName: user.lastName ?? '',
       departmentId: doctor?.departmentId ?? null
@@ -136,9 +138,10 @@ export class AdminUserManagementComponent implements OnInit {
       return;
     }
 
-    const { firstName, lastName, departmentId } = this.nameForm.getRawValue();
+    const { username, firstName, lastName, departmentId } = this.nameForm.getRawValue();
     const updatedUser: UserModel = {
       ...this.selectedUser,
+      username: username ?? '',
       firstName: firstName ?? '',
       lastName: lastName ?? ''
     };

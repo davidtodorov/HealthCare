@@ -27,6 +27,11 @@
         <form [formGroup]="nameForm" (ngSubmit)="saveUser()">
           <div class="form-grid">
             <label class="form-field">
+              <span>Username</span>
+              <input formControlName="username" type="text" placeholder="Username" />
+              <small *ngIf="nameForm.get('username')?.invalid && nameForm.get('username')?.touched">Username is required.</small>
+            </label>
+            <label class="form-field">
               <span>First name</span>
               <input formControlName="firstName" type="text" placeholder="First name" />
               <small *ngIf="nameForm.get('firstName')?.invalid && nameForm.get('firstName')?.touched">First name is required.</small>

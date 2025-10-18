@@ -10,6 +10,8 @@ import { BaseService } from '../base-service';
 import { ApiConfiguration } from '../api-configuration';
 import { StrictHttpResponse } from '../strict-http-response';
 
+import { userChangePassword } from '../fn/user/user-change-password';
+import { UserChangePassword$Params } from '../fn/user/user-change-password';
 import { userDelete } from '../fn/user/user-delete';
 import { UserDelete$Params } from '../fn/user/user-delete';
 import { userGet } from '../fn/user/user-get';
@@ -26,60 +28,6 @@ import { UserPut$Params } from '../fn/user/user-put';
 export class UserService extends BaseService {
   constructor(config: ApiConfiguration, http: HttpClient) {
     super(config, http);
-  }
-
-  /** Path part for operation `userGetAll()` */
-  static readonly UserGetAllPath = '/api/User';
-
-  /**
-   * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `userGetAll()` instead.
-   *
-   * This method doesn't expect any request body.
-   */
-  userGetAll$Response(params?: UserGetAll$Params, context?: HttpContext): Observable<StrictHttpResponse<Array<UserModel>>> {
-    const obs = userGetAll(this.http, this.rootUrl, params, context);
-    return obs;
-  }
-
-  /**
-   * This method provides access only to the response body.
-   * To access the full response (for headers, for example), `userGetAll$Response()` instead.
-   *
-   * This method doesn't expect any request body.
-   */
-  userGetAll(params?: UserGetAll$Params, context?: HttpContext): Observable<Array<UserModel>> {
-    const resp = this.userGetAll$Response(params, context);
-    return resp.pipe(
-      map((r: StrictHttpResponse<Array<UserModel>>): Array<UserModel> => r.body)
-    );
-  }
-
-  /** Path part for operation `userPost()` */
-  static readonly UserPostPath = '/api/User';
-
-  /**
-   * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `userPost()` instead.
-   *
-   * This method sends `application/json` and handles request body of type `application/json`.
-   */
-  userPost$Response(params: UserPost$Params, context?: HttpContext): Observable<StrictHttpResponse<Blob>> {
-    const obs = userPost(this.http, this.rootUrl, params, context);
-    return obs;
-  }
-
-  /**
-   * This method provides access only to the response body.
-   * To access the full response (for headers, for example), `userPost$Response()` instead.
-   *
-   * This method sends `application/json` and handles request body of type `application/json`.
-   */
-  userPost(params: UserPost$Params, context?: HttpContext): Observable<Blob> {
-    const resp = this.userPost$Response(params, context);
-    return resp.pipe(
-      map((r: StrictHttpResponse<Blob>): Blob => r.body)
-    );
   }
 
   /** Path part for operation `userGet()` */
@@ -158,6 +106,87 @@ export class UserService extends BaseService {
    */
   userDelete(params: UserDelete$Params, context?: HttpContext): Observable<Blob> {
     const resp = this.userDelete$Response(params, context);
+    return resp.pipe(
+      map((r: StrictHttpResponse<Blob>): Blob => r.body)
+    );
+  }
+
+  /** Path part for operation `userChangePassword()` */
+  static readonly UserChangePasswordPath = '/api/User/{id}/password';
+
+  /**
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `userChangePassword()` instead.
+   *
+   * This method sends `application/json` and handles request body of type `application/json`.
+   */
+  userChangePassword$Response(params: UserChangePassword$Params, context?: HttpContext): Observable<StrictHttpResponse<Blob>> {
+    const obs = userChangePassword(this.http, this.rootUrl, params, context);
+    return obs;
+  }
+
+  /**
+   * This method provides access only to the response body.
+   * To access the full response (for headers, for example), `userChangePassword$Response()` instead.
+   *
+   * This method sends `application/json` and handles request body of type `application/json`.
+   */
+  userChangePassword(params: UserChangePassword$Params, context?: HttpContext): Observable<Blob> {
+    const resp = this.userChangePassword$Response(params, context);
+    return resp.pipe(
+      map((r: StrictHttpResponse<Blob>): Blob => r.body)
+    );
+  }
+
+  /** Path part for operation `userGetAll()` */
+  static readonly UserGetAllPath = '/api/User';
+
+  /**
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `userGetAll()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  userGetAll$Response(params?: UserGetAll$Params, context?: HttpContext): Observable<StrictHttpResponse<Array<UserModel>>> {
+    const obs = userGetAll(this.http, this.rootUrl, params, context);
+    return obs;
+  }
+
+  /**
+   * This method provides access only to the response body.
+   * To access the full response (for headers, for example), `userGetAll$Response()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  userGetAll(params?: UserGetAll$Params, context?: HttpContext): Observable<Array<UserModel>> {
+    const resp = this.userGetAll$Response(params, context);
+    return resp.pipe(
+      map((r: StrictHttpResponse<Array<UserModel>>): Array<UserModel> => r.body)
+    );
+  }
+
+  /** Path part for operation `userPost()` */
+  static readonly UserPostPath = '/api/User';
+
+  /**
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `userPost()` instead.
+   *
+   * This method sends `application/json` and handles request body of type `application/json`.
+   */
+  userPost$Response(params: UserPost$Params, context?: HttpContext): Observable<StrictHttpResponse<Blob>> {
+    const obs = userPost(this.http, this.rootUrl, params, context);
+    return obs;
+  }
+
+  /**
+   * This method provides access only to the response body.
+   * To access the full response (for headers, for example), `userPost$Response()` instead.
+   *
+   * This method sends `application/json` and handles request body of type `application/json`.
+   */
+  userPost(params: UserPost$Params, context?: HttpContext): Observable<Blob> {
+    const resp = this.userPost$Response(params, context);
     return resp.pipe(
       map((r: StrictHttpResponse<Blob>): Blob => r.body)
     );
