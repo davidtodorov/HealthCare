@@ -133,3 +133,16 @@
     </div>
   </section>
 </div>
+
+<app-appointment-confirmation-modal
+  *ngIf="confirmModalOpen"
+  [doctor]="selectedDoctor"
+  [patient]="selectedPatient"
+  [selectedDate]="selectedDate"
+  [selectedTime]="selectedTime"
+  [isDoctor]="isDoctor"
+  [isBusy]="isBooking"
+  [error]="bookingError"
+  (cancel)="closeConfirmModal()"
+  (confirm)="confirmBooking()"
+></app-appointment-confirmation-modal>

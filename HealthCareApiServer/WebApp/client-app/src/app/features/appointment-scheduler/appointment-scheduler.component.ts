@@ -11,10 +11,17 @@ import { AuthService } from '../../auth/auth.service';
 import { ROLE_DOCTOR } from '../../common/roles';
 import { CalendarComponent } from '../../common/calendar/calendar.component';
 import { generateTimeSlots } from '../../helpers/dateHelper';
+import { AppointmentConfirmationModalComponent } from './appointment-confirmation-modal/appointment-confirmation-modal.component';
+
+type BookingRequestPayload = {
+  doctorId: number;
+  dateTime: string;
+  patientId?: number;
+};
 
 @Component({
   selector: 'app-appointment-scheduler',
-  imports: [CommonModule, FormsModule, CalendarComponent],
+  imports: [CommonModule, FormsModule, CalendarComponent, AppointmentConfirmationModalComponent],
   templateUrl: './appointment-scheduler.component.html',
   styleUrl: './appointment-scheduler.component.scss'
 })
@@ -37,6 +44,10 @@ export class AppointmentSchedulerComponent implements OnInit {
   bookedOk: boolean = false;
   isDoctor: boolean = false;
   currentUserId: number | null = null;
+  confirmModalOpen = false;
+  isBooking = false;
+  bookingError: string | null = null;
+  private pendingBookingPayload: BookingRequestPayload | null = null;
 
   constructor(
     private doctorService: DoctorService,
@@ -317,7 +328,7 @@ export class AppointmentSchedulerComponent implements OnInit {
     if (this.isDoctor && !this.selectedPatient) return;
 
     const date = moment(d).hour(moment.duration(t).hours()).minute(moment.duration(t).minutes()).utc(true).format();
-    const body: { doctorId: number; dateTime: string; patientId?: number } = {
+    const body: BookingRequestPayload = {
       doctorId: doctor.id,
       dateTime: date,
     };
@@ -326,16 +337,55 @@ export class AppointmentSchedulerComponent implements OnInit {
       body.patientId = this.selectedPatient.id;
     }
 
-    this.appointmentService.appointmentBook({ body }).subscribe({
+    this.bookedOk = false;
+    this.bookingError = null;
+    this.pendingBookingPayload = body;
+    this.confirmModalOpen = true;
+  }
+
+  confirmBooking() {
+    if (!this.pendingBookingPayload) {
+      this.closeConfirmModal();
+      return;
+    }
+
+    this.isBooking = true;
+    this.bookingError = null;
+
+    this.appointmentService.appointmentBook({ body: this.pendingBookingPayload }).subscribe({
       next: () => {
-        this.appointmentService.appointmentGetAll().subscribe(result => {
-          this.scheduledAppointments = result;
-          this.updateAvailabilitySlots();
-          this.bookedOk = true;
-          this.selectedTime = null;
+        this.appointmentService.appointmentGetAll().subscribe({
+          next: result => {
+            this.scheduledAppointments = result;
+            this.updateAvailabilitySlots();
+            this.bookedOk = true;
+            this.selectedTime = null;
+            this.confirmModalOpen = false;
+            this.pendingBookingPayload = null;
+            this.isBooking = false;
+            this.bookingError = null;
+          },
+          error: () => {
+            this.isBooking = false;
+            this.bookingError = 'Unable to refresh appointments. Please try again.';
+          }
         });
+      },
+      error: () => {
+        this.isBooking = false;
+        this.bookingError = 'Something went wrong while booking. Please try again.';
       }
     });
+  }
+
+  closeConfirmModal() {
+    if (this.isBooking) {
+      return;
+    }
+
+    this.confirmModalOpen = false;
+    this.bookingError = null;
+    this.pendingBookingPayload = null;
   }
 
   resetSelection() {
