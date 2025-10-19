@@ -15,7 +15,7 @@ import { AdminAppointmentsComponent } from './features/admin-appointments/admin-
 export const routes: Routes = [
   {
     path: '',
-    redirectTo: 'main-menu',
+    component: MainMenuComponent,
     pathMatch: 'full',
     data: {}
   },
