@@ -5,7 +5,6 @@ import { CalendarComponent } from '../common/calendar/calendar.component';
 import moment from 'moment';
 import { AppointmentService, DoctorService, PrescriptionService } from '../api/services';
 import { AppointmentModel, AppointmentStatus, PatientModel, PrescriptionModel, UserModel } from '../api/models';
-import { A } from '@fullcalendar/core/internal-common';
 import { EnumTextPipe } from '../common/enumPipe';
 import { AuthService } from '../auth/auth.service';
 
@@ -208,7 +207,7 @@ export class DoctorSchedulerComponent implements OnInit {
       // Search filter
       if (q) {
         return (a.patient && a.patient.fullName && a.patient.fullName.toLocaleLowerCase().includes(q.trim())
-          //TODO: || a.reason.toLowerCase().includes(q)
+        || a.notes?.toLowerCase().includes(q)
         );
       }
       return true;

@@ -44,8 +44,8 @@
                 <dd>{{ appointment.doctorName }}</dd>
               </div>
               <div>
-                <dt class="font-medium text-slate-700">Reason</dt>
-                <dd>{{ appointment.reason || 'Not specified' }}</dd>
+                <dt class="font-medium text-slate-700">Notes</dt>
+                <dd>{{ appointment.notes || 'Not specified' }}</dd>
               </div>
             </dl>
             <div *ngIf="appointment.notes" class="mt-4">
@@ -85,8 +85,8 @@
                 <dd>{{ appointment.doctorName }}</dd>
               </div>
               <div>
-                <dt class="font-medium text-slate-700">Reason</dt>
-                <dd>{{ appointment.reason || 'Not specified' }}</dd>
+                <dt class="font-medium text-slate-700">Notes</dt>
+                <dd>{{ appointment.notes || 'Not specified' }}</dd>
               </div>
             </dl>
             <div class="mt-4">

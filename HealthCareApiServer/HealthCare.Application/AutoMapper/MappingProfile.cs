@@ -25,7 +25,7 @@ namespace HealthCare.Application.AutoMapper
 
             CreateMap<AppointmentModel, Appointment>()
                 .ForMember(am => am.DateTime, opts => opts.MapFrom(a => a.DateTime))
-                .ForMember(am => am.Reason, opts => opts.MapFrom(a => a.Reason))
+                .ForMember(am => am.Notes, opts => opts.MapFrom(a => a.Notes))
                 .ForMember(am => am.Status, opts => opts.MapFrom(a => a.Status))
                 .ForMember(am => am.PatientId, opts => opts.MapFrom(a => a.PatientId))
                 .ForMember(am => am.DoctorId, opts => opts.MapFrom(a => a.DoctorId));

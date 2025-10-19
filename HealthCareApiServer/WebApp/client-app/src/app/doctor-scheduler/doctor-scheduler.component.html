@@ -57,7 +57,7 @@
                 <div class="flex flex-col sm:flex-row items-center gap-2 mb-3">
                     <input type="text" [(ngModel)]="searchQuery" (input)="renderSchedule()"
                         class="w-full border border-slate-200 rounded-xl px-3 py-2 outline-none focus:ring-2 focus:ring-indigo-300 transition"
-                        placeholder="Filter by patient name or reason" />
+                        placeholder="Filter by patient name or notes" />
                     <select [(ngModel)]="statusFilter" (change)="renderSchedule()"
                         class="w-full sm:w-auto border border-slate-200 rounded-xl px-3 py-2 focus:ring-2 focus:ring-indigo-300">
                         <option value="all">All statuses</option>
@@ -92,7 +92,7 @@
                                             {{ item.status | enumText: AppointmentStatus }}
                                         </span>
                                     </div>
-                                    <div class="text-sm text-slate-600 truncate">{{ item.reason }}</div>
+                                    <div class="text-sm text-slate-600 truncate">{{ item.notes }}</div>
                                 </div>
                             </button>
                         </ng-container>
@@ -146,8 +146,8 @@
                                             selectedAppt.dateTime | date: 'shortDate' }}</span></div>
                                     <div><span class="text-slate-600">Time:</span> <span class="font-medium">{{
                                             selectedAppt.dateTime | date: 'HH:mm' }}</span></div>
-                                    <div><span class="text-slate-600">Reason:</span> <span class="font-medium">{{
-                                            selectedAppt.reason }}</span></div>
+                                    <div><span class="text-slate-600">Notes:</span> <span class="font-medium">{{
+                                            selectedAppt.notes }}</span></div>
                                     <div><span class="text-slate-600">Status:</span> <span
                                             class="text-xs px-2 py-0.5 rounded-full border font-medium capitalize"
                                             [ngClass]="getApptStatusClasses(selectedAppt.status)">{{ selectedAppt.status
@@ -280,7 +280,7 @@
                                     <thead>
                                         <tr class="text-left text-slate-600">
                                             <th class="py-2 border-b border-slate-200 font-medium">Date</th>
-                                            <th class="py-2 border-b border-slate-200 font-medium">Reason</th>
+                                            <th class="py-2 border-b border-slate-200 font-medium">Notes</th>
                                             <th class="py-2 border-b border-slate-200 font-medium">Outcome</th>
                                         </tr>
                                     </thead>
@@ -291,7 +291,7 @@
                                                 <td class='py-2 border-b border-slate-200'>{{ visit.dateTime | date:
                                                     'short' }}</td>
                                                 <td class='py-2 border-b border-slate-200 text-slate-700'>{{
-                                                    visit.reason }}</td>
+                                                    visit.notes }}</td>
                                                 <td class='py-2 border-b border-slate-200 capitalize text-slate-700'>{{
                                                     visit.status | enumText: AppointmentStatus }}</td>
                                             </tr>
