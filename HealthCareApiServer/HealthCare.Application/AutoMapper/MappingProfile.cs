@@ -42,8 +42,7 @@ namespace HealthCare.Application.AutoMapper
             CreateMap<UpdateAppointmentModel, Appointment>()
                 .ForMember(am => am.Status, opts => opts.MapFrom(a => a.Status))
                 .ForMember(am => am.Notes, opts => opts.MapFrom(a => a.Notes))
-                .ForMember(am => am.Prescriptions, opts => opts.MapFrom(a => a.Prescriptions))
-                ;
+                .ForMember(am => am.Prescriptions, opts => opts.MapFrom(a => a.Prescriptions));
 
 
             CreateMap<Appointment, CreateAppointmentModel>().ReverseMap();

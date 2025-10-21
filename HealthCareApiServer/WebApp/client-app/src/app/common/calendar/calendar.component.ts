@@ -49,18 +49,16 @@ export class CalendarComponent implements OnInit, OnChanges {
 
   ngOnInit() {
     this.initSelectors();
-    this.goToday(false); // Initialize to today's month/year
+    this.goToday(false);
     this.buildMonth(this.viewYear, this.viewMonth);
   }
 
   ngOnChanges(changes: SimpleChanges): void {
-    // Removed UTC normalization to keep UI in local time
     if (changes['appointments'] || changes['dates'] || changes['availabilitySlots'] || changes['selectedDate'] || changes['currentView']) {
       this.buildMonth(this.viewYear, this.viewMonth);
     }
   }
 
-  // --- Initialization (Copied from original) ---
   private initSelectors() {
     this.months.forEach((nm, idx) => {
       this.monthOptions.push({ value: idx, text: nm });
@@ -77,13 +75,12 @@ export class CalendarComponent implements OnInit, OnChanges {
     this.viewYear = now.year();
     this.viewMonth = now.month();
     if (selectDay) {
-      this.selectDate(now); // local moment
+      this.selectDate(now);
     } else {
       this.buildMonth(this.viewYear, this.viewMonth);
     }
   }
 
-  // --- Calendar Logic (Copied from original) ---
   buildMonth(y: number, m: number): void {
     this.viewYear = y;
     this.viewMonth = m;
@@ -101,6 +98,7 @@ export class CalendarComponent implements OnInit, OnChanges {
       this.calendarDays.push({ date: moment(), ymd: '', d: 0, classes: 'h-10', hasAppts: false, isDisabled: true });
     }
 
+    // Actual days, adding classes as needed
     for (let d = 1; d <= days; d++) {
       const date = moment({ year: y, month: m, date: d });
       const ymd = date.format('YYYY-MM-DD');

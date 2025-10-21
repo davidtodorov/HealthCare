@@ -1,8 +1,8 @@
 import { CommonModule } from '@angular/common';
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { PrescriptionIntakeModel, PrescriptionModel } from '../../api/models';
-import { PrescriptionIntakeService, PrescriptionService } from '../../api/services';
-import { PushNotificationService } from '../../common/push-notification.service';
+import { PrescriptionIntakeModel, PrescriptionModel } from '../api/models';
+import { PrescriptionIntakeService, PrescriptionService } from '../api/services';
+import { PushNotificationService } from '../common/push-notification.service';
 import moment from 'moment';
 import { Subscription } from 'rxjs';
 

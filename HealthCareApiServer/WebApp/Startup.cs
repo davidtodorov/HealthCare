@@ -29,7 +29,6 @@ namespace WebApp
                 .AddHttpContextAccessor()
                 .AddDbContext<HealthCareDbContext>(options => options.UseSqlServer(this.Configuration.GetDefaultConnectionString()))
                 .AddIdentity()
-                //.AddJwtAuthentication(services.GetApplicationSettings(this.Configuration))  //USE FOR JWT AUTHENTICATION
                 .AddCors(options =>
                 {
                     options.AddPolicy("CorsApi", builder =>
@@ -41,10 +40,6 @@ namespace WebApp
                 .AddMapperConfig()
                 .AddApplicationServices()
                 .AddControllers();
-
-            services.Configure<WebPushOptions>(Configuration.GetSection("WebPush"));
-            services.AddSingleton<IPushNotificationSender, WebPushNotificationSender>();
-            services.AddHostedService<PrescriptionReminderHostedService>();
 
             services.AddEndpointsApiExplorer();
             services.AddOpenApiDocument(config =>

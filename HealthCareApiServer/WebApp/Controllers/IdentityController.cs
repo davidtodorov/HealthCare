@@ -40,7 +40,6 @@ namespace WebApp.Controllers
                 return Unauthorized();
             }
 
-
             await signInManager.SignInAsync(user, false, CookieAuthenticationDefaults.AuthenticationScheme);
             return Ok(new { UserId = user.Id, Username = user.UserName, FirstName = user.FirstName, LastName = user.LastName });
 

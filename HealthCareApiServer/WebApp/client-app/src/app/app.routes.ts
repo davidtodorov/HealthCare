@@ -1,21 +1,21 @@
 import { Routes } from '@angular/router';
-import { AppointmentSchedulerComponent } from './features/appointment-scheduler/appointment-scheduler.component';
+import { AppointmentSchedulerComponent } from './appointments/appointment-scheduler/appointment-scheduler.component';
 import { DoctorSchedulerComponent } from './doctor-scheduler/doctor-scheduler.component';
 import { LoginComponent } from './auth/login/login.component';
 import { RegisterComponent } from './auth/register/register.component';
 import { roleGuard } from './auth/role.guard';
 import { MainMenuComponent } from './main-menu/main-menu.component';
 import { ForbiddenComponent } from './errors/forbidden/forbidden.component';
-import { PrescriptionHistoryComponent } from './features/prescriptions/prescription-history.component';
-import { AppointmentHistoryComponent } from './features/appointment-history/appointment-history.component';
+import { PrescriptionHistoryComponent } from './prescriptions/prescription-history.component';
+import { AppointmentHistoryComponent } from './appointments/appointment-history/appointment-history.component';
 import { ROLE_ADMIN, ROLE_DOCTOR, ROLE_PATIENT } from './common/roles';
-import { AdminUserManagementComponent } from './features/admin-user-management/admin-user-management.component';
-import { AdminAppointmentsComponent } from './features/admin-appointments/admin-appointments.component';
+import { AdminUserManagementComponent } from './admin/admin-user-management/admin-user-management.component';
+import { AdminAppointmentsComponent } from './admin/admin-appointments/admin-appointments.component';
 
 export const routes: Routes = [
   {
     path: '',
-    component: MainMenuComponent,
+    redirectTo: 'main-menu',
     pathMatch: 'full',
     data: {}
   },
