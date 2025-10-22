@@ -36,7 +36,7 @@
                 [disabled]="day.isDisabled"
                 (click)="selectDate(day.date)">
             {{ day.d }}
-            <span *ngIf="day.hasAppts" class="absolute bottom-1 w-1.5 h-1.5 rounded-full bg-indigo-500"></span>
+            <span *ngIf="day.hasAppts && !day.isDisabled" class="absolute bottom-1 w-1.5 h-1.5 rounded-full bg-indigo-500"></span>
         </button>
     </ng-container>
 </div>

@@ -212,7 +212,7 @@ export class CalendarComponent implements OnInit, OnChanges {
       return slots.some(slot => this.isSlotAfter(date, slot, now));
     }
 
-    return this.dates.indexOf(ymd) !== -1;
+    return this.dates.length > 0 ? this.dates.indexOf(ymd) !== -1 : true;
   }
 
   private isDateDisabled(date: moment.Moment, hasSlots: boolean): boolean {
