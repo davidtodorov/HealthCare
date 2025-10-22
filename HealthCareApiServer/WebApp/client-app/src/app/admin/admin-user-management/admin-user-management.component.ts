@@ -3,7 +3,7 @@ import { Component, OnInit, inject } from '@angular/core';
 import { AbstractControl, FormBuilder, ReactiveFormsModule, ValidationErrors, Validators } from '@angular/forms';
 import { forkJoin, of } from 'rxjs';
 import { catchError, finalize } from 'rxjs/operators';
-import { DepartmentModel, DoctorModel, UserModel } from '../../api/models';
+import { DepartmentModel, DoctorModel, UpdateDoctorModel, UserModel } from '../../api/models';
 import { DepartmentService, DoctorService, UserService } from '../../api/services';
 import { AdminUserService } from './admin-user.service';
 
@@ -150,11 +150,8 @@ export class AdminUserManagementComponent implements OnInit {
 
     let doctorUpdate$ = of({});
     if (this.selectedDoctor && typeof departmentId === 'number' && departmentId !== this.selectedDoctor.departmentId) {
-      const updatedDoctor: DoctorModel = {
-        ...this.selectedDoctor,
-        departmentId
-      };
-      doctorUpdate$ = this.doctorService.doctorPut({ id: this.selectedDoctor.id!, body: updatedDoctor });
+      const updatedDoctor = { id: this.selectedDoctor.id!, departmentId } as UpdateDoctorModel;
+      doctorUpdate$ = this.doctorService.doctorUpdateDepartment({ body: updatedDoctor });
     }
 
     this.saving = true;

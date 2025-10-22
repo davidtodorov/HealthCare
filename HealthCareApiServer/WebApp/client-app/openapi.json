@@ -508,6 +508,37 @@
       }
     },
     "/api/Doctor": {
+      "put": {
+        "tags": [
+          "Doctor"
+        ],
+        "operationId": "Doctor_UpdateDepartment",
+        "requestBody": {
+          "x-name": "requestModel",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateDoctorModel"
+              }
+            }
+          },
+          "required": true,
+          "x-position": 1
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/octet-stream": {
+                "schema": {
+                  "type": "string",
+                  "format": "binary"
+                }
+              }
+            }
+          }
+        }
+      },
       "get": {
         "tags": [
           "Doctor"
@@ -2323,6 +2354,20 @@
           "password": {
             "type": "string",
             "minLength": 1
+          }
+        }
+      },
+      "UpdateDoctorModel": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "departmentId": {
+            "type": "integer",
+            "format": "int32"
           }
         }
       },

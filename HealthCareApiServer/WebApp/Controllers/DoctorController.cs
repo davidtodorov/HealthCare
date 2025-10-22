@@ -4,6 +4,7 @@ using HealthCare.Application.Models.Appointments;
 using HealthCare.Application.Models.Doctor;
 using HealthCare.Core.Entities;
 using HealthCare.Infrastructure;
+using HealthCare.Infrastructure.Repositories;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
@@ -27,7 +28,7 @@ namespace WebApp.Controllers
         [HttpPost(nameof(Create))]
         public async Task<ActionResult> Create(CreateDoctorModel requestModel)
         {
-            requestModel.DepartmentId = 1;
+            requestModel.DepartmentId = requestModel.DepartmentId;
             requestModel.HospitalId = 2;
             var result = await this.doctorCreator.CreateDoctor(requestModel);
             if (result.Failure)
@@ -46,6 +47,24 @@ namespace WebApp.Controllers
             mapper.Map(appointents, listDto);
             return Ok(listDto);
             
+        }
+
+        [HttpPut]
+        public async Task<ActionResult> UpdateDepartment(UpdateDoctorModel requestModel)
+        {
+            var entity = this.unitOfWork.DoctorRepository.GetById(requestModel.Id);
+            try
+            {
+                entity.DepartmentId = requestModel.DepartmentId;
+                await unitOfWork.SaveChangesAsync();
+            }
+            catch (Exception ex)
+            {
+
+                throw;
+            }
+            
+            return Ok();
         }
     }
 }

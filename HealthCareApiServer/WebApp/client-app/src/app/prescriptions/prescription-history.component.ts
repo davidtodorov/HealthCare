@@ -115,7 +115,7 @@ export class PrescriptionHistoryComponent implements OnInit, OnDestroy {
     this.isLoading = true;
     this.errorMessage = null;
 
-    this.prescriptionService.prescriptionGetAll().subscribe({
+    this.prescriptionService.prescriptionGetForCurrentPatient().subscribe({
       next: data => {
         this.prescriptions = (data || []).map(p => ({
           ...p,

@@ -60,11 +60,10 @@ export class LoginComponent implements OnInit {
       password: formData.password 
     }}).subscribe({
       next: () => {
-          this.router.navigateByUrl('/');
-
-        // this.auth.clear();
-        // this.auth.getRoles().pipe(take(1)).subscribe(roles => {
-        // });
+        this.auth.clear();
+        this.auth.getRoles().pipe(take(1)).subscribe(roles => {
+            this.router.navigateByUrl('/');
+        });
       },
       error: (err) => {
         console.error('Login API call failed', err);

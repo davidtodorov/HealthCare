@@ -23,6 +23,10 @@ namespace HealthCare.Application.AutoMapper
                 .ForMember(dm => dm.FirstName, opts => opts.MapFrom(d => d.User.FirstName))
                 .ForMember(dm => dm.LastName, opts => opts.MapFrom(d => d.User.LastName));
 
+            CreateMap<UpdateDoctorModel, Doctor>()
+                .ForMember(dm => dm.Id, opts => opts.MapFrom(d => d.Id))
+                .ForMember(dm => dm.DepartmentId, opts => opts.MapFrom(d => d.DepartmentId));
+
             CreateMap<AppointmentModel, Appointment>()
                 .ForMember(am => am.DateTime, opts => opts.MapFrom(a => a.DateTime))
                 .ForMember(am => am.Notes, opts => opts.MapFrom(a => a.Notes))

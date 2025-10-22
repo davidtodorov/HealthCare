@@ -33,6 +33,8 @@ export type { DoctorGetAppointmentsForDoctor$Params } from './fn/doctor/doctor-g
 export { doctorGetAppointmentsForDoctor } from './fn/doctor/doctor-get-appointments-for-doctor';
 export type { DoctorGetAll$Params } from './fn/doctor/doctor-get-all';
 export { doctorGetAll } from './fn/doctor/doctor-get-all';
+export type { DoctorUpdateDepartment$Params } from './fn/doctor/doctor-update-department';
+export { doctorUpdateDepartment } from './fn/doctor/doctor-update-department';
 export type { DoctorPost$Params } from './fn/doctor/doctor-post';
 export { doctorPost } from './fn/doctor/doctor-post';
 export type { DoctorGet$Params } from './fn/doctor/doctor-get';

@@ -26,6 +26,8 @@ import { doctorPost } from '../fn/doctor/doctor-post';
 import { DoctorPost$Params } from '../fn/doctor/doctor-post';
 import { doctorPut } from '../fn/doctor/doctor-put';
 import { DoctorPut$Params } from '../fn/doctor/doctor-put';
+import { doctorUpdateDepartment } from '../fn/doctor/doctor-update-department';
+import { DoctorUpdateDepartment$Params } from '../fn/doctor/doctor-update-department';
 
 @Injectable({ providedIn: 'root' })
 export class DoctorService extends BaseService {
@@ -111,6 +113,33 @@ export class DoctorService extends BaseService {
     const resp = this.doctorGetAll$Response(params, context);
     return resp.pipe(
       map((r: StrictHttpResponse<Array<DoctorModel>>): Array<DoctorModel> => r.body)
+    );
+  }
+
+  /** Path part for operation `doctorUpdateDepartment()` */
+  static readonly DoctorUpdateDepartmentPath = '/api/Doctor';
+
+  /**
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `doctorUpdateDepartment()` instead.
+   *
+   * This method sends `application/json` and handles request body of type `application/json`.
+   */
+  doctorUpdateDepartment$Response(params: DoctorUpdateDepartment$Params, context?: HttpContext): Observable<StrictHttpResponse<Blob>> {
+    const obs = doctorUpdateDepartment(this.http, this.rootUrl, params, context);
+    return obs;
+  }
+
+  /**
+   * This method provides access only to the response body.
+   * To access the full response (for headers, for example), `doctorUpdateDepartment$Response()` instead.
+   *
+   * This method sends `application/json` and handles request body of type `application/json`.
+   */
+  doctorUpdateDepartment(params: DoctorUpdateDepartment$Params, context?: HttpContext): Observable<Blob> {
+    const resp = this.doctorUpdateDepartment$Response(params, context);
+    return resp.pipe(
+      map((r: StrictHttpResponse<Blob>): Blob => r.body)
     );
   }
 

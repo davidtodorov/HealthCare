@@ -18,5 +18,6 @@ export type { PushNotificationTestRequest } from './models/push-notification-tes
 export type { PushSubscriptionModel } from './models/push-subscription-model';
 export type { RegisterUserRequestModel } from './models/register-user-request-model';
 export type { UpdateAppointmentModel } from './models/update-appointment-model';
+export type { UpdateDoctorModel } from './models/update-doctor-model';
 export type { UserAndRoles } from './models/user-and-roles';
 export type { UserModel } from './models/user-model';

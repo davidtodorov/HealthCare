@@ -127,7 +127,7 @@ namespace WebApp.Controllers
         [Route(nameof(Roles))]
         public async Task<UserAndRoles> Roles()
         {
-            if(User == null)
+                if(User == null)
             {
                 return null;
             }
